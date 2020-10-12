@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:promotion_platform/utils/custom_widget/build_point.dart';
+import 'package:promotion_platform/utils/custom_widget/point.dart';
 
 class TabProfileScreen extends StatefulWidget {
   @override
@@ -18,48 +18,7 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    width: deviceWidth,
-                    child: Stack(
-                      children: [
-                        Row(
-                          children: [
-                            CircleAvatar(
-                              child: Text('Avatar'),
-                              backgroundColor: Colors.teal,
-                              radius: 32,
-                            ),
-                            SizedBox(
-                              width: 12,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'User Name',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                Text(
-                                  'Sửa thông tin',
-                                  style: TextStyle(color: Colors.teal),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Positioned(
-                          right: 0,
-                          child: BuildPoint(
-                            point: 1000,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  _buildAppBar(),
                   _buildButton(
                     title: 'Thành viên vàng',
                     iconData: Icons.leaderboard,
@@ -101,6 +60,55 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
               ),
             ),
           )
+        ],
+      ),
+    );
+  }
+
+  Container _buildAppBar() {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 8,
+      ),
+      width: deviceWidth,
+      child: Stack(
+        children: [
+          Row(
+            children: [
+              CircleAvatar(
+                child: Text('Avatar'),
+                backgroundColor: Colors.teal,
+                radius: 32,
+              ),
+              SizedBox(
+                width: 12,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'User Name',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  Text(
+                    'Sửa thông tin',
+                    style: TextStyle(color: Colors.teal),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Positioned(
+            right: 0,
+            child: Point(
+              point: 1000,
+              hasBorder: true,
+            ),
+          ),
         ],
       ),
     );

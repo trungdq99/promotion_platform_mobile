@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
-import '../utils/custom_widget/build_point.dart';
-import '../utils/custom_widget/build_group_title.dart';
-import '../utils/custom_widget/build_voucher.dart';
+import '../utils/constant.dart';
+import '../utils/custom_widget/point.dart';
+import '../utils/custom_widget/group_title.dart';
+import '../utils/custom_widget/voucher.dart';
 
-class TabHomeScreen extends StatefulWidget {
+class HomeTab extends StatefulWidget {
   @override
-  _TabHomeScreenState createState() => _TabHomeScreenState();
+  _HomeTabState createState() => _HomeTabState();
 }
 
-class _TabHomeScreenState extends State<TabHomeScreen> {
+class _HomeTabState extends State<HomeTab> {
+  double deviceWidth;
   @override
   Widget build(BuildContext context) {
-    final deviceWidth = MediaQuery.of(context).size.width;
+    deviceWidth = MediaQuery.of(context).size.width;
     // final deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Stack(
@@ -21,52 +23,11 @@ class _TabHomeScreenState extends State<TabHomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    width: deviceWidth,
-                    child: Stack(
-                      children: [
-                        Row(
-                          children: [
-                            CircleAvatar(
-                              child: Text('Logo'),
-                              backgroundColor: Colors.teal,
-                              radius: 24,
-                            ),
-                            SizedBox(
-                              width: 12,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Good morning,'),
-                                Text('User Name'),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Positioned(
-                          right: 0,
-                          child: BuildPoint(
-                            point: 1000,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    child: Text('Quảng cáo'),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black),
-                    ),
-                    padding: EdgeInsets.all(8),
-                    height: 150,
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.all(16),
-                  ),
-                  BuildGroupTitle(
+                  _buildAppBar(deviceWidth),
+                  _buildAds(),
+                  GroupTitle(
                     title: 'Thương hiệu nổi bật',
-                    isShowAll: true,
+                    canShowAll: true,
                   ),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
@@ -91,30 +52,30 @@ class _TabHomeScreenState extends State<TabHomeScreen> {
                       ],
                     ),
                   ),
-                  BuildGroupTitle(
+                  GroupTitle(
                     title: 'Quà ngon được săn đón',
-                    isShowAll: true,
+                    canShowAll: true,
                   ),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        BuildVoucher(
+                        Voucher(
                           voucherTitle: 'Voucher 500,000 VND',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
                         ),
-                        BuildVoucher(
+                        Voucher(
                           voucherTitle: 'Voucher 500,000 VND',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
                         ),
-                        BuildVoucher(
+                        Voucher(
                           voucherTitle: 'Voucher 500,000 VND',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
                         ),
-                        BuildVoucher(
+                        Voucher(
                           voucherTitle: 'Voucher 500,000 VND',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
@@ -149,6 +110,66 @@ class _TabHomeScreenState extends State<TabHomeScreen> {
     );
   }
 
+  Widget _buildAds() {
+    return Container(
+      child: Text('Quảng cáo'),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black),
+      ),
+      padding: EdgeInsets.all(8),
+      height: 150,
+      width: deviceWidth,
+      margin: EdgeInsets.all(16),
+    );
+  }
+
+  Widget _buildAppBar(double deviceWidth) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 8,
+      ),
+      width: deviceWidth,
+      child: Stack(
+        children: [
+          Row(
+            children: [
+              CircleAvatar(
+                child: Text('Logo'),
+                backgroundColor: Colors.teal,
+                radius: 24,
+              ),
+              SizedBox(
+                width: 12,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Good morning,',
+                    style: DEFAULT_TEXT_STYLE,
+                  ),
+                  Text(
+                    'User Name',
+                    style: BOLD_TITLE_TEXT_STYLE,
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Positioned(
+            right: 0,
+            child: Point(
+              point: 1000,
+              hasBorder: true,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Show brand
   Widget _buildBrand({
     @required String brandTitle,
     int promotions,
@@ -177,9 +198,12 @@ class _TabHomeScreenState extends State<TabHomeScreen> {
           ),
           Text(
             brandTitle,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: BOLD_TITLE_TEXT_STYLE,
           ),
-          Text('$promotions khuyến mãi'),
+          Text(
+            '$promotions khuyến mãi',
+            style: SMALL_TEXT_STYLE,
+          ),
         ],
       ),
     );

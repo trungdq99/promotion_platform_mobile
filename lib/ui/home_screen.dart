@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:promotion_platform/ui/tab_gift_screen.dart';
-import 'package:promotion_platform/ui/tab_notification_screen.dart';
-import 'package:promotion_platform/ui/tab_profile_screen.dart';
-import './tab_home_screen.dart';
+import './gift_tab.dart';
+import './notification_tab.dart';
+import './profile_tab.dart';
+import './home_tab.dart';
 import '../utils/constant.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
         CupertinoTabView returnValue;
         switch (index) {
           case 0:
-            returnValue = _buildTabView(TabHomeScreen());
+            returnValue = _buildTabView(HomeTab());
             break;
           case 1:
             returnValue = _buildTabView(TabGiftScreen());

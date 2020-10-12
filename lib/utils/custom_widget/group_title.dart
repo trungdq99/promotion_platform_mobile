@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:promotion_platform/utils/constant.dart';
 
-class BuildGroupTitle extends StatelessWidget {
-  const BuildGroupTitle({
+class GroupTitle extends StatelessWidget {
+  const GroupTitle({
     Key key,
     @required this.title,
-    @required this.isShowAll,
+    @required this.canShowAll,
     this.function,
   }) : super(key: key);
 
   final String title;
-  final bool isShowAll;
+  final bool canShowAll;
   final Function function;
   @override
   Widget build(BuildContext context) {
@@ -30,17 +31,12 @@ class BuildGroupTitle extends StatelessWidget {
         children: [
           Text(
             this.title,
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-            ),
+            style: BOLD_TITLE_TEXT_STYLE,
           ),
-          isShowAll
+          canShowAll
               ? Text(
                   'Tất cả',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
+                  style: DEFAULT_TEXT_STYLE,
                 )
               : Container(),
         ],

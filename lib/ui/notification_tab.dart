@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:promotion_platform/ui/notification_detail_screen.dart';
 
 class TabNotificationScreen extends StatefulWidget {
   @override
@@ -23,6 +24,7 @@ class _TabNotificationScreenState extends State<TabNotificationScreen> {
               tabs: [
                 Tab(
                   child: Container(
+                    margin: EdgeInsets.only(top: 8),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       border: Border.all(
@@ -38,6 +40,7 @@ class _TabNotificationScreenState extends State<TabNotificationScreen> {
                 ),
                 Tab(
                   child: Container(
+                    margin: EdgeInsets.only(top: 8),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       border: Border.all(
@@ -87,6 +90,11 @@ class _TabNotificationScreenState extends State<TabNotificationScreen> {
                   children: [
                     _buildMessage(
                       showMore: true,
+                      function: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => NotificationDetailScreen(),
+                        ));
+                      },
                     ),
                     _buildMessage(
                       isRead: false,
@@ -105,54 +113,58 @@ class _TabNotificationScreenState extends State<TabNotificationScreen> {
   Widget _buildMessage({
     bool isRead: true,
     bool showMore: false,
+    Function function,
   }) {
-    return Container(
-      color: isRead ? Colors.white : Colors.black12,
-      width: double.maxFinite,
-      height: 100,
-      child: Row(
-        children: [
-          Expanded(
-            flex: 2,
-            child: Container(
-              width: double.maxFinite,
-              height: double.maxFinite,
-              padding: EdgeInsets.all(8),
-              child: CircleAvatar(
-                backgroundColor: Colors.teal,
+    return InkWell(
+      onTap: function,
+      child: Container(
+        color: isRead ? Colors.white : Colors.black12,
+        width: double.maxFinite,
+        height: 100,
+        child: Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: Container(
+                width: double.maxFinite,
+                height: double.maxFinite,
+                padding: EdgeInsets.all(8),
+                child: CircleAvatar(
+                  backgroundColor: Colors.teal,
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text(
-                  'Uni Delivery',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    'Uni Delivery',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                Text(
-                    'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha'),
-                Text(
-                  'Thứ Hai, 07:00',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                  Text(
+                      'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha'),
+                  Text(
+                    'Thứ Hai, 07:00',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
+              flex: 7,
             ),
-            flex: 7,
-          ),
-          Expanded(
-            child: showMore ? Icon(Icons.more_vert) : Container(),
-            flex: 1,
-          )
-        ],
+            Expanded(
+              child: showMore ? Icon(Icons.more_vert) : Container(),
+              flex: 1,
+            )
+          ],
+        ),
       ),
     );
   }

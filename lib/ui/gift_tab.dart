@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import '../utils/custom_widget/build_group_title.dart';
-import '../utils/custom_widget/build_voucher.dart';
-import '../utils/custom_widget/build_point.dart';
+import 'package:promotion_platform/ui/my_gift_screen.dart';
+import 'package:promotion_platform/ui/gift_detail_screen.dart';
+import '../utils/custom_widget/group_title.dart';
+import '../utils/custom_widget/voucher.dart';
+import '../utils/custom_widget/point.dart';
 
 class TabGiftScreen extends StatefulWidget {
   @override
@@ -40,30 +42,30 @@ class _TabGiftScreenState extends State<TabGiftScreen> {
                 children: [
                   _buildAppBar(),
                   _buildSearchTextField(),
-                  BuildGroupTitle(
+                  GroupTitle(
                     title: 'Đi ăn',
-                    isShowAll: true,
+                    canShowAll: true,
                   ),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        BuildVoucher(
+                        Voucher(
                           voucherTitle: 'Voucher trị giá 500.000 VNĐ',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
                         ),
-                        BuildVoucher(
+                        Voucher(
                           voucherTitle: 'Voucher trị giá 500.000 VNĐ',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
                         ),
-                        BuildVoucher(
+                        Voucher(
                           voucherTitle: 'Voucher trị giá 500.000 VNĐ',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
                         ),
-                        BuildVoucher(
+                        Voucher(
                           voucherTitle: 'Voucher trị giá 500.000 VNĐ',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
@@ -71,30 +73,30 @@ class _TabGiftScreenState extends State<TabGiftScreen> {
                       ],
                     ),
                   ),
-                  BuildGroupTitle(
+                  GroupTitle(
                     title: 'Đi uống',
-                    isShowAll: true,
+                    canShowAll: true,
                   ),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        BuildVoucher(
+                        Voucher(
                           voucherTitle: 'Voucher trị giá 500.000 VNĐ',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
                         ),
-                        BuildVoucher(
+                        Voucher(
                           voucherTitle: 'Voucher trị giá 500.000 VNĐ',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
                         ),
-                        BuildVoucher(
+                        Voucher(
                           voucherTitle: 'Voucher trị giá 500.000 VNĐ',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
                         ),
-                        BuildVoucher(
+                        Voucher(
                           voucherTitle: 'Voucher trị giá 500.000 VNĐ',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
@@ -102,30 +104,30 @@ class _TabGiftScreenState extends State<TabGiftScreen> {
                       ],
                     ),
                   ),
-                  BuildGroupTitle(
+                  GroupTitle(
                     title: 'Mua sắm',
-                    isShowAll: true,
+                    canShowAll: true,
                   ),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        BuildVoucher(
+                        Voucher(
                           voucherTitle: 'Voucher trị giá 500.000 VNĐ',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
                         ),
-                        BuildVoucher(
+                        Voucher(
                           voucherTitle: 'Voucher trị giá 500.000 VNĐ',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
                         ),
-                        BuildVoucher(
+                        Voucher(
                           voucherTitle: 'Voucher trị giá 500.000 VNĐ',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
                         ),
-                        BuildVoucher(
+                        Voucher(
                           voucherTitle: 'Voucher trị giá 500.000 VNĐ',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
@@ -423,7 +425,7 @@ class _TabGiftScreenState extends State<TabGiftScreen> {
           );
   }
 
-  Padding _buildSearchTextField() {
+  Widget _buildSearchTextField() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: TextField(
@@ -443,57 +445,77 @@ class _TabGiftScreenState extends State<TabGiftScreen> {
     );
   }
 
-  Container _buildAppBar() {
+  Widget _buildAppBar() {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.symmetric(
+        horizontal: 16,
+      ),
       width: _deviceWidth,
       child: Stack(
         children: [
-          Container(
-            width: 132,
-            child: Stack(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(8),
-                    ),
-                    border: Border.all(
-                      color: Colors.black,
-                    ),
-                  ),
-                  padding: EdgeInsets.all(8),
-                  width: 124,
-                  child: Row(
-                    children: [
-                      Icon(Icons.card_giftcard),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Text('Quà đã đổi'),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: CircleAvatar(
-                    child: Text(
-                      '10',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                    backgroundColor: Colors.teal,
-                    radius: 12,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          _buildMyGiftButton(),
           Positioned(
-            child: BuildPoint(point: 1000),
+            child: Point(
+              point: 1000,
+              hasBorder: true,
+            ),
             right: 0,
+            top: 8,
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildMyGiftButton() {
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => MyGiftScreen(),
+          ),
+        );
+      },
+      child: Container(
+        width: 132,
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(8),
+                ),
+                border: Border.all(
+                  color: Colors.black,
+                ),
+              ),
+              padding: EdgeInsets.all(8),
+              margin: EdgeInsets.only(top: 8),
+              width: 124,
+              child: Row(
+                children: [
+                  Icon(Icons.card_giftcard),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text('Quà đã đổi'),
+                ],
+              ),
+            ),
+            Positioned(
+              right: 0,
+              top: 0,
+              child: CircleAvatar(
+                child: Text(
+                  '10',
+                  style: TextStyle(fontSize: 12),
+                ),
+                backgroundColor: Colors.teal,
+                radius: 12,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

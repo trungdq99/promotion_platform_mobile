@@ -62,3 +62,31 @@ const List<BottomNavigationBarItem> BOTTOM_NAVIGATION_BAR_ITEMS = [
     ),
   ),
 ];
+
+// Bold title TextStyle
+const TextStyle BOLD_TITLE_TEXT_STYLE = TextStyle(
+  fontSize: DEFAULT_FONT_SIZE,
+  fontWeight: FontWeight.bold,
+  color: Colors.black,
+);
+
+// Header TextStyle
+const TextStyle HEADER_TEXT_STYLE = TextStyle(
+  fontSize: BIG_FONT_SIZE,
+  fontWeight: FontWeight.bold,
+  color: Colors.black,
+);
+
+// Default TextStyle
+const TextStyle DEFAULT_TEXT_STYLE = TextStyle(
+  fontSize: DEFAULT_FONT_SIZE,
+  color: Colors.black,
+);
+
+const TextStyle SMALL_TEXT_STYLE = TextStyle(
+  fontSize: SMALL_FONT_SIZE,
+  color: Colors.black,
+);
+const double DEFAULT_FONT_SIZE = 20;
+const double SMALL_FONT_SIZE = 16;
+const double BIG_FONT_SIZE = 24;
