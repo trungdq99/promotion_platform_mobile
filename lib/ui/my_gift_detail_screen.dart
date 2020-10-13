@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:promotion_platform/utils/constant.dart';
 import 'package:promotion_platform/utils/custom_widget/point.dart';
-import 'package:promotion_platform/utils/custom_widget/some_brand_detail.dart';
+import 'package:promotion_platform/utils/custom_widget/brand_contact.dart';
+import 'package:promotion_platform/utils/custom_widget/show_detail.dart';
+import 'package:promotion_platform/utils/custom_widget/some_brand_info.dart';
 
 class MyGiftDetailScreen extends StatefulWidget {
   @override
@@ -11,7 +13,6 @@ class MyGiftDetailScreen extends StatefulWidget {
 class _MyGiftDetailScreenState extends State<MyGiftDetailScreen> {
   ScrollController _scrollController;
   double deviceWidth;
-  bool isShowMore = false;
   @override
   void initState() {
     _scrollController = ScrollController();
@@ -38,12 +39,8 @@ class _MyGiftDetailScreenState extends State<MyGiftDetailScreen> {
                   Divider(
                     color: Colors.black,
                   ),
-                  InkWell(
-                    onTap: _showMoreOrLess,
-                    child: Container(
-                      height: isShowMore ? null : 200,
-                      padding: EdgeInsets.all(16),
-                      child: Text(
+                  ShowDetail(
+                    detail:
                         '- Voucher mệnh giá 500,000 VNĐ không giới hạn sản phẩm.\n'
                         'Lưu ý: Hạn sử dụng mã ưu đãi là 1 tuần kể từ ngày đổi.\n'
                         'Điều khoản & áp dụng:\n'
@@ -54,25 +51,14 @@ class _MyGiftDetailScreenState extends State<MyGiftDetailScreen> {
                         '* Không áp dụng:\n'
                         '- Không quy đổi thành tiền mặt, không hoàn trả tiền thừa.\n'
                         '- Khách hàng có thể được yêu cầu trả thêm tiền nếu sử dụng quá gía trị của voucher.',
-                      ),
-                    ),
                   ),
-                  InkWell(
-                    onTap: _showMoreOrLess,
-                    child: Icon(
-                      isShowMore
-                          ? Icons.keyboard_arrow_up
-                          : Icons.keyboard_arrow_down,
-                      size: 32,
-                    ),
-                  ),
-                  SomeBrandDetail(
+                  BrandContact(
                     email: 'unidelivery@gmail.com',
                     numOfStore: 7,
                     phone: '19001000',
                   ),
-                  _buildBrandInfo(
-                    title: 'Uni Delivery',
+                  SomeBrandInfo(
+                    brandTitle: 'Uni Delivery',
                     info: 'Hệ thống giao hàng cho sinh viên',
                   ),
                   SizedBox(
@@ -94,75 +80,6 @@ class _MyGiftDetailScreenState extends State<MyGiftDetailScreen> {
               padding: EdgeInsets.all(16),
               width: deviceWidth - 60,
               child: Text('Sử dụng'),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showMoreOrLess() {
-    setState(() {
-      isShowMore = !isShowMore;
-    });
-  }
-
-  Widget _buildBrandInfo({
-    String title,
-    String info,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(
-          color: Colors.black,
-        ),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      padding: EdgeInsets.all(8),
-      margin: EdgeInsets.all(16),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: Container(
-              color: Colors.teal,
-              height: 50,
-            ),
-          ),
-          Expanded(
-            flex: 3,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: BOLD_TITLE_TEXT_STYLE,
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                Text(
-                  info,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                    ),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  child: Text('Chi tiết'),
-                ),
-              ],
             ),
           ),
         ],
@@ -197,11 +114,17 @@ class _MyGiftDetailScreenState extends State<MyGiftDetailScreen> {
                   style: BOLD_TITLE_TEXT_STYLE,
                   overflow: TextOverflow.ellipsis,
                 ),
-                Text(brand),
+                Text(
+                  brand,
+                  style: DEFAULT_TEXT_STYLE,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('HSD: 23/09/2020'),
+                    Text(
+                      'HSD: 23/09/2020',
+                      style: SMALL_TEXT_STYLE,
+                    ),
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.teal,
@@ -211,7 +134,10 @@ class _MyGiftDetailScreenState extends State<MyGiftDetailScreen> {
                         horizontal: 16,
                         vertical: 8,
                       ),
-                      child: Text('Còn 1 ngày'),
+                      child: Text(
+                        'Còn 1 ngày',
+                        style: SMALL_TEXT_STYLE,
+                      ),
                     ),
                   ],
                 ),
@@ -223,6 +149,7 @@ class _MyGiftDetailScreenState extends State<MyGiftDetailScreen> {
     );
   }
 
+  // App bar
   Widget _buildAppBar(BuildContext context) {
     return SliverAppBar(
       backgroundColor: Colors.white,

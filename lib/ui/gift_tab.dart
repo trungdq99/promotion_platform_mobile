@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:promotion_platform/ui/my_gift_screen.dart';
-import 'package:promotion_platform/ui/gift_detail_screen.dart';
+import 'package:promotion_platform/utils/constant.dart';
+import './my_gift_screen.dart';
 import '../utils/custom_widget/group_title.dart';
 import '../utils/custom_widget/voucher.dart';
 import '../utils/custom_widget/point.dart';
@@ -251,6 +251,11 @@ class _TabGiftScreenState extends State<TabGiftScreen> {
         trailing: Radio(
           value: value,
           groupValue: _sortIndex,
+          onChanged: (value) {
+            setState(() {
+              _sortIndex = value;
+            });
+          },
         ),
         onTap: () {
           setState(() {
@@ -477,7 +482,7 @@ class _TabGiftScreenState extends State<TabGiftScreen> {
         );
       },
       child: Container(
-        width: 132,
+        width: 144,
         child: Stack(
           children: [
             Container(
@@ -491,14 +496,17 @@ class _TabGiftScreenState extends State<TabGiftScreen> {
               ),
               padding: EdgeInsets.all(8),
               margin: EdgeInsets.only(top: 8),
-              width: 124,
+              width: 136,
               child: Row(
                 children: [
                   Icon(Icons.card_giftcard),
                   SizedBox(
                     width: 8,
                   ),
-                  Text('Quà đã đổi'),
+                  Text(
+                    'Quà đã đổi',
+                    style: SMALL_TEXT_STYLE,
+                  ),
                 ],
               ),
             ),
@@ -508,7 +516,7 @@ class _TabGiftScreenState extends State<TabGiftScreen> {
               child: CircleAvatar(
                 child: Text(
                   '10',
-                  style: TextStyle(fontSize: 12),
+                  style: SUPER_SMALL_TEXT_STYLE,
                 ),
                 backgroundColor: Colors.teal,
                 radius: 12,

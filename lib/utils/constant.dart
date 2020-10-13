@@ -87,6 +87,19 @@ const TextStyle SMALL_TEXT_STYLE = TextStyle(
   fontSize: SMALL_FONT_SIZE,
   color: Colors.black,
 );
+
+const TextStyle BOLD_SMALL_TEXT_STYLE = TextStyle(
+  fontSize: SMALL_FONT_SIZE,
+  color: Colors.black,
+  fontWeight: FontWeight.bold,
+);
+
+const TextStyle SUPER_SMALL_TEXT_STYLE = TextStyle(
+  fontSize: SMALL_FONT_SIZE,
+  //color: Colors.black,
+);
+
 const double DEFAULT_FONT_SIZE = 20;
 const double SMALL_FONT_SIZE = 16;
+const double SUPER_SMALL_FONT_SIZE = 12;
 const double BIG_FONT_SIZE = 24;

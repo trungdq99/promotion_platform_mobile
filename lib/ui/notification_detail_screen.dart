@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:promotion_platform/utils/constant.dart';
 import 'package:promotion_platform/utils/custom_widget/custom_back_button.dart';
@@ -71,51 +68,57 @@ class _NotificationDetailScreenState extends State<NotificationDetailScreen> {
         _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
       }
     });
-    return SingleChildScrollView(
-      padding: EdgeInsets.all(16),
-      child: Column(
-        children: [
-          _buildAvatar(),
-          Text(
-            'Uni Delivery',
-            style: HEADER_TEXT_STYLE,
-          ),
-          _buildMessage(
-            message:
-                'yay! Chúc mừng bạn đã kích hoạt thành công gói quà từ Uni Delivery! Một voucher trị giá 500,000 VNĐ đang chờ được bạn sử dụng tại hệ thống cửa hàng của Uni Delivery nha. Còn chần chờ gì nữa mà không sử dụng ngay nào!',
-            dateTime: 'Thứ Hai, 07:00',
-            buttonTitle: 'Dùng ngay',
-          ),
-          _buildMessage(
-            message:
-                'yay! Chúc mừng bạn đã kích hoạt thành công gói quà từ Uni Delivery! Một voucher trị giá 500,000 VNĐ đang chờ được bạn sử dụng tại hệ thống cửa hàng của Uni Delivery nha. Còn chần chờ gì nữa mà không sử dụng ngay nào!',
-            dateTime: 'Thứ Hai, 07:00',
-            buttonTitle: 'Dùng ngay',
-          ),
-          _buildMessage(
-            message:
-                'yay! Chúc mừng bạn đã kích hoạt thành công gói quà từ Uni Delivery! Một voucher trị giá 500,000 VNĐ đang chờ được bạn sử dụng tại hệ thống cửa hàng của Uni Delivery nha. Còn chần chờ gì nữa mà không sử dụng ngay nào!',
-            dateTime: 'Thứ Hai, 07:00',
-            buttonTitle: 'Dùng ngay',
-          ),
-          _buildMessage(
-            message:
-                'yay! Chúc mừng bạn đã kích hoạt thành công gói quà từ Uni Delivery! Một voucher trị giá 500,000 VNĐ đang chờ được bạn sử dụng tại hệ thống cửa hàng của Uni Delivery nha. Còn chần chờ gì nữa mà không sử dụng ngay nào!',
-            dateTime: 'Thứ Hai, 07:00',
-            buttonTitle: 'Dùng ngay',
-          ),
-          _buildMessage(
-            message:
-                'yay! Chúc mừng bạn đã kích hoạt thành công gói quà từ Uni Delivery! Một voucher trị giá 500,000 VNĐ đang chờ được bạn sử dụng tại hệ thống cửa hàng của Uni Delivery nha. Còn chần chờ gì nữa mà không sử dụng ngay nào!',
-            dateTime: 'Thứ Hai, 07:00',
-            buttonTitle: 'Dùng ngay',
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        SizedBox(
+          height: 32,
+        ),
+        _buildAvatar(),
+        SizedBox(
+          height: 16,
+        ),
+        Text(
+          'Uni Delivery',
+          style: HEADER_TEXT_STYLE,
+        ),
+        SizedBox(
+          height: 32,
+        ),
+        _buildMessage(
+          message:
+              'yay! Chúc mừng bạn đã kích hoạt thành công gói quà từ Uni Delivery! Một voucher trị giá 500,000 VNĐ đang chờ được bạn sử dụng tại hệ thống cửa hàng của Uni Delivery nha. Còn chần chờ gì nữa mà không sử dụng ngay nào!',
+          dateTime: 'Thứ Hai, 07:00',
+          buttonTitle: 'Dùng ngay',
+        ),
+        _buildMessage(
+          message:
+              'yay! Chúc mừng bạn đã kích hoạt thành công gói quà từ Uni Delivery! Một voucher trị giá 500,000 VNĐ đang chờ được bạn sử dụng tại hệ thống cửa hàng của Uni Delivery nha. Còn chần chờ gì nữa mà không sử dụng ngay nào!',
+          dateTime: 'Thứ Hai, 07:00',
+          buttonTitle: 'Dùng ngay',
+        ),
+        _buildMessage(
+          message:
+              'yay! Chúc mừng bạn đã kích hoạt thành công gói quà từ Uni Delivery! Một voucher trị giá 500,000 VNĐ đang chờ được bạn sử dụng tại hệ thống cửa hàng của Uni Delivery nha. Còn chần chờ gì nữa mà không sử dụng ngay nào!',
+          dateTime: 'Thứ Hai, 07:00',
+          buttonTitle: 'Dùng ngay',
+        ),
+        _buildMessage(
+          message:
+              'yay! Chúc mừng bạn đã kích hoạt thành công gói quà từ Uni Delivery! Một voucher trị giá 500,000 VNĐ đang chờ được bạn sử dụng tại hệ thống cửa hàng của Uni Delivery nha. Còn chần chờ gì nữa mà không sử dụng ngay nào!',
+          dateTime: 'Thứ Hai, 07:00',
+          buttonTitle: 'Dùng ngay',
+        ),
+        _buildMessage(
+          message:
+              'yay! Chúc mừng bạn đã kích hoạt thành công gói quà từ Uni Delivery! Một voucher trị giá 500,000 VNĐ đang chờ được bạn sử dụng tại hệ thống cửa hàng của Uni Delivery nha. Còn chần chờ gì nữa mà không sử dụng ngay nào!',
+          dateTime: 'Thứ Hai, 07:00',
+          buttonTitle: 'Dùng ngay',
+        ),
+      ],
     );
   }
 
-  CircleAvatar _buildAvatar() {
+  Widget _buildAvatar() {
     return CircleAvatar(
       backgroundColor: Colors.teal,
       radius: 32,
@@ -131,7 +134,10 @@ class _NotificationDetailScreenState extends State<NotificationDetailScreen> {
   }) {
     return Column(
       children: [
-        Text(dateTime),
+        Text(
+          dateTime,
+          style: SMALL_TEXT_STYLE,
+        ),
         Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -140,10 +146,17 @@ class _NotificationDetailScreenState extends State<NotificationDetailScreen> {
             ),
             borderRadius: BorderRadius.circular(8),
           ),
-          padding: EdgeInsets.all(8),
+          margin: EdgeInsets.all(16),
+          padding: EdgeInsets.all(16),
           child: Column(
             children: [
-              Text(message),
+              Text(
+                message,
+                style: DEFAULT_TEXT_STYLE,
+              ),
+              SizedBox(
+                height: 16,
+              ),
               InkWell(
                 onTap: () {},
                 child: Container(
@@ -154,7 +167,10 @@ class _NotificationDetailScreenState extends State<NotificationDetailScreen> {
                   width: double.maxFinite,
                   alignment: Alignment.center,
                   padding: EdgeInsets.symmetric(vertical: 8),
-                  child: Text(buttonTitle),
+                  child: Text(
+                    buttonTitle,
+                    style: DEFAULT_TEXT_STYLE,
+                  ),
                 ),
               ),
             ],

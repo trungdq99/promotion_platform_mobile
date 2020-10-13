@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import '../constant.dart';
 
-class SomeBrandDetail extends StatelessWidget {
-  const SomeBrandDetail({
+class BrandContact extends StatelessWidget {
+  const BrandContact({
     Key key,
     this.email,
     this.phone,
@@ -22,7 +23,10 @@ class SomeBrandDetail extends StatelessWidget {
             height: 0,
           ),
           ListTile(
-            title: Text(email),
+            title: Text(
+              email,
+              style: SMALL_TEXT_STYLE,
+            ),
             leading: Icon(Icons.email),
           ),
           Divider(
@@ -30,7 +34,10 @@ class SomeBrandDetail extends StatelessWidget {
             height: 0,
           ),
           ListTile(
-            title: Text(phone),
+            title: Text(
+              phone,
+              style: SMALL_TEXT_STYLE,
+            ),
             leading: Icon(Icons.phone),
             trailing: Icon(Icons.arrow_forward_ios),
           ),
@@ -39,7 +46,10 @@ class SomeBrandDetail extends StatelessWidget {
             height: 0,
           ),
           ListTile(
-            title: Text('$numOfStore cửa hàng áp dụng'),
+            title: Text(
+              '$numOfStore cửa hàng áp dụng',
+              style: SMALL_TEXT_STYLE,
+            ),
             leading: Icon(Icons.store),
             trailing: Icon(Icons.arrow_forward_ios),
           ),

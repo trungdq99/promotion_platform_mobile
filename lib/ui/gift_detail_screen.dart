@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:promotion_platform/utils/constant.dart';
-import 'package:promotion_platform/utils/custom_widget/point.dart';
-import 'package:promotion_platform/utils/custom_widget/some_brand_detail.dart';
+import '../utils/constant.dart';
+import '../utils/custom_widget/point.dart';
+import '../utils/custom_widget/brand_contact.dart';
+import '../utils/custom_widget/show_detail.dart';
+import '../utils/custom_widget/some_brand_info.dart';
 
 class GiftDetailScreen extends StatefulWidget {
   @override
@@ -11,7 +13,7 @@ class GiftDetailScreen extends StatefulWidget {
 class _GiftDetailScreenState extends State<GiftDetailScreen> {
   ScrollController _scrollController;
   double deviceWidth;
-  bool isShowMore = false;
+
   @override
   void initState() {
     _scrollController = ScrollController();
@@ -37,13 +39,10 @@ class _GiftDetailScreenState extends State<GiftDetailScreen> {
                   ),
                   Divider(
                     color: Colors.black,
+                    height: 0,
                   ),
-                  InkWell(
-                    onTap: _showMoreOrLess,
-                    child: Container(
-                      height: isShowMore ? null : 200,
-                      padding: EdgeInsets.all(16),
-                      child: Text(
+                  ShowDetail(
+                    detail:
                         '- Voucher mệnh giá 500,000 VNĐ không giới hạn sản phẩm.\n'
                         'Lưu ý: Hạn sử dụng mã ưu đãi là 1 tuần kể từ ngày đổi.\n'
                         'Điều khoản & áp dụng:\n'
@@ -54,25 +53,14 @@ class _GiftDetailScreenState extends State<GiftDetailScreen> {
                         '* Không áp dụng:\n'
                         '- Không quy đổi thành tiền mặt, không hoàn trả tiền thừa.\n'
                         '- Khách hàng có thể được yêu cầu trả thêm tiền nếu sử dụng quá gía trị của voucher.',
-                      ),
-                    ),
                   ),
-                  InkWell(
-                    onTap: _showMoreOrLess,
-                    child: Icon(
-                      isShowMore
-                          ? Icons.keyboard_arrow_up
-                          : Icons.keyboard_arrow_down,
-                      size: 32,
-                    ),
-                  ),
-                  SomeBrandDetail(
+                  BrandContact(
                     email: 'unidelivery@gmail.com',
                     numOfStore: 7,
                     phone: '19001000',
                   ),
-                  _buildBrandInfo(
-                    title: 'Uni Delivery',
+                  SomeBrandInfo(
+                    brandTitle: 'Uni Delivery',
                     info: 'Hệ thống giao hàng cho sinh viên',
                   ),
                   SizedBox(
@@ -101,75 +89,6 @@ class _GiftDetailScreenState extends State<GiftDetailScreen> {
     );
   }
 
-  void _showMoreOrLess() {
-    setState(() {
-      isShowMore = !isShowMore;
-    });
-  }
-
-  Widget _buildBrandInfo({
-    String title,
-    String info,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(
-          color: Colors.black,
-        ),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      padding: EdgeInsets.all(8),
-      margin: EdgeInsets.all(16),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: Container(
-              color: Colors.teal,
-              height: 50,
-            ),
-          ),
-          Expanded(
-            flex: 3,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: BOLD_TITLE_TEXT_STYLE,
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                Text(
-                  info,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                    ),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  child: Text('Chi tiết'),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildTitle({
     String title,
     String brand,
@@ -188,7 +107,7 @@ class _GiftDetailScreenState extends State<GiftDetailScreen> {
             ),
           ),
           Expanded(
-            flex: 2,
+            flex: 3,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -197,14 +116,19 @@ class _GiftDetailScreenState extends State<GiftDetailScreen> {
                   style: BOLD_TITLE_TEXT_STYLE,
                   overflow: TextOverflow.ellipsis,
                 ),
-                Text(brand),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      brand,
+                      style: DEFAULT_TEXT_STYLE,
+                    ),
+                    Point(
+                      point: point,
+                    ),
+                  ],
+                ),
               ],
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Point(
-              point: point,
             ),
           ),
         ],

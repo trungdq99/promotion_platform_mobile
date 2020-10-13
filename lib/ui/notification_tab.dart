@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:promotion_platform/ui/notification_detail_screen.dart';
+import 'package:promotion_platform/utils/constant.dart';
 
 class TabNotificationScreen extends StatefulWidget {
   @override
@@ -75,13 +76,48 @@ class _TabNotificationScreenState extends State<TabNotificationScreen> {
               SingleChildScrollView(
                 child: Column(
                   children: [
-                    _buildMessage(),
-                    _buildMessage(isRead: false),
-                    _buildMessage(),
-                    _buildMessage(),
-                    _buildMessage(),
-                    _buildMessage(),
-                    _buildMessage(),
+                    _buildMessage(
+                      brandTitle: 'Uni Delivery',
+                      message:
+                          'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
+                      date: 'Thứ Hai, 07:00',
+                    ),
+                    _buildMessage(
+                        brandTitle: 'Uni Delivery',
+                        message:
+                            'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
+                        date: 'Thứ Hai, 07:00',
+                        isRead: false),
+                    _buildMessage(
+                      brandTitle: 'Uni Delivery',
+                      message:
+                          'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
+                      date: 'Thứ Hai, 07:00',
+                    ),
+                    _buildMessage(
+                      brandTitle: 'Uni Delivery',
+                      message:
+                          'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
+                      date: 'Thứ Hai, 07:00',
+                    ),
+                    _buildMessage(
+                      brandTitle: 'Uni Delivery',
+                      message:
+                          'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
+                      date: 'Thứ Hai, 07:00',
+                    ),
+                    _buildMessage(
+                      brandTitle: 'Uni Delivery',
+                      message:
+                          'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
+                      date: 'Thứ Hai, 07:00',
+                    ),
+                    _buildMessage(
+                      brandTitle: 'Uni Delivery',
+                      message:
+                          'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
+                      date: 'Thứ Hai, 07:00',
+                    ),
                   ],
                 ),
               ),
@@ -89,14 +125,24 @@ class _TabNotificationScreenState extends State<TabNotificationScreen> {
                 child: Column(
                   children: [
                     _buildMessage(
+                      brandTitle: 'Uni Delivery',
+                      message:
+                          'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
+                      date: 'Thứ Hai, 07:00',
                       showMore: true,
                       function: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => NotificationDetailScreen(),
-                        ));
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => NotificationDetailScreen(),
+                          ),
+                        );
                       },
                     ),
                     _buildMessage(
+                      brandTitle: 'Uni Delivery',
+                      message:
+                          'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
+                      date: 'Thứ Hai, 07:00',
                       isRead: false,
                       showMore: true,
                     ),
@@ -111,16 +157,25 @@ class _TabNotificationScreenState extends State<TabNotificationScreen> {
   }
 
   Widget _buildMessage({
+    String brandTitle,
+    String message,
+    String date,
     bool isRead: true,
     bool showMore: false,
     Function function,
   }) {
     return InkWell(
-      onTap: function,
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => NotificationDetailScreen(),
+          ),
+        );
+      },
       child: Container(
         color: isRead ? Colors.white : Colors.black12,
         width: double.maxFinite,
-        height: 100,
+        height: 128,
         child: Row(
           children: [
             Expanded(
@@ -140,20 +195,18 @@ class _TabNotificationScreenState extends State<TabNotificationScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(
-                    'Uni Delivery',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    brandTitle,
+                    style: BOLD_TITLE_TEXT_STYLE,
                   ),
                   Text(
-                      'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha'),
+                    message,
+                    style: SMALL_TEXT_STYLE,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
                   Text(
-                    'Thứ Hai, 07:00',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
+                    date,
+                    style: BOLD_SMALL_TEXT_STYLE,
                   ),
                 ],
               ),
