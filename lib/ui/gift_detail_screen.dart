@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:promotion_platform/bloc/gift_detail_screen/gift_detail_screen_bloc.dart';
+import 'package:promotion_platform/bloc/gift_detail_screen/gift_detail_screen_event.dart';
+import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import '../utils/constant.dart';
 import '../utils/custom_widget/point.dart';
 import '../utils/custom_widget/brand_contact.dart';
@@ -137,16 +140,19 @@ class _GiftDetailScreenState extends State<GiftDetailScreen> {
   }
 
   Widget _buildAppBar(BuildContext context) {
+    final giftDetailScreenBloc = BlocProvider.of<GiftDetailScreenBloc>(context);
     return SliverAppBar(
       backgroundColor: Colors.white,
       flexibleSpace: Container(
         color: Colors.teal,
       ),
       expandedHeight: 150,
+      pinned: true,
       leading: Padding(
         padding: EdgeInsets.only(left: 16),
         child: InkWell(
           onTap: () {
+            giftDetailScreenBloc.emitEvent(GiftDetailScreenEventClose());
             Navigator.of(context).pop();
           },
           child: CircleAvatar(

@@ -19,11 +19,7 @@ class Voucher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => GiftDetailScreen(),
-        ),
-      ),
+      onTap: function,
       child: Container(
         width: 250,
         margin: EdgeInsets.only(

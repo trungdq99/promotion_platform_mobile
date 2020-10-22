@@ -46,6 +46,9 @@ class _ShowDetailState extends State<ShowDetail> {
             size: 32,
           ),
         ),
+        SizedBox(
+          height: 16,
+        ),
       ],
     );
   }

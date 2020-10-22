@@ -157,6 +157,7 @@ class _MyGiftDetailScreenState extends State<MyGiftDetailScreen> {
         color: Colors.teal,
       ),
       expandedHeight: 150,
+      pinned: true,
       leading: Padding(
         padding: EdgeInsets.only(left: 16),
         child: InkWell(

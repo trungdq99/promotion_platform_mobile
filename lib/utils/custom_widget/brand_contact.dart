@@ -7,40 +7,48 @@ class BrandContact extends StatelessWidget {
     this.email,
     this.phone,
     this.numOfStore: 0,
+    this.type,
   }) : super(key: key);
 
   final String email;
   final String phone;
   final int numOfStore;
+  final String type;
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.symmetric(
+        horizontal: 16,
+      ),
       child: Column(
         children: [
           Divider(
             color: Colors.black,
             height: 0,
           ),
-          ListTile(
-            title: Text(
-              email,
-              style: SMALL_TEXT_STYLE,
-            ),
-            leading: Icon(Icons.email),
-          ),
+          email != null
+              ? ListTile(
+                  title: Text(
+                    email,
+                    style: SMALL_TEXT_STYLE,
+                  ),
+                  leading: Icon(Icons.email),
+                )
+              : Container(),
           Divider(
             color: Colors.black,
             height: 0,
           ),
-          ListTile(
-            title: Text(
-              phone,
-              style: SMALL_TEXT_STYLE,
-            ),
-            leading: Icon(Icons.phone),
-            trailing: Icon(Icons.arrow_forward_ios),
-          ),
+          phone != null
+              ? ListTile(
+                  title: Text(
+                    phone,
+                    style: SMALL_TEXT_STYLE,
+                  ),
+                  leading: Icon(Icons.phone),
+                  trailing: Icon(Icons.arrow_forward_ios),
+                )
+              : Container(),
           Divider(
             color: Colors.black,
             height: 0,
@@ -57,6 +65,15 @@ class BrandContact extends StatelessWidget {
             color: Colors.black,
             height: 0,
           ),
+          type != null
+              ? ListTile(
+                  title: Text(
+                    type,
+                    style: SMALL_TEXT_STYLE,
+                  ),
+                  leading: Icon(Icons.label),
+                )
+              : Container(),
         ],
       ),
     );

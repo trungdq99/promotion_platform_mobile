@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+// API constant
+const String BASE_URL = 'https://loyaltyapi20201014234207.azurewebsites.net';
+const String LOGIN_API = 'api/v1/auth/google';
 // List Bottom Navigation Bar Items
 const List<BottomNavigationBarItem> BOTTOM_NAVIGATION_BAR_ITEMS = [
   BottomNavigationBarItem(
@@ -103,3 +106,29 @@ const double DEFAULT_FONT_SIZE = 20;
 const double SMALL_FONT_SIZE = 16;
 const double SUPER_SMALL_FONT_SIZE = 12;
 const double BIG_FONT_SIZE = 24;
+
+// Type of data to save on disk
+enum SavingType {
+  String,
+  Int,
+  Bool,
+  Double,
+  StringList,
+}
+
+// UnAuthorize header
+const Map<String, String> UN_AUTHORIZE_HEADER = {
+  'Content-Type': 'application/json; charset=UTF-8',
+};
+
+// Request method
+enum RequestMethod {
+  GET,
+  POST,
+  PUT,
+  PATCH,
+  DELETE,
+}
+
+// Key to save data on disk
+const String ACCESS_TOKEN_KEY = 'access_token';

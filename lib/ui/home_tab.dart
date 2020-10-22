@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:promotion_platform/bloc/gift_detail_screen/gift_detail_screen_bloc.dart';
+import 'package:promotion_platform/bloc/gift_detail_screen/gift_detail_screen_event.dart';
+import 'package:promotion_platform/ui/brand_detail_screen.dart';
+import 'package:promotion_platform/ui/gift_detail_screen.dart';
+import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import '../utils/constant.dart';
 import '../utils/custom_widget/point.dart';
 import '../utils/custom_widget/group_title.dart';
@@ -13,6 +18,7 @@ class _HomeTabState extends State<HomeTab> {
   double deviceWidth;
   @override
   Widget build(BuildContext context) {
+    final giftDetailScreenBloc = BlocProvider.of<GiftDetailScreenBloc>(context);
     deviceWidth = MediaQuery.of(context).size.width;
     // final deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -64,11 +70,18 @@ class _HomeTabState extends State<HomeTab> {
                           voucherTitle: 'Voucher 500,000 VND',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
+                          function: () => giftDetailScreenBloc.emitEvent(
+                            GiftDetailScreenEventOpen(),
+                          ),
                         ),
                         Voucher(
                           voucherTitle: 'Voucher 500,000 VND',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
+                          function: () =>
+                              Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => GiftDetailScreen(),
+                          )),
                         ),
                         Voucher(
                           voucherTitle: 'Voucher 500,000 VND',
@@ -175,36 +188,43 @@ class _HomeTabState extends State<HomeTab> {
     int promotions,
     String imageUrl,
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.black,
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => BrandDetailScreen(),
+        ));
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.black,
+          ),
         ),
-      ),
-      padding: EdgeInsets.all(16),
-      margin: EdgeInsets.only(
-        left: 16,
-      ),
-      height: 150,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            color: Colors.teal,
-            height: 64,
-            width: 64,
-            alignment: Alignment.center,
-            child: Text('Uni'),
-          ),
-          Text(
-            brandTitle,
-            style: BOLD_TITLE_TEXT_STYLE,
-          ),
-          Text(
-            '$promotions khuyến mãi',
-            style: SMALL_TEXT_STYLE,
-          ),
-        ],
+        padding: EdgeInsets.all(16),
+        margin: EdgeInsets.only(
+          left: 16,
+        ),
+        height: 150,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              color: Colors.teal,
+              height: 64,
+              width: 64,
+              alignment: Alignment.center,
+              child: Text('Uni'),
+            ),
+            Text(
+              brandTitle,
+              style: BOLD_TITLE_TEXT_STYLE,
+            ),
+            Text(
+              '$promotions khuyến mãi',
+              style: SMALL_TEXT_STYLE,
+            ),
+          ],
+        ),
       ),
     );
   }
