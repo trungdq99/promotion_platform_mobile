@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constant.dart';
+import '../helper.dart';
 
 class Point extends StatelessWidget {
   const Point({
@@ -8,7 +9,7 @@ class Point extends StatelessWidget {
     this.hasBorder: false,
   }) : super(key: key);
 
-  final int point;
+  final double point;
   final bool hasBorder;
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class Point extends StatelessWidget {
             width: 8,
           ),
           Text(
-            point.toString(),
+            Helper.decimalPatternFormat(point),
             style: DEFAULT_TEXT_STYLE,
           ),
         ],

@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:promotion_platform/bloc/brand_detail_screen/brand_detail_screen_bloc.dart';
+import 'package:promotion_platform/bloc/brand_detail_screen/brand_detail_screen_state.dart';
+import 'package:promotion_platform/models/brand_model.dart';
+import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
+import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
 import 'package:promotion_platform/utils/constant.dart';
 import 'package:promotion_platform/utils/custom_widget/brand_contact.dart';
+import 'package:promotion_platform/utils/custom_widget/progressing.dart';
 import 'package:promotion_platform/utils/custom_widget/show_detail.dart';
 import 'package:promotion_platform/utils/custom_widget/voucher.dart';
 
@@ -11,6 +17,7 @@ class BrandDetailScreen extends StatefulWidget {
 
 class _BrandDetailScreenState extends State<BrandDetailScreen> {
   ScrollController _scrollController;
+  BrandDetailScreenBloc _brandDetailScreenBloc;
   double deviceWidth;
   @override
   void initState() {
@@ -20,64 +27,92 @@ class _BrandDetailScreenState extends State<BrandDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _brandDetailScreenBloc = BlocProvider.of<BrandDetailScreenBloc>(context);
     deviceWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          _buildAppBar(context),
-          SliverList(
-            delegate: SliverChildListDelegate([
-              _buildTitle(
-                  brandTitle: 'Uni Delivery',
-                  email: 'unidelivery@gmail.com',
-                  phone: '19001000',
-                  numOfStore: 7,
-                  type: 'Ẩm thực, ăn uống các thứ'),
-              ShowDetail(
-                detail: 'Hệ thống giao hàng cho sinh viên FPT\n'
-                    '- Giao hàng tận nơi với mức giá phải chăng.\n'
-                    '- Thức ăn luôn nóng hổi sẵn sàng ăn ngay, hoặc bạn có thể hâm lại bằng lò vi sóng ở 7/11\n'
-                    'Hệ thống giao hàng cho sinh viên FPT\n'
-                    '- Giao hàng tận nơi với mức giá phải chăng.\n'
-                    '- Thức ăn luôn nóng hổi sẵn sàng ăn ngay, hoặc bạn có thể hâm lại bằng lò vi sóng ở 7/11\n'
-                    'Hệ thống giao hàng cho sinh viên FPT\n'
-                    '- Giao hàng tận nơi với mức giá phải chăng.\n'
-                    '- Thức ăn luôn nóng hổi sẵn sàng ăn ngay, hoặc bạn có thể hâm lại bằng lò vi sóng ở 7/11\n',
-              ),
-              SafeArea(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      Voucher(
-                        voucherTitle: 'Voucher 500,000 VND',
-                        brandTitle: 'Uni Delivery',
-                        price: 1000,
+    return BlocEventStateBuilder<BrandDetailScreenState>(
+      builder: (context, state) {
+        BrandModel brandModel = BrandModel();
+        if (state.isOpen) {
+          brandModel = state.brandModel;
+        }
+
+        return _buildScreen(
+          context,
+          state.isOpening,
+          brandModel,
+        );
+      },
+      bloc: _brandDetailScreenBloc,
+    );
+  }
+
+  Widget _buildScreen(
+    BuildContext context,
+    bool isProgressing,
+    BrandModel brandModel,
+  ) {
+    return Stack(
+      children: [
+        Scaffold(
+          body: CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+              _buildAppBar(context),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  _buildTitle(
+                      brandTitle: brandModel.brandName,
+                      phone: brandModel.phoneNumber,
+                      numOfStore: 7,
+                      type: 'Ẩm thực, ăn uống các thứ'),
+                  ShowDetail(detail: brandModel.description),
+                  // ShowDetail(
+                  //   detail: 'Hệ thống giao hàng cho sinh viên FPT\n'
+                  //       '- Giao hàng tận nơi với mức giá phải chăng.\n'
+                  //       '- Thức ăn luôn nóng hổi sẵn sàng ăn ngay, hoặc bạn có thể hâm lại bằng lò vi sóng ở 7/11\n'
+                  //       'Hệ thống giao hàng cho sinh viên FPT\n'
+                  //       '- Giao hàng tận nơi với mức giá phải chăng.\n'
+                  //       '- Thức ăn luôn nóng hổi sẵn sàng ăn ngay, hoặc bạn có thể hâm lại bằng lò vi sóng ở 7/11\n'
+                  //       'Hệ thống giao hàng cho sinh viên FPT\n'
+                  //       '- Giao hàng tận nơi với mức giá phải chăng.\n'
+                  //       '- Thức ăn luôn nóng hổi sẵn sàng ăn ngay, hoặc bạn có thể hâm lại bằng lò vi sóng ở 7/11\n',
+                  // ),
+                  SafeArea(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Voucher(
+                            voucherTitle: 'Voucher 500,000 VND',
+                            brandTitle: 'Uni Delivery',
+                            price: 1000,
+                          ),
+                          Voucher(
+                            voucherTitle: 'Voucher 500,000 VND',
+                            brandTitle: 'Uni Delivery',
+                            price: 1000,
+                          ),
+                          Voucher(
+                            voucherTitle: 'Voucher 500,000 VND',
+                            brandTitle: 'Uni Delivery',
+                            price: 1000,
+                          ),
+                          Voucher(
+                            voucherTitle: 'Voucher 500,000 VND',
+                            brandTitle: 'Uni Delivery',
+                            price: 1000,
+                          ),
+                        ],
                       ),
-                      Voucher(
-                        voucherTitle: 'Voucher 500,000 VND',
-                        brandTitle: 'Uni Delivery',
-                        price: 1000,
-                      ),
-                      Voucher(
-                        voucherTitle: 'Voucher 500,000 VND',
-                        brandTitle: 'Uni Delivery',
-                        price: 1000,
-                      ),
-                      Voucher(
-                        voucherTitle: 'Voucher 500,000 VND',
-                        brandTitle: 'Uni Delivery',
-                        price: 1000,
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                ]),
               ),
-            ]),
+            ],
           ),
-        ],
-      ),
+        ),
+        isProgressing ? Progressing() : Container(),
+      ],
     );
   }
 

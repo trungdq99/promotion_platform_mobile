@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:promotion_platform/utils/constant.dart';
-import './my_gift_screen.dart';
+import './voucher_screen.dart';
 import '../utils/custom_widget/group_title.dart';
 import '../utils/custom_widget/voucher.dart';
 import '../utils/custom_widget/point.dart';
 
-class TabGiftScreen extends StatefulWidget {
+class PromotionTabScreen extends StatefulWidget {
   @override
-  _TabGiftScreenState createState() => _TabGiftScreenState();
+  _PromotionTabScreenState createState() => _PromotionTabScreenState();
 }
 
-class _TabGiftScreenState extends State<TabGiftScreen> {
+class _PromotionTabScreenState extends State<PromotionTabScreen> {
   double _deviceWidth;
 
   bool _isShowTypeSelection = false;

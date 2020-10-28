@@ -8,6 +8,7 @@ class ApiProvider {
   Future fetchData(String api, RequestMethod method, Map<String, String> header,
       String body) async {
     Response response;
+    print('Call api: $BASE_URL/$api');
     if (method == RequestMethod.GET) {
       response = await client.get('$BASE_URL/$api', headers: header);
     } else if (method == RequestMethod.POST) {

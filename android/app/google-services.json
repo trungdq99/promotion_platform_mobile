@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "134712540788",
+    "firebase_url": "https://loyalty-fcfae.firebaseio.com",
+    "project_id": "loyalty-fcfae",
+    "storage_bucket": "loyalty-fcfae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:134712540788:android:d62006b9f68fac64619b21",
+        "android_client_info": {
+          "package_name": "com.ts.promotion_platform"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "134712540788-r03v2452stm9j4oc1ijuer3jfdq6qip2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMqNHhkEinexDy5XsMNeb2JKNFIAPO1rU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "134712540788-r03v2452stm9j4oc1ijuer3jfdq6qip2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "134712540788-usd2ovj55jnpomhj4o6ga85k7m45qckf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ts.promotionPlatform"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

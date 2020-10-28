@@ -33,7 +33,7 @@ class AuthenticationBloc
         IdTokenResult fbTokenResult = await user.getIdTokenResult(true);
         String firebaseToken = fbTokenResult.token;
         print(firebaseToken);
-        token = await _signInSever(token: firebaseToken);
+        token = await _signInSever(firebaseToken: firebaseToken);
         if (token != null && token.isNotEmpty) {
           Helper.saveData(
             ACCESS_TOKEN_KEY,
@@ -41,8 +41,6 @@ class AuthenticationBloc
             SavingType.String,
           );
           isSuccess = true;
-          print(
-              'Username: ${user.displayName} | Email: ${user.email} | Email verified: ${user.emailVerified} | Phone number: ${user.phoneNumber} | Photo url: ${user.photoURL}');
         } else {
           errMsg = 'Sign in sever failed!';
         }
@@ -50,6 +48,7 @@ class AuthenticationBloc
       if (!isSuccess) {
         yield AuthenticationState.error(errMsg: errMsg);
       } else {
+        print('Access token : $token');
         yield AuthenticationState.authenticated(token: token);
       }
     } else if (event is AuthenticationEventSignOut) {
@@ -58,19 +57,20 @@ class AuthenticationBloc
     }
   }
 
-  Future<String> _signInSever({@required String token}) async {
+  Future<String> _signInSever({@required String firebaseToken}) async {
     Repository _repository = Repository();
-    Response response = await _repository.login(token: token);
+    Response response = await _repository.login(token: firebaseToken);
     print(response.statusCode);
     print(response.body);
+    String token;
     if (response.statusCode == 200) {
       Map<String, dynamic> responseBody = Helper.decodeJson(response.body);
 
       if (responseBody != null) {
-        return responseBody['token'];
+        token = responseBody['token'];
       }
     }
-    return null;
+    return token;
   }
 
   final GoogleSignIn _googleSignIn = GoogleSignIn();

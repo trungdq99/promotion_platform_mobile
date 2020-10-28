@@ -1,12 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:promotion_platform/bloc/gift_detail_screen/gift_detail_screen_bloc.dart';
-import 'package:promotion_platform/bloc/gift_detail_screen/gift_detail_screen_event.dart';
-import 'package:promotion_platform/bloc/gift_detail_screen/gift_detail_screen_state.dart';
-import 'package:promotion_platform/ui/gift_detail_screen.dart';
+import 'package:promotion_platform/bloc/authentication/authentication_bloc.dart';
+import 'package:promotion_platform/bloc/authentication/authentication_state.dart';
+import 'package:promotion_platform/bloc/brand/brand_bloc.dart';
+import 'package:promotion_platform/bloc/brand/brand_event.dart';
+import 'package:promotion_platform/bloc/brand_detail_screen/brand_detail_screen_bloc.dart';
+import 'package:promotion_platform/bloc/brand_detail_screen/brand_detail_screen_event.dart';
+import 'package:promotion_platform/bloc/brand_detail_screen/brand_detail_screen_state.dart';
+import 'package:promotion_platform/bloc/customer/customer_bloc.dart';
+import 'package:promotion_platform/bloc/customer/customer_event.dart';
+import 'package:promotion_platform/ui/brand_detail_screen.dart';
+import '../bloc/promotion_detail_screen/promotion_detail_screen_bloc.dart';
+import '../bloc/promotion_detail_screen/promotion_detail_screen_state.dart';
+import 'package:promotion_platform/ui/promotion_detail_screen.dart';
 import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
-import './gift_tab.dart';
+import './promotion_tab.dart';
 import './notification_tab.dart';
 import './profile_tab.dart';
 import './home_tab.dart';
@@ -28,19 +37,47 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final giftDetailScreenBloc = BlocProvider.of<GiftDetailScreenBloc>(context);
-    return BlocEventStateBuilder<GiftDetailScreenState>(
-      bloc: giftDetailScreenBloc,
-      builder: (context, state) {
-        if (state.isOpen) {
-          WidgetsBinding.instance.addPostFrameCallback((_) async {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => GiftDetailScreen(),
-            ));
+    final giftDetailScreenBloc =
+        BlocProvider.of<PromotionDetailScreenBloc>(context);
+    final brandDetailScreenBloc =
+        BlocProvider.of<BrandDetailScreenBloc>(context);
+    final customerBloc = BlocProvider.of<CustomerBloc>(context);
+    final authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
+    return BlocEventStateBuilder<AuthenticationState>(
+      builder: (context, authenticationState) {
+        if (authenticationState.isAuthenticated) {
+          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+            customerBloc
+                .emitEvent(CustomerEventLoad(token: authenticationState.token));
           });
         }
-        return _buildHomeScreen();
+        return BlocEventStateBuilder<BrandDetailScreenState>(
+          builder: (context, brandDetailScreenState) {
+            if (brandDetailScreenState.isOpening) {
+              WidgetsBinding.instance.addPostFrameCallback((_) async {
+                Navigator.of(context).pushNamed('/brand_detail').whenComplete(
+                    () => brandDetailScreenBloc
+                        .emitEvent(BrandDetailScreenEventClose()));
+              });
+            }
+            return BlocEventStateBuilder<PromotionDetailScreenState>(
+              bloc: giftDetailScreenBloc,
+              builder: (context, giftDetailScreenState) {
+                if (giftDetailScreenState.isOpen) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) async {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => PromotionDetailScreen(),
+                    ));
+                  });
+                }
+                return _buildHomeScreen();
+              },
+            );
+          },
+          bloc: brandDetailScreenBloc,
+        );
       },
+      bloc: authenticationBloc,
     );
   }
 
@@ -59,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
             returnValue = _buildTabView(HomeTab());
             break;
           case 1:
-            returnValue = _buildTabView(TabGiftScreen());
+            returnValue = _buildTabView(PromotionTabScreen());
             break;
           case 2:
             returnValue = _buildTabView(Scaffold(

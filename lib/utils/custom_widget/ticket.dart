@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:promotion_platform/ui/my_gift_detail_screen.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:promotion_platform/ui/voucher_detail_screen.dart';
 import 'package:promotion_platform/utils/constant.dart';
+import 'package:promotion_platform/utils/custom_colors.dart';
 
 class Ticket extends StatelessWidget {
   final double margin = 20;
@@ -45,21 +47,31 @@ class Ticket extends StatelessWidget {
             smallClipRadius: smallClipRadius,
             numberOfSmallClips: numberOfSmallClips,
           ),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.black),
+          child: Neumorphic(
+            style: NeumorphicStyle(
+              // border: NeumorphicBorder(
+              //   width: 1,
+              //   color: Colors.teal,
+              // ),
+              boxShape: NeumorphicBoxShape.roundRect(
+                BorderRadius.circular(16),
+              ),
             ),
             child: Row(
               children: [
                 Expanded(
                   flex: 1,
-                  child: Container(
-                    width: 50,
-                    height: 50,
-                    color: Colors.teal,
-                    child: Text('UNI'),
+                  child: Neumorphic(
+                    child: Text(
+                      'Uni',
+                      style: DEFAULT_TEXT_STYLE,
+                    ),
+                    margin: EdgeInsets.all(8),
+                    padding: EdgeInsets.all(24),
+                    style: NeumorphicStyle(
+                      depth: -20,
+                      color: CustomColors.GREEN,
+                    ),
                   ),
                 ),
                 Expanded(

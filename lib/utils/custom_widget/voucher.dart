@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:promotion_platform/ui/gift_detail_screen.dart';
+import 'package:promotion_platform/ui/promotion_detail_screen.dart';
 import 'package:promotion_platform/utils/constant.dart';
 import 'package:promotion_platform/utils/custom_widget/point.dart';
 

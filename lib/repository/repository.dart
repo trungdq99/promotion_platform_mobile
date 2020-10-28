@@ -17,4 +17,24 @@ class Repository {
       Helper.encodeJson(body),
     );
   }
+
+  Future fetchCustomer({@required String token}) => _apiProvider.fetchData(
+        CUSTOMER_API,
+        RequestMethod.GET,
+        Helper.getAuthorizeHeader(token),
+        null,
+      );
+  Future fetchBrands() => _apiProvider.fetchData(
+        BRANDS_API,
+        RequestMethod.GET,
+        UN_AUTHORIZE_HEADER,
+        null,
+      );
+
+  Future fetchBrandDetail({@required int id}) => _apiProvider.fetchData(
+        '$BRANDS_API/$id',
+        RequestMethod.GET,
+        UN_AUTHORIZE_HEADER,
+        null,
+      );
 }
