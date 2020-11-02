@@ -8,14 +8,10 @@ class ShowDetail extends StatefulWidget {
     @required this.detail,
   });
   @override
-  _ShowDetailState createState() => _ShowDetailState(detail: this.detail);
+  _ShowDetailState createState() => _ShowDetailState();
 }
 
 class _ShowDetailState extends State<ShowDetail> {
-  final String detail;
-  _ShowDetailState({
-    this.detail,
-  });
   bool isShowMore = false;
 
   void _showMoreOrLess() {
@@ -31,10 +27,10 @@ class _ShowDetailState extends State<ShowDetail> {
         InkWell(
           onTap: _showMoreOrLess,
           child: Container(
-            height: (isShowMore || this.detail.isEmpty) ? null : 200,
+            height: (isShowMore || widget.detail.isEmpty) ? null : 200,
             padding: EdgeInsets.all(16),
             child: Text(
-              this.detail,
+              widget.detail,
               style: DEFAULT_TEXT_STYLE,
             ),
           ),

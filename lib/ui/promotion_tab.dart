@@ -14,14 +14,10 @@ class PromotionTabScreen extends StatefulWidget {
   final BuildContext homeContext;
   PromotionTabScreen({@required this.homeContext});
   @override
-  _PromotionTabScreenState createState() =>
-      _PromotionTabScreenState(homeContext: homeContext);
+  _PromotionTabScreenState createState() => _PromotionTabScreenState();
 }
 
 class _PromotionTabScreenState extends State<PromotionTabScreen> {
-  final BuildContext homeContext;
-  _PromotionTabScreenState({@required this.homeContext});
-
   double _deviceWidth;
 
   bool _isShowTypeSelection = false;
@@ -150,17 +146,17 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
               ),
             )),
           ),
-          Positioned(
-            bottom: 100,
-            right: -10,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                _buildSelectType(),
-                _buildSelectSort(),
-              ],
-            ),
-          ),
+          // Positioned(
+          //   bottom: 100,
+          //   right: -10,
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.end,
+          //     children: [
+          //       _buildSelectType(),
+          //       _buildSelectSort(),
+          //     ],
+          //   ),
+          // ),
           // Positioned(
           //   bottom: 100,
           //   right: 0,
@@ -214,10 +210,10 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
                 //height: 200,
                 child: Column(
                   children: [
-                    _buildSortOption(title: 'Mới nhất', value: 0),
-                    _buildSortOption(title: 'Cũ nhất', value: 1),
-                    _buildSortOption(title: 'Bean từ cao đến thấp', value: 2),
-                    _buildSortOption(title: 'Bean từ thấp đến cao', value: 3),
+                    // _buildSortOption(title: 'Mới nhất', value: 0),
+                    // _buildSortOption(title: 'Cũ nhất', value: 1),
+                    // _buildSortOption(title: 'Bean từ cao đến thấp', value: 2),
+                    // _buildSortOption(title: 'Bean từ thấp đến cao', value: 3),
                   ],
                 ),
               ),
@@ -252,30 +248,30 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
           );
   }
 
-  Card _buildSortOption({
-    @required String title,
-    @required int value,
-  }) {
-    return Card(
-      child: ListTile(
-        title: Text(title),
-        trailing: Radio(
-          value: value,
-          groupValue: _sortIndex,
-          onChanged: (value) {
-            setState(() {
-              _sortIndex = value;
-            });
-          },
-        ),
-        onTap: () {
-          setState(() {
-            _sortIndex = value;
-          });
-        },
-      ),
-    );
-  }
+  // Card _buildSortOption({
+  //   required String title,
+  //   required int value,
+  // }) {
+  //   return Card(
+  //     child: ListTile(
+  //       title: Text(title),
+  //       trailing: Radio(
+  //         value: value,
+  //         groupValue: _sortIndex,
+  //         onChanged: (value) {
+  //           setState(() {
+  //             // _sortIndex = value;
+  //           });
+  //         },
+  //       ),
+  //       onTap: () {
+  //         setState(() {
+  //           _sortIndex = value;
+  //         });
+  //       },
+  //     ),
+  //   );
+  // }
 
   Widget _buildSelectType() {
     return _isShowTypeSelection
@@ -490,11 +486,17 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
         NeumorphicButton(
           style: neumorphicStyleUpWithHighRadius,
           onPressed: () {
-            Navigator.of(homeContext).push(
+            Navigator.push(
+              widget.homeContext,
               CupertinoPageRoute(
                 builder: (context) => MyGiftScreen(),
               ),
             );
+            // Navigator.of(homeContext).push(
+            //   CupertinoPageRoute(
+            //     builder: (context) => MyGiftScreen(),
+            //   ),
+            // );
           },
           padding: EdgeInsets.all(16),
           child: Container(

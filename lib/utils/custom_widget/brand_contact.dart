@@ -3,12 +3,11 @@ import '../constant.dart';
 
 class BrandContact extends StatelessWidget {
   const BrandContact({
-    Key key,
     this.email,
     this.phone,
     this.numOfStore: 0,
     this.type,
-  }) : super(key: key);
+  });
 
   final String email;
   final String phone;

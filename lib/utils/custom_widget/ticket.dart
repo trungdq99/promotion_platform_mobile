@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:promotion_platform/ui/voucher_detail_screen.dart';
@@ -15,19 +16,20 @@ class Ticket extends StatelessWidget {
   final String brandTitle;
   final String date;
   const Ticket({
-    Key key,
     this.voucherTitle,
     this.brandTitle,
     this.date,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => MyGiftDetailScreen(),
-        ));
+        Navigator.push(
+            context,
+            CupertinoPageRoute(
+              builder: (context) => MyGiftDetailScreen(),
+            ));
       },
       child: Container(
         decoration: BoxDecoration(

@@ -12,10 +12,9 @@ class AdsWidget extends StatefulWidget {
 }
 
 class _AdsWidgetState extends State<AdsWidget> {
-  int _currentIndex;
+  int _currentIndex = 0;
   @override
   void initState() {
-    _currentIndex = 0;
     super.initState();
   }
 

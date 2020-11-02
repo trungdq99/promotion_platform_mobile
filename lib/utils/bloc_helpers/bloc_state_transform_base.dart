@@ -37,7 +37,7 @@ abstract class BlocStateTransformBase<T, S extends BlocState>
     blocIn.state.listen((BlocState stateIn) {
       T currentState = _stateController.value ?? initialState;
 
-      stateHandler(currentState: currentState, newState: stateIn)
+      stateHandler(currentState: currentState, newState: stateIn as S)
           .forEach((T newState) {
         _stateController.sink.add(newState);
       });

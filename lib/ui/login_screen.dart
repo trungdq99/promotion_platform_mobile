@@ -1,12 +1,12 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:promotion_platform/bloc/authentication/authentication_bloc.dart';
 import 'package:promotion_platform/bloc/authentication/authentication_event.dart';
 import 'package:promotion_platform/bloc/authentication/authentication_state.dart';
 import 'package:promotion_platform/login_background.dart';
-
 import 'package:promotion_platform/ui/home_screen.dart';
 import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
@@ -24,12 +24,11 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   double deviceWidth;
   double deviceHeight;
-  TextEditingController _textEditingController;
+  TextEditingController _textEditingController = TextEditingController();
   bool isLoginByPhone = false;
-  AuthenticationBloc _authenticationBloc;
+  AuthenticationBloc _authenticationBloc = AuthenticationBloc();
   @override
   void initState() {
-    _textEditingController = TextEditingController();
     super.initState();
   }
 
@@ -41,14 +40,23 @@ class _LoginScreenState extends State<LoginScreen> {
     return BlocEventStateBuilder<AuthenticationState>(
       builder: (context, state) {
         if (state.isAuthenticated) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (context) => HomeScreen(),
-            ));
+          WidgetsFlutterBinding.ensureInitialized()
+              .addPostFrameCallback((timeStamp) {
+            Navigator.pushReplacement(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => HomeScreen(),
+                ));
           });
+          // WidgetsBinding.instance.addPostFrameCallback((_) {
+          //   Navigator.of(context).pushReplacement(MaterialPageRoute(
+          //     builder: (context) => HomeScreen(),
+          //   ));
+          // });
         }
         if (state.isError) {
           showDialog(
+            context: context,
             builder: (context) => ErrorAlert(errMsg: state.errorMessage),
           ).whenComplete(() =>
               _authenticationBloc.emitEvent(AuthenticationEventSignOut()));
@@ -171,11 +179,17 @@ class _LoginScreenState extends State<LoginScreen> {
     return NeumorphicButton(
       onPressed: () {
         FocusScope.of(context).unfocus();
-        Navigator.of(context).push(
-          MaterialPageRoute(
+        Navigator.push(
+          context,
+          CupertinoPageRoute(
             builder: (context) => HomeScreen(),
           ),
         );
+        // Navigator.of(context).push(
+        //   MaterialPageRoute(
+        //     builder: (context) => HomeScreen(),
+        //   ),
+        // );
       },
       style: neumorphicStyleUpWithHighRadius,
       child: Padding(

@@ -12,16 +12,11 @@ class TabNotificationScreen extends StatefulWidget {
     @required this.homeContext,
   });
   @override
-  _TabNotificationScreenState createState() =>
-      _TabNotificationScreenState(homeContext: homeContext);
+  _TabNotificationScreenState createState() => _TabNotificationScreenState();
 }
 
 class _TabNotificationScreenState extends State<TabNotificationScreen>
     with SingleTickerProviderStateMixin {
-  final BuildContext homeContext;
-  _TabNotificationScreenState({
-    @required this.homeContext,
-  });
   TabController _tabController;
   @override
   void initState() {
@@ -110,13 +105,13 @@ class _TabNotificationScreenState extends State<TabNotificationScreen>
                 'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
             date: 'Thứ Hai, 07:00',
             showMore: true,
-            function: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => NotificationDetailScreen(),
-                ),
-              );
-            },
+            // function: () {
+            //   Navigator.of(context).push(
+            //     MaterialPageRoute(
+            //       builder: (context) => NotificationDetailScreen(),
+            //     ),
+            //   );
+            // },
           ),
           _buildMessage(
             brandTitle: 'Uni Delivery',
@@ -183,20 +178,26 @@ class _TabNotificationScreenState extends State<TabNotificationScreen>
   }
 
   Widget _buildMessage({
-    String brandTitle,
-    String message,
-    String date,
+    String brandTitle: '',
+    String message: '',
+    String date: '',
     bool isRead: true,
     bool showMore: false,
-    Function function,
+    //Function function,
   }) {
     return NeumorphicButton(
       onPressed: () {
-        Navigator.of(homeContext).push(
+        Navigator.push(
+          widget.homeContext,
           CupertinoPageRoute(
             builder: (context) => NotificationDetailScreen(),
           ),
         );
+        // Navigator.of(homeContext).push(
+        //   CupertinoPageRoute(
+        //     builder: (context) => NotificationDetailScreen(),
+        //   ),
+        // );
       },
       style: neumorphicStyleUpWithSmallRadius,
       padding: EdgeInsets.all(0),

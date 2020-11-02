@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:promotion_platform/utils/constant.dart';
 import 'package:promotion_platform/utils/custom_colors.dart';
-import 'package:promotion_platform/utils/custom_widget/custom_back_button.dart';
 
 class NotificationDetailScreen extends StatefulWidget {
   @override
@@ -11,11 +10,10 @@ class NotificationDetailScreen extends StatefulWidget {
 }
 
 class _NotificationDetailScreenState extends State<NotificationDetailScreen> {
-  ScrollController _scrollController;
+  ScrollController _scrollController = ScrollController();
   double maxScrollExtent = 0;
   @override
   void initState() {
-    _scrollController = ScrollController();
     super.initState();
   }
 
@@ -25,7 +23,7 @@ class _NotificationDetailScreenState extends State<NotificationDetailScreen> {
       appBar: NeumorphicAppBar(
         leading: NeumorphicButton(
           style: neumorphicStyleUpCircle,
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pop(context),
           padding: EdgeInsets.all(0),
           child: Icon(
             Icons.arrow_back_ios,
@@ -101,11 +99,16 @@ class _NotificationDetailScreenState extends State<NotificationDetailScreen> {
 
   // List of message
   Widget _buildListMessage() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((timeStamp) {
       if (_scrollController.hasClients) {
         _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
       }
     });
+    // _widgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   if (_scrollController.hasClients) {
+    //     _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    //   }
+    // });
     return SingleChildScrollView(
       controller: _scrollController,
       child: Column(
@@ -129,30 +132,35 @@ class _NotificationDetailScreenState extends State<NotificationDetailScreen> {
                 'yay! Chúc mừng bạn đã kích hoạt thành công gói quà từ Uni Delivery! Một voucher trị giá 500,000 VNĐ đang chờ được bạn sử dụng tại hệ thống cửa hàng của Uni Delivery nha. Còn chần chờ gì nữa mà không sử dụng ngay nào!',
             dateTime: 'Thứ Hai, 07:00',
             buttonTitle: 'Dùng ngay',
+            function: () {},
           ),
           _buildMessage(
             message:
                 'yay! Chúc mừng bạn đã kích hoạt thành công gói quà từ Uni Delivery! Một voucher trị giá 500,000 VNĐ đang chờ được bạn sử dụng tại hệ thống cửa hàng của Uni Delivery nha. Còn chần chờ gì nữa mà không sử dụng ngay nào!',
             dateTime: 'Thứ Hai, 07:00',
             buttonTitle: 'Dùng ngay',
+            function: () {},
           ),
           _buildMessage(
             message:
                 'yay! Chúc mừng bạn đã kích hoạt thành công gói quà từ Uni Delivery! Một voucher trị giá 500,000 VNĐ đang chờ được bạn sử dụng tại hệ thống cửa hàng của Uni Delivery nha. Còn chần chờ gì nữa mà không sử dụng ngay nào!',
             dateTime: 'Thứ Hai, 07:00',
             buttonTitle: 'Dùng ngay',
+            function: () {},
           ),
           _buildMessage(
             message:
                 'yay! Chúc mừng bạn đã kích hoạt thành công gói quà từ Uni Delivery! Một voucher trị giá 500,000 VNĐ đang chờ được bạn sử dụng tại hệ thống cửa hàng của Uni Delivery nha. Còn chần chờ gì nữa mà không sử dụng ngay nào!',
             dateTime: 'Thứ Hai, 07:00',
             buttonTitle: 'Dùng ngay',
+            function: () {},
           ),
           _buildMessage(
             message:
                 'yay! Chúc mừng bạn đã kích hoạt thành công gói quà từ Uni Delivery! Một voucher trị giá 500,000 VNĐ đang chờ được bạn sử dụng tại hệ thống cửa hàng của Uni Delivery nha. Còn chần chờ gì nữa mà không sử dụng ngay nào!',
             dateTime: 'Thứ Hai, 07:00',
             buttonTitle: 'Dùng ngay',
+            function: () {},
           ),
         ],
       ),
@@ -168,9 +176,9 @@ class _NotificationDetailScreenState extends State<NotificationDetailScreen> {
   }
 
   Widget _buildMessage({
-    String dateTime,
-    String message,
-    String buttonTitle,
+    String dateTime: '',
+    String message: '',
+    String buttonTitle: '',
     Function function,
   }) {
     return Column(

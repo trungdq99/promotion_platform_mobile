@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:promotion_platform/utils/custom_colors.dart';
 import '../constant.dart';
 import '../helper.dart';
 
 class Point extends StatelessWidget {
   const Point({
-    Key key,
     @required this.point,
     this.hasBorder: false,
     this.function,
-  }) : super(key: key);
+  });
 
   final Function function;
   final double point;

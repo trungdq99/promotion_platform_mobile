@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -6,17 +5,12 @@ import 'package:promotion_platform/utils/custom_widget/icon/game_icon.dart';
 import 'package:promotion_platform/bloc/brand/brand_bloc.dart';
 import 'package:promotion_platform/bloc/brand/brand_event.dart';
 import 'package:promotion_platform/bloc/brand/brand_state.dart';
-import 'package:promotion_platform/bloc/brand_detail_screen/brand_detail_screen_bloc.dart';
-import 'package:promotion_platform/bloc/brand_detail_screen/brand_detail_screen_event.dart';
 import 'package:promotion_platform/bloc/customer/customer_bloc.dart';
 import 'package:promotion_platform/bloc/customer/customer_state.dart';
 import 'package:promotion_platform/utils/custom_widget/ads_widget.dart';
 import 'package:promotion_platform/utils/custom_widget/full_screen_progressing.dart';
-import '../bloc/promotion_detail_screen/promotion_detail_screen_bloc.dart';
-import '../bloc/promotion_detail_screen/promotion_detail_screen_event.dart';
 import 'package:promotion_platform/models/brand_model.dart';
 import 'package:promotion_platform/models/customer_model.dart';
-import 'package:promotion_platform/ui/brand_detail_screen.dart';
 import 'package:promotion_platform/ui/promotion_detail_screen.dart';
 import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
@@ -33,25 +27,13 @@ class HomeTab extends StatefulWidget {
     @required this.homeContext,
   });
   @override
-  _HomeTabState createState() => _HomeTabState(
-        cupertinoTabController: cupertinoTabController,
-        homeContext: homeContext,
-      );
+  _HomeTabState createState() => _HomeTabState();
 }
 
 class _HomeTabState extends State<HomeTab> {
-  final CupertinoTabController cupertinoTabController;
-  final BuildContext homeContext;
-
-  _HomeTabState({
-    @required this.cupertinoTabController,
-    @required this.homeContext,
-  });
   double deviceWidth;
   CustomerBloc _customerBloc;
   BrandBloc _brandBLoc;
-  BrandDetailScreenBloc _brandDetailScreenBloc;
-  PromotionDetailScreenBloc _promotionDetailScreenBloc;
 
   @override
   void initState() {
@@ -60,11 +42,11 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   Widget build(BuildContext context) {
-    _promotionDetailScreenBloc =
-        BlocProvider.of<PromotionDetailScreenBloc>(context);
-    _brandDetailScreenBloc = BlocProvider.of<BrandDetailScreenBloc>(context);
     _customerBloc = BlocProvider.of<CustomerBloc>(context);
     _brandBLoc = BlocProvider.of<BrandBloc>(context);
+    // WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((timeStamp) {
+    //   _brandBLoc.emitEvent(BrandEventLoadList());
+    // });
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (_brandBLoc != null) _brandBLoc.emitEvent(BrandEventLoadList());
     });
@@ -91,7 +73,7 @@ class _HomeTabState extends State<HomeTab> {
                         title: 'Quà ngon được săn đón',
                         canShowAll: true,
                         function: () {
-                          cupertinoTabController.index = 1;
+                          widget.cupertinoTabController.index = 1;
                         },
                       ),
                       _buildListPromotion(),
@@ -125,9 +107,15 @@ class _HomeTabState extends State<HomeTab> {
 
   Function pushPromotionDetailScreen() => () async {
         await Future.delayed(Duration(milliseconds: 50));
-        Navigator.of(homeContext).push(MaterialPageRoute(
-          builder: (context) => PromotionDetailScreen(),
-        ));
+        Navigator.push(
+          widget.homeContext,
+          CupertinoPageRoute(
+            builder: (context) => PromotionDetailScreen(),
+          ),
+        );
+        // Navigator.of(widget.homeContext).push(MaterialPageRoute(
+        //   builder: (context) => PromotionDetailScreen(),
+        // ));
       };
   Widget _buildListPromotion() {
     return SingleChildScrollView(
@@ -145,9 +133,7 @@ class _HomeTabState extends State<HomeTab> {
             voucherTitle: 'Voucher 500,000 VND',
             brandTitle: 'Uni Delivery',
             price: 1000,
-            function: () => _promotionDetailScreenBloc.emitEvent(
-              PromotionDetailScreenEventOpen(),
-            ),
+            function: () {},
           ),
           PromotionWidget(
             voucherTitle: 'Voucher 500,000 VND',
@@ -175,9 +161,9 @@ class _HomeTabState extends State<HomeTab> {
             (element) {
               children.add(
                 _buildBrand(
-                  brandTitle: element.brandName,
+                  brandTitle: element.brandName ?? '',
                   promotions: 10,
-                  brandId: element.id,
+                  brandId: element.id ?? 0,
                 ),
               );
             },
@@ -283,14 +269,14 @@ class _HomeTabState extends State<HomeTab> {
   // Show brand
   Widget _buildBrand({
     @required String brandTitle,
-    int promotions,
-    String imageUrl,
-    int brandId,
+    int promotions: 0,
+    String imageUrl: '',
+    int brandId: 0,
   }) {
     return NeumorphicButton(
       onPressed: () {
-        _brandDetailScreenBloc
-            .emitEvent(BrandDetailScreenEventOpen(brandId: brandId));
+        // _brandDetailScreenBloc
+        //     .emitEvent(BrandDetailScreenEventOpen(brandId: brandId));
       },
       margin: EdgeInsets.all(16),
       padding: EdgeInsets.all(0),

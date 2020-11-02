@@ -3,11 +3,10 @@ import 'package:promotion_platform/utils/constant.dart';
 
 class GroupTitle extends StatelessWidget {
   const GroupTitle({
-    Key key,
     @required this.title,
     @required this.canShowAll,
     this.function,
-  }) : super(key: key);
+  });
 
   final String title;
   final bool canShowAll;
@@ -35,7 +34,7 @@ class GroupTitle extends StatelessWidget {
           ),
           canShowAll
               ? InkWell(
-                  onTap: function,
+                  onTap: function?.call(),
                   child: Text(
                     'Tất cả',
                     style: DEFAULT_TEXT_STYLE,

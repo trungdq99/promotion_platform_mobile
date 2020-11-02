@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:promotion_platform/utils/custom_colors.dart';
-import '../bloc/promotion_detail_screen/promotion_detail_screen_bloc.dart';
-import '../bloc/promotion_detail_screen/promotion_detail_screen_event.dart';
-import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import '../utils/constant.dart';
 import '../utils/custom_widget/point.dart';
 import '../utils/custom_widget/brand_contact.dart';
@@ -16,12 +12,11 @@ class PromotionDetailScreen extends StatefulWidget {
 }
 
 class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
-  ScrollController _scrollController;
+  ScrollController _scrollController = ScrollController();
   double deviceWidth;
 
   @override
   void initState() {
-    _scrollController = ScrollController();
     super.initState();
   }
 
@@ -100,9 +95,9 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
   }
 
   Widget _buildTitle({
-    String title,
-    String brand,
-    double point,
+    String title: '',
+    String brand: '',
+    double point: 0,
   }) {
     return Padding(
       padding: EdgeInsets.all(16.0),
@@ -147,8 +142,6 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
   }
 
   Widget _buildAppBar(BuildContext context) {
-    final giftDetailScreenBloc =
-        BlocProvider.of<PromotionDetailScreenBloc>(context);
     return SliverAppBar(
       backgroundColor: Colors.white,
       flexibleSpace: Container(
@@ -161,7 +154,8 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
         child: InkWell(
           onTap: () {
             //giftDetailScreenBloc.emitEvent(PromotionDetailScreenEventClose());
-            Navigator.of(context).pop();
+            // Navigator.of(context).pop();
+            Navigator.pop(context);
           },
           child: CircleAvatar(
             radius: 20,

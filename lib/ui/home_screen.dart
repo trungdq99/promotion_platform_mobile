@@ -19,7 +19,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  CupertinoTabController _tabController;
+  CupertinoTabController _tabController =
+      CupertinoTabController(initialIndex: 0);
 
   // Used to handle Android back button navigation with tab specific navigator.
   final GlobalKey<NavigatorState> firstTabNavKey = GlobalKey<NavigatorState>();
@@ -30,7 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    _tabController = CupertinoTabController(initialIndex: 0);
     super.initState();
   }
 
@@ -41,10 +41,15 @@ class _HomeScreenState extends State<HomeScreen> {
     return BlocEventStateBuilder<AuthenticationState>(
       builder: (context, authenticationState) {
         if (authenticationState.isAuthenticated) {
-          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          WidgetsFlutterBinding.ensureInitialized()
+              .addPostFrameCallback((timeStamp) {
             customerBloc
                 .emitEvent(CustomerEventLoad(token: authenticationState.token));
           });
+          // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          //   customerBloc
+          //       .emitEvent(CustomerEventLoad(token: authenticationState.token));
+          // });
         }
         return _buildHomeScreen();
       },
@@ -55,13 +60,22 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildHomeScreen() {
     return WillPopScope(
       onWillPop: () async {
-        return !await _currentNavigatorKey().currentState.maybePop();
+        final isFirstRouteInCurrentTab =
+            !await _currentNavigatorKey().currentState.maybePop();
+        return isFirstRouteInCurrentTab;
       },
       child: CupertinoTabScaffold(
         controller: _tabController,
         tabBar: _buildTabBar(),
         tabBuilder: (context, index) {
-          CupertinoTabView returnValue;
+          CupertinoTabView returnValue = _buildTabView(
+            tabView: HomeTab(
+              cupertinoTabController: _tabController,
+              homeContext: context,
+            ),
+            navKey: firstTabNavKey,
+          );
+          ;
           switch (index) {
             case 0:
               returnValue = _buildTabView(
@@ -74,7 +88,9 @@ class _HomeScreenState extends State<HomeScreen> {
               break;
             case 1:
               returnValue = _buildTabView(
-                tabView: PromotionTabScreen(),
+                tabView: PromotionTabScreen(
+                  homeContext: context,
+                ),
                 navKey: secondTabNavKey,
               );
               break;
@@ -124,8 +140,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  CupertinoTabView _buildTabView(
-      {Widget tabView, GlobalKey<NavigatorState> navKey}) {
+  CupertinoTabView _buildTabView({
+    @required Widget tabView,
+    @required GlobalKey<NavigatorState> navKey,
+  }) {
     return CupertinoTabView(
       navigatorKey: navKey,
       builder: (context) => tabView,
@@ -136,20 +154,15 @@ class _HomeScreenState extends State<HomeScreen> {
     switch (_tabController.index) {
       case 0:
         return firstTabNavKey;
-        break;
       case 1:
         return secondTabNavKey;
-        break;
       case 2:
         return thirdTabNavKey;
-        break;
       case 3:
         return fourthTabNavKey;
-        break;
       case 4:
         return fifthTabNavKey;
-        break;
     }
-    return null;
+    return firstTabNavKey;
   }
 }

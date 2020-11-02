@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:promotion_platform/bloc/brand_detail_screen/brand_detail_screen_bloc.dart';
-import 'package:promotion_platform/bloc/brand_detail_screen/brand_detail_screen_state.dart';
 import 'package:promotion_platform/models/brand_model.dart';
-import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
-import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
 import 'package:promotion_platform/utils/constant.dart';
 import 'package:promotion_platform/utils/custom_widget/brand_contact.dart';
 import 'package:promotion_platform/utils/custom_widget/full_screen_progressing.dart';
@@ -16,41 +12,40 @@ class BrandDetailScreen extends StatefulWidget {
 }
 
 class _BrandDetailScreenState extends State<BrandDetailScreen> {
-  ScrollController _scrollController;
-  BrandDetailScreenBloc _brandDetailScreenBloc;
+  ScrollController _scrollController = ScrollController();
   double deviceWidth;
   @override
   void initState() {
-    _scrollController = ScrollController();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    _brandDetailScreenBloc = BlocProvider.of<BrandDetailScreenBloc>(context);
     deviceWidth = MediaQuery.of(context).size.width;
-    return BlocEventStateBuilder<BrandDetailScreenState>(
-      builder: (context, state) {
-        BrandModel brandModel = BrandModel();
-        if (state.isOpen) {
-          brandModel = state.brandModel;
-        }
-
-        return _buildScreen(
-          context,
-          state.isOpening,
-          brandModel,
-        );
-      },
-      bloc: _brandDetailScreenBloc,
+    return _buildScreen(
+      brandModel: BrandModel(),
     );
+    // return BlocEventStateBuilder<BrandDetailScreenState>(
+    //   builder: (context, state) {
+    //     BrandModel brandModel = BrandModel();
+    //     if (state.isOpen) {
+    //       brandModel = state.brandModel;
+    //     }
+    //
+    //     return _buildScreen(
+    //       context,
+    //       state.isOpening,
+    //       brandModel,
+    //     );
+    //   },
+    //   bloc: _brandDetailScreenBloc,
+    // );
   }
 
-  Widget _buildScreen(
-    BuildContext context,
-    bool isProgressing,
-    BrandModel brandModel,
-  ) {
+  Widget _buildScreen({
+    //bool isProgressing,
+    @required BrandModel brandModel,
+  }) {
     return Stack(
       children: [
         Scaffold(
@@ -61,11 +56,11 @@ class _BrandDetailScreenState extends State<BrandDetailScreen> {
               SliverList(
                 delegate: SliverChildListDelegate([
                   _buildTitle(
-                      brandTitle: brandModel.brandName,
-                      phone: brandModel.phoneNumber,
+                      brandTitle: brandModel.brandName ?? '',
+                      phone: brandModel.phoneNumber ?? '',
                       numOfStore: 7,
                       type: 'Ẩm thực, ăn uống các thứ'),
-                  ShowDetail(detail: brandModel.description),
+                  ShowDetail(detail: brandModel.description ?? ''),
                   // ShowDetail(
                   //   detail: 'Hệ thống giao hàng cho sinh viên FPT\n'
                   //       '- Giao hàng tận nơi với mức giá phải chăng.\n'
@@ -111,7 +106,7 @@ class _BrandDetailScreenState extends State<BrandDetailScreen> {
             ],
           ),
         ),
-        isProgressing ? FullScreenProgressing() : Container(),
+        // isProgressing ? FullScreenProgressing() : Container(),
       ],
     );
   }
@@ -128,7 +123,7 @@ class _BrandDetailScreenState extends State<BrandDetailScreen> {
         padding: EdgeInsets.only(left: 16),
         child: InkWell(
           onTap: () {
-            Navigator.of(context).pop();
+            Navigator.pop(context);
           },
           child: CircleAvatar(
             radius: 20,
@@ -160,11 +155,11 @@ class _BrandDetailScreenState extends State<BrandDetailScreen> {
   }
 
   Widget _buildTitle({
-    String brandTitle,
-    String email,
-    String phone,
-    int numOfStore,
-    String type,
+    String brandTitle: '',
+    String email: '',
+    String phone: '',
+    int numOfStore: 0,
+    String type: '',
   }) {
     return Container(
       decoration: BoxDecoration(

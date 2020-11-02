@@ -22,19 +22,19 @@ class Repository {
         CUSTOMER_API,
         RequestMethod.GET,
         Helper.getAuthorizeHeader(token),
-        null,
+        '',
       );
   Future fetchBrands() => _apiProvider.fetchData(
         BRANDS_API,
         RequestMethod.GET,
         UN_AUTHORIZE_HEADER,
-        null,
+        '',
       );
 
-  Future fetchBrandDetail({@required int id}) => _apiProvider.fetchData(
-        '$BRANDS_API/$id',
+  Future fetchBrandDetail({@required int brandId}) => _apiProvider.fetchData(
+        '$BRANDS_API/$brandId',
         RequestMethod.GET,
         UN_AUTHORIZE_HEADER,
-        null,
+        '',
       );
 }

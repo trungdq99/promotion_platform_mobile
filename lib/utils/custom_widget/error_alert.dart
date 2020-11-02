@@ -30,7 +30,7 @@ class ErrorAlert extends StatelessWidget {
               'OK',
               style: SMALL_TEXT_STYLE,
             ),
-            onTap: () => Navigator.of(context).pop(),
+            onTap: () => Navigator.pop(context),
           )
         ],
       ),

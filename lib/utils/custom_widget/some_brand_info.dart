@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:promotion_platform/ui/brand_detail_screen.dart';
@@ -18,9 +19,11 @@ class SomeBrandInfo extends StatelessWidget {
     return NeumorphicButton(
       style: neumorphicStyleUpWithSmallRadius,
       onPressed: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => BrandDetailScreen(),
-        ));
+        Navigator.push(
+            context,
+            CupertinoPageRoute(
+              builder: (context) => BrandDetailScreen(),
+            ));
       },
       margin: EdgeInsets.all(16),
       padding: EdgeInsets.all(0),

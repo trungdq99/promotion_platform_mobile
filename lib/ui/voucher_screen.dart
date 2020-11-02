@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:promotion_platform/utils/constant.dart';
-import 'package:promotion_platform/utils/custom_widget/custom_back_button.dart';
 import 'package:promotion_platform/utils/custom_widget/ticket.dart';
 
 class MyGiftScreen extends StatefulWidget {
@@ -26,42 +25,23 @@ class _MyGiftScreenState extends State<MyGiftScreen> {
                 //floating: true,
                 pinned: true,
 
-                leading: CustomBackButton(
-                  function: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
+                // leading: CustomBackButton(
+                //   function: () {
+                //     // Navigator.of(context,nullOk: true,).pop();
+                //     Navigator.pop(context);
+                //   },
+                // ),
               ),
               SliverList(
                 delegate: SliverChildListDelegate(
                   [
                     Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Ticket(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Ticket(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Ticket(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Ticket(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Ticket(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Ticket(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Ticket(),
+                      child: Ticket(
+                        brandTitle: '',
+                        date: '',
+                        voucherTitle: '',
+                      ),
                     ),
                   ],
                 ),

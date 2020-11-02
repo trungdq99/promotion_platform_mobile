@@ -5,12 +5,11 @@ import 'package:promotion_platform/utils/custom_widget/point.dart';
 
 class PromotionWidget extends StatelessWidget {
   const PromotionWidget({
-    Key key,
     @required this.voucherTitle,
     @required this.brandTitle,
     @required this.price,
     this.function,
-  }) : super(key: key);
+  });
 
   final String brandTitle;
   final String voucherTitle;

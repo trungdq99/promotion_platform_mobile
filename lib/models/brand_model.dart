@@ -18,7 +18,7 @@ class BrandModel {
   String brandNameSms;
 
   BrandModel({
-    this.id: 0,
+    this.id,
     this.brandName: '',
     this.description: '',
     this.contactPerson: '',

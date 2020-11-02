@@ -11,17 +11,16 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  bool _isSelectGender;
+  bool _isSelectGender = false;
   @override
   void initState() {
-    _isSelectGender = false;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(context),
+      appBar: _buildAppBar(),
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -223,11 +222,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  PreferredSizeWidget _buildAppBar() {
     return NeumorphicAppBar(
       leading: NeumorphicButton(
         style: neumorphicStyleUpCircle,
-        onPressed: () => Navigator.of(context).pop(),
+        onPressed: () => Navigator.pop(context),
         padding: EdgeInsets.all(0),
         child: Icon(
           Icons.close,

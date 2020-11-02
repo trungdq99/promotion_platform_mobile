@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:promotion_platform/utils/constant.dart';
-import 'package:promotion_platform/utils/custom_widget/point.dart';
 import 'package:promotion_platform/utils/custom_widget/brand_contact.dart';
 import 'package:promotion_platform/utils/custom_widget/show_detail.dart';
 import 'package:promotion_platform/utils/custom_widget/some_brand_info.dart';
@@ -11,11 +10,10 @@ class MyGiftDetailScreen extends StatefulWidget {
 }
 
 class _MyGiftDetailScreenState extends State<MyGiftDetailScreen> {
-  ScrollController _scrollController;
+  ScrollController _scrollController = ScrollController();
   double deviceWidth;
   @override
   void initState() {
-    _scrollController = ScrollController();
     super.initState();
   }
 
@@ -88,9 +86,9 @@ class _MyGiftDetailScreenState extends State<MyGiftDetailScreen> {
   }
 
   Widget _buildTitle({
-    String title,
-    String brand,
-    int point,
+    String title: '',
+    String brand: '',
+    int point: 0,
   }) {
     return Padding(
       padding: EdgeInsets.all(16.0),
@@ -162,7 +160,8 @@ class _MyGiftDetailScreenState extends State<MyGiftDetailScreen> {
         padding: EdgeInsets.only(left: 16),
         child: InkWell(
           onTap: () {
-            Navigator.of(context).pop();
+            // Navigator.of(context).pop();
+            Navigator.pop(context);
           },
           child: CircleAvatar(
             radius: 20,

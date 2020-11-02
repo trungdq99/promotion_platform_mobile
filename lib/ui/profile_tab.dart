@@ -10,16 +10,12 @@ class TabProfileScreen extends StatefulWidget {
   final BuildContext homeContext;
   TabProfileScreen({
     @required this.homeContext,
-    Key key,
-  }) : super(key: key);
+  });
   @override
-  _TabProfileScreenState createState() =>
-      _TabProfileScreenState(homeContext: homeContext);
+  _TabProfileScreenState createState() => _TabProfileScreenState();
 }
 
 class _TabProfileScreenState extends State<TabProfileScreen> {
-  final BuildContext homeContext;
-  _TabProfileScreenState({@required this.homeContext});
   double deviceWidth;
   @override
   Widget build(BuildContext context) {
@@ -92,10 +88,17 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
               NeumorphicButton(
                 style: neumorphicStyleUpCircle,
                 onPressed: () {
-                  Navigator.of(homeContext).push(CupertinoPageRoute(
-                    builder: (context) => EditProfileScreen(),
-                    fullscreenDialog: true,
-                  ));
+                  Navigator.push(
+                    widget.homeContext,
+                    CupertinoPageRoute(
+                      builder: (context) => EditProfileScreen(),
+                      fullscreenDialog: true,
+                    ),
+                  );
+                  // Navigator.of(homeContext).push(CupertinoPageRoute(
+                  //   builder: (context) => EditProfileScreen(),
+                  //   fullscreenDialog: true,
+                  // ));
                 },
                 padding: EdgeInsets.all(0),
                 child: Container(
@@ -143,9 +146,9 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
   }
 
   Widget _buildButton({
-    IconData iconData,
-    String title,
-    Function function,
+    IconData iconData: Icons.settings,
+    String title: '',
+    //Function function: const (){},
   }) {
     return NeumorphicButton(
       onPressed: () {},
