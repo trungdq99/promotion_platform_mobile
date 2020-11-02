@@ -14,6 +14,7 @@ class PromotionDetailScreenBloc extends BlocEventStateBase<
       PromotionDetailScreenEvent event,
       PromotionDetailScreenState state) async* {
     if (event is PromotionDetailScreenEventOpen) {
+      await Future.delayed(Duration(milliseconds: 50));
       yield PromotionDetailScreenState.open();
     } else if (event is PromotionDetailScreenEventClose) {
       yield PromotionDetailScreenState.close();

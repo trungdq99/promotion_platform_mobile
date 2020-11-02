@@ -1,16 +1,27 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:promotion_platform/utils/custom_widget/icon/search_icon.dart';
 import 'package:promotion_platform/utils/constant.dart';
+import 'package:promotion_platform/utils/custom_colors.dart';
+import 'package:promotion_platform/utils/custom_widget/icon/voucher_icon.dart';
 import './voucher_screen.dart';
 import '../utils/custom_widget/group_title.dart';
-import '../utils/custom_widget/voucher.dart';
+import '../utils/custom_widget/promotion_widget.dart';
 import '../utils/custom_widget/point.dart';
 
 class PromotionTabScreen extends StatefulWidget {
+  final BuildContext homeContext;
+  PromotionTabScreen({@required this.homeContext});
   @override
-  _PromotionTabScreenState createState() => _PromotionTabScreenState();
+  _PromotionTabScreenState createState() =>
+      _PromotionTabScreenState(homeContext: homeContext);
 }
 
 class _PromotionTabScreenState extends State<PromotionTabScreen> {
+  final BuildContext homeContext;
+  _PromotionTabScreenState({@required this.homeContext});
+
   double _deviceWidth;
 
   bool _isShowTypeSelection = false;
@@ -50,22 +61,22 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        Voucher(
+                        PromotionWidget(
                           voucherTitle: 'Voucher trị giá 500.000 VNĐ',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
                         ),
-                        Voucher(
+                        PromotionWidget(
                           voucherTitle: 'Voucher trị giá 500.000 VNĐ',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
                         ),
-                        Voucher(
+                        PromotionWidget(
                           voucherTitle: 'Voucher trị giá 500.000 VNĐ',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
                         ),
-                        Voucher(
+                        PromotionWidget(
                           voucherTitle: 'Voucher trị giá 500.000 VNĐ',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
@@ -81,22 +92,22 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        Voucher(
+                        PromotionWidget(
                           voucherTitle: 'Voucher trị giá 500.000 VNĐ',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
                         ),
-                        Voucher(
+                        PromotionWidget(
                           voucherTitle: 'Voucher trị giá 500.000 VNĐ',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
                         ),
-                        Voucher(
+                        PromotionWidget(
                           voucherTitle: 'Voucher trị giá 500.000 VNĐ',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
                         ),
-                        Voucher(
+                        PromotionWidget(
                           voucherTitle: 'Voucher trị giá 500.000 VNĐ',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
@@ -112,22 +123,22 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        Voucher(
+                        PromotionWidget(
                           voucherTitle: 'Voucher trị giá 500.000 VNĐ',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
                         ),
-                        Voucher(
+                        PromotionWidget(
                           voucherTitle: 'Voucher trị giá 500.000 VNĐ',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
                         ),
-                        Voucher(
+                        PromotionWidget(
                           voucherTitle: 'Voucher trị giá 500.000 VNĐ',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
                         ),
-                        Voucher(
+                        PromotionWidget(
                           voucherTitle: 'Voucher trị giá 500.000 VNĐ',
                           brandTitle: 'Uni Delivery',
                           price: 1000,
@@ -431,19 +442,19 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
   }
 
   Widget _buildSearchTextField() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
+    return Neumorphic(
+      style: neumorphicStyleDownDefault,
+      margin: EdgeInsets.all(16),
+      padding: EdgeInsets.all(8),
       child: TextField(
         decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(8),
-            ),
-          ),
-          hintText: 'Search name, store, ...',
-          suffixIcon: Icon(
-            Icons.search,
-            color: Colors.teal,
+          border: InputBorder.none,
+          hintText: 'Tìm kiếm',
+          suffixIcon: NeumorphicButton(
+            onPressed: () {},
+            style: neumorphicStyleUpCircle,
+            padding: EdgeInsets.all(0),
+            child: SearchIcon(),
           ),
         ),
       ),
@@ -454,6 +465,7 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 16,
+        vertical: 8,
       ),
       width: _deviceWidth,
       child: Stack(
@@ -463,9 +475,9 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
             child: Point(
               point: 1000,
               hasBorder: true,
+              function: () {},
             ),
             right: 0,
-            top: 8,
           ),
         ],
       ),
@@ -473,58 +485,60 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
   }
 
   Widget _buildMyGiftButton() {
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => MyGiftScreen(),
-          ),
-        );
-      },
-      child: Container(
-        width: 144,
-        child: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(8),
-                ),
-                border: Border.all(
-                  color: Colors.black,
-                ),
+    return Stack(
+      children: [
+        NeumorphicButton(
+          style: neumorphicStyleUpWithHighRadius,
+          onPressed: () {
+            Navigator.of(homeContext).push(
+              CupertinoPageRoute(
+                builder: (context) => MyGiftScreen(),
               ),
-              padding: EdgeInsets.all(8),
-              margin: EdgeInsets.only(top: 8),
-              width: 136,
+            );
+          },
+          padding: EdgeInsets.all(16),
+          child: Container(
+            width: 136,
+            child: Container(
+              // padding: EdgeInsets.all(8),
+              // margin: EdgeInsets.only(top: 8),
+              // width: 136,
               child: Row(
                 children: [
-                  Icon(Icons.card_giftcard),
+                  VoucherIcon(),
                   SizedBox(
                     width: 8,
                   ),
                   Text(
-                    'Quà đã đổi',
-                    style: SMALL_TEXT_STYLE,
+                    'Quà của tui',
+                    style: BOLD_SMALL_TEXT_STYLE,
                   ),
                 ],
               ),
             ),
-            Positioned(
-              right: 0,
-              top: 0,
-              child: CircleAvatar(
-                child: Text(
-                  '10',
-                  style: SUPER_SMALL_TEXT_STYLE,
+          ),
+        ),
+        Positioned(
+          right: 0,
+          top: 0,
+          child: Neumorphic(
+            style: neumorphicStyleDownCircle,
+            child: Container(
+              height: 24,
+              width: 24,
+              alignment: Alignment.center,
+              color: CustomColors.GREEN,
+              child: Text(
+                '10',
+                style: TextStyle(
+                  fontSize: SUPER_SMALL_FONT_SIZE,
+                  fontFamily: 'Segoe UI',
                 ),
-                backgroundColor: Colors.teal,
-                radius: 12,
               ),
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }

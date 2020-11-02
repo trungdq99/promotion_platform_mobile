@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:promotion_platform/utils/custom_colors.dart';
 import '../constant.dart';
 import '../helper.dart';
 
@@ -7,40 +9,55 @@ class Point extends StatelessWidget {
     Key key,
     @required this.point,
     this.hasBorder: false,
+    this.function,
   }) : super(key: key);
 
+  final Function function;
   final double point;
   final bool hasBorder;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: this.hasBorder
-          ? BoxDecoration(
-              border: Border.all(
-                color: Colors.black,
-              ),
-              borderRadius: BorderRadius.all(
-                Radius.circular(8),
-              ),
-            )
-          : BoxDecoration(),
-      padding: EdgeInsets.all(8),
-      child: Row(
-        children: [
-          CircleAvatar(
-            child: Text('B'),
-            backgroundColor: Colors.teal,
-            radius: 12,
+    return this.hasBorder
+        ? NeumorphicButton(
+            onPressed: function,
+            style: neumorphicStyleUpWithHighRadius,
+            child: _showPoint(),
+            padding: EdgeInsets.all(8),
+          )
+        : Padding(
+            padding: EdgeInsets.all(8),
+            child: _showPoint(),
+          );
+  }
+
+  Row _showPoint() {
+    return Row(
+      children: [
+        Neumorphic(
+          style: neumorphicStyleDownCircle,
+          child: Container(
+            color: Colors.teal,
+            height: 24,
+            width: 24,
+            alignment: Alignment.center,
+            child: Text(
+              'B',
+            ),
           ),
-          SizedBox(
-            width: 8,
-          ),
-          Text(
-            Helper.decimalPatternFormat(point),
-            style: DEFAULT_TEXT_STYLE,
-          ),
-        ],
-      ),
+        ),
+        // CircleAvatar(
+        //   child: Text('B'),
+        //   backgroundColor: Colors.teal,
+        //   radius: 12,
+        // ),
+        SizedBox(
+          width: 8,
+        ),
+        Text(
+          Helper.decimalPatternFormat(point),
+          style: POINT_TEXT_STYLE,
+        ),
+      ],
     );
   }
 }

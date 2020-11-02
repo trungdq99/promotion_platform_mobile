@@ -5,6 +5,7 @@ import 'package:promotion_platform/bloc/brand/brand_bloc.dart';
 import 'package:promotion_platform/bloc/brand_detail_screen/brand_detail_screen_bloc.dart';
 import 'package:promotion_platform/bloc/customer/customer_bloc.dart';
 import 'package:promotion_platform/ui/splash_screen.dart';
+import 'package:promotion_platform/utils/custom_colors.dart';
 import './bloc/promotion_detail_screen/promotion_detail_screen_bloc.dart';
 import 'package:promotion_platform/models/brand_model.dart';
 import 'package:promotion_platform/ui/login_screen.dart';
@@ -32,25 +33,24 @@ class App extends StatelessWidget {
                 routes: listRoutes,
                 themeMode: ThemeMode.light,
                 theme: NeumorphicThemeData(
-                  baseColor: Color.fromRGBO(236, 240, 243, 1),
+                  baseColor: CustomColors.BACKGROUND_COLOR,
                   lightSource: LightSource.topLeft,
                   depth: 20,
                   intensity: 1,
+                  borderColor: Color(0xfffffcfc),
+                  borderWidth: 0.8,
+                  boxShape: NeumorphicBoxShape.rect(),
+                  buttonStyle: neumorphicStyleUpWithSmallRadius,
                 ),
                 darkTheme: NeumorphicThemeData(
                   baseColor: Color(0xFF3E3E3E),
                   lightSource: LightSource.topLeft,
                   depth: 6,
                 ),
-                home: LoginScreen(),
+                // home: LoginScreen(),
+                home: HomeScreen(),
               ),
-              // child: MaterialApp(
-              //   title: 'Promotion Platform',
-              //   debugShowCheckedModeBanner: false,
-              //   theme: ThemeData(
-              //     primaryColor: Colors.black,
-              //   ),
-              //   //home: HomeScreen(),
+              //home: HomeScreen(),
               //   //home: LoginScreen(),
               //   home: SplashScreen(),
               //   routes: listRoutes,

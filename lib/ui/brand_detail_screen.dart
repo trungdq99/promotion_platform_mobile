@@ -6,9 +6,9 @@ import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
 import 'package:promotion_platform/utils/constant.dart';
 import 'package:promotion_platform/utils/custom_widget/brand_contact.dart';
-import 'package:promotion_platform/utils/custom_widget/progressing.dart';
+import 'package:promotion_platform/utils/custom_widget/full_screen_progressing.dart';
 import 'package:promotion_platform/utils/custom_widget/show_detail.dart';
-import 'package:promotion_platform/utils/custom_widget/voucher.dart';
+import 'package:promotion_platform/utils/custom_widget/promotion_widget.dart';
 
 class BrandDetailScreen extends StatefulWidget {
   @override
@@ -82,22 +82,22 @@ class _BrandDetailScreenState extends State<BrandDetailScreen> {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: [
-                          Voucher(
+                          PromotionWidget(
                             voucherTitle: 'Voucher 500,000 VND',
                             brandTitle: 'Uni Delivery',
                             price: 1000,
                           ),
-                          Voucher(
+                          PromotionWidget(
                             voucherTitle: 'Voucher 500,000 VND',
                             brandTitle: 'Uni Delivery',
                             price: 1000,
                           ),
-                          Voucher(
+                          PromotionWidget(
                             voucherTitle: 'Voucher 500,000 VND',
                             brandTitle: 'Uni Delivery',
                             price: 1000,
                           ),
-                          Voucher(
+                          PromotionWidget(
                             voucherTitle: 'Voucher 500,000 VND',
                             brandTitle: 'Uni Delivery',
                             price: 1000,
@@ -111,7 +111,7 @@ class _BrandDetailScreenState extends State<BrandDetailScreen> {
             ],
           ),
         ),
-        isProgressing ? Progressing() : Container(),
+        isProgressing ? FullScreenProgressing() : Container(),
       ],
     );
   }

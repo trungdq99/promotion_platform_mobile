@@ -2,17 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:promotion_platform/bloc/authentication/authentication_bloc.dart';
 import 'package:promotion_platform/bloc/authentication/authentication_state.dart';
-import 'package:promotion_platform/bloc/brand/brand_bloc.dart';
-import 'package:promotion_platform/bloc/brand/brand_event.dart';
-import 'package:promotion_platform/bloc/brand_detail_screen/brand_detail_screen_bloc.dart';
-import 'package:promotion_platform/bloc/brand_detail_screen/brand_detail_screen_event.dart';
-import 'package:promotion_platform/bloc/brand_detail_screen/brand_detail_screen_state.dart';
 import 'package:promotion_platform/bloc/customer/customer_bloc.dart';
 import 'package:promotion_platform/bloc/customer/customer_event.dart';
-import 'package:promotion_platform/ui/brand_detail_screen.dart';
-import '../bloc/promotion_detail_screen/promotion_detail_screen_bloc.dart';
-import '../bloc/promotion_detail_screen/promotion_detail_screen_state.dart';
-import 'package:promotion_platform/ui/promotion_detail_screen.dart';
+import 'package:promotion_platform/utils/custom_colors.dart';
 import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
 import './promotion_tab.dart';
@@ -27,20 +19,23 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  CupertinoTabController _cupertinoTabController;
+  CupertinoTabController _tabController;
+
+  // Used to handle Android back button navigation with tab specific navigator.
+  final GlobalKey<NavigatorState> firstTabNavKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> secondTabNavKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> thirdTabNavKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> fourthTabNavKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> fifthTabNavKey = GlobalKey<NavigatorState>();
 
   @override
   void initState() {
-    _cupertinoTabController = CupertinoTabController(initialIndex: 0);
+    _tabController = CupertinoTabController(initialIndex: 0);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final giftDetailScreenBloc =
-        BlocProvider.of<PromotionDetailScreenBloc>(context);
-    final brandDetailScreenBloc =
-        BlocProvider.of<BrandDetailScreenBloc>(context);
     final customerBloc = BlocProvider.of<CustomerBloc>(context);
     final authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
     return BlocEventStateBuilder<AuthenticationState>(
@@ -51,80 +46,110 @@ class _HomeScreenState extends State<HomeScreen> {
                 .emitEvent(CustomerEventLoad(token: authenticationState.token));
           });
         }
-        return BlocEventStateBuilder<BrandDetailScreenState>(
-          builder: (context, brandDetailScreenState) {
-            if (brandDetailScreenState.isOpening) {
-              WidgetsBinding.instance.addPostFrameCallback((_) async {
-                Navigator.of(context).pushNamed('/brand_detail').whenComplete(
-                    () => brandDetailScreenBloc
-                        .emitEvent(BrandDetailScreenEventClose()));
-              });
-            }
-            return BlocEventStateBuilder<PromotionDetailScreenState>(
-              bloc: giftDetailScreenBloc,
-              builder: (context, giftDetailScreenState) {
-                if (giftDetailScreenState.isOpen) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) async {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => PromotionDetailScreen(),
-                    ));
-                  });
-                }
-                return _buildHomeScreen();
-              },
-            );
-          },
-          bloc: brandDetailScreenBloc,
-        );
+        return _buildHomeScreen();
       },
       bloc: authenticationBloc,
     );
   }
 
   Widget _buildHomeScreen() {
-    return CupertinoTabScaffold(
-      controller: _cupertinoTabController,
-      tabBar: CupertinoTabBar(
-        items: BOTTOM_NAVIGATION_BAR_ITEMS,
-        activeColor: Colors.black,
-        inactiveColor: Colors.grey,
-      ),
-      tabBuilder: (context, index) {
-        CupertinoTabView returnValue;
-        switch (index) {
-          case 0:
-            returnValue = _buildTabView(HomeTab());
-            break;
-          case 1:
-            returnValue = _buildTabView(PromotionTabScreen());
-            break;
-          case 2:
-            returnValue = _buildTabView(Scaffold(
-              body: Center(
-                  child: FlatButton(
-                child: Text('Click'),
-                onPressed: () {
-                  _cupertinoTabController.index = 1;
-                },
-              )),
-            ));
-            break;
-          case 3:
-            returnValue = _buildTabView(TabNotificationScreen());
-            break;
-          case 4:
-            returnValue = _buildTabView(TabProfileScreen());
-            break;
-        }
-        ;
-        return returnValue;
+    return WillPopScope(
+      onWillPop: () async {
+        return !await _currentNavigatorKey().currentState.maybePop();
       },
+      child: CupertinoTabScaffold(
+        controller: _tabController,
+        tabBar: _buildTabBar(),
+        tabBuilder: (context, index) {
+          CupertinoTabView returnValue;
+          switch (index) {
+            case 0:
+              returnValue = _buildTabView(
+                tabView: HomeTab(
+                  cupertinoTabController: _tabController,
+                  homeContext: context,
+                ),
+                navKey: firstTabNavKey,
+              );
+              break;
+            case 1:
+              returnValue = _buildTabView(
+                tabView: PromotionTabScreen(),
+                navKey: secondTabNavKey,
+              );
+              break;
+            case 2:
+              returnValue = _buildTabView(
+                tabView: Scaffold(
+                  body: Center(
+                      child: FlatButton(
+                    child: Text('Click'),
+                    onPressed: () {
+                      _tabController.index = 1;
+                    },
+                  )),
+                ),
+                navKey: thirdTabNavKey,
+              );
+              break;
+            case 3:
+              returnValue = _buildTabView(
+                tabView: TabNotificationScreen(
+                  homeContext: context,
+                ),
+                navKey: fourthTabNavKey,
+              );
+              break;
+            case 4:
+              returnValue = _buildTabView(
+                tabView: TabProfileScreen(
+                  homeContext: context,
+                ),
+                navKey: fifthTabNavKey,
+              );
+              break;
+          }
+
+          return returnValue;
+        },
+      ),
     );
   }
 
-  CupertinoTabView _buildTabView(Widget tabView) {
+  CupertinoTabBar _buildTabBar() {
+    return CupertinoTabBar(
+      items: bottomNavigationBarItems,
+      backgroundColor: CustomColors.BACKGROUND_COLOR,
+      border: Border.all(style: BorderStyle.none),
+    );
+  }
+
+  CupertinoTabView _buildTabView(
+      {Widget tabView, GlobalKey<NavigatorState> navKey}) {
     return CupertinoTabView(
+      navigatorKey: navKey,
       builder: (context) => tabView,
     );
+  }
+
+  GlobalKey<NavigatorState> _currentNavigatorKey() {
+    switch (_tabController.index) {
+      case 0:
+        return firstTabNavKey;
+        break;
+      case 1:
+        return secondTabNavKey;
+        break;
+      case 2:
+        return thirdTabNavKey;
+        break;
+      case 3:
+        return fourthTabNavKey;
+        break;
+      case 4:
+        return fifthTabNavKey;
+        break;
+    }
+    return null;
   }
 }

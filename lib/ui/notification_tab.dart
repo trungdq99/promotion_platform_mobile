@@ -1,157 +1,183 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:promotion_platform/ui/notification_detail_screen.dart';
 import 'package:promotion_platform/utils/constant.dart';
+import 'package:promotion_platform/utils/custom_colors.dart';
 
 class TabNotificationScreen extends StatefulWidget {
+  final BuildContext homeContext;
+  TabNotificationScreen({
+    @required this.homeContext,
+  });
   @override
-  _TabNotificationScreenState createState() => _TabNotificationScreenState();
+  _TabNotificationScreenState createState() =>
+      _TabNotificationScreenState(homeContext: homeContext);
 }
 
-class _TabNotificationScreenState extends State<TabNotificationScreen> {
+class _TabNotificationScreenState extends State<TabNotificationScreen>
+    with SingleTickerProviderStateMixin {
+  final BuildContext homeContext;
+  _TabNotificationScreenState({
+    @required this.homeContext,
+  });
+  TabController _tabController;
   @override
   void initState() {
+    _tabController = TabController(
+      length: 2,
+      initialIndex: 0,
+      vsync: this,
+    );
+    _tabController.addListener(() {
+      setState(() {});
+    });
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.teal,
-          flexibleSpace: SafeArea(
-            child: TabBar(
-              tabs: [
-                Tab(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: NeumorphicColors.background,
+        flexibleSpace: SafeArea(
+          child: TabBar(
+            controller: _tabController,
+            tabs: [
+              Tab(
+                child: NeumorphicButton(
+                  style: _tabController.index == 0
+                      ? neumorphicStyleDownWithHighRadius
+                      : neumorphicStyleUpWithHighRadius,
+                  onPressed: () {
+                    setState(() {
+                      _tabController.index = 0;
+                    });
+                  },
                   child: Container(
                     margin: EdgeInsets.only(top: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: Colors.black,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
                     width: double.maxFinite,
                     //padding: EdgeInsets.symmetric(vertical: 4),
                     alignment: Alignment.center,
                     child: Text('Thông báo'),
                   ),
                 ),
-                Tab(
+              ),
+              Tab(
+                child: NeumorphicButton(
+                  style: _tabController.index == 1
+                      ? neumorphicStyleDownWithHighRadius
+                      : neumorphicStyleUpWithHighRadius,
+                  onPressed: () {
+                    setState(() {
+                      _tabController.index = 1;
+                    });
+                  },
                   child: Container(
                     margin: EdgeInsets.only(top: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: Colors.black,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
                     width: double.maxFinite,
-                    padding: EdgeInsets.symmetric(vertical: 4),
                     alignment: Alignment.center,
                     child: Text('Tin nhắn'),
                   ),
                 ),
-              ],
-              unselectedLabelColor: Colors.black45,
-              unselectedLabelStyle: TextStyle(
-                fontSize: 16,
-              ),
-              labelColor: Colors.teal,
-              labelStyle: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-              indicatorSize: TabBarIndicatorSize.tab,
-              indicator: BoxDecoration(),
-            ),
-          ),
-        ),
-        body: SafeArea(
-          child: TabBarView(
-            children: [
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    _buildMessage(
-                      brandTitle: 'Uni Delivery',
-                      message:
-                          'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
-                      date: 'Thứ Hai, 07:00',
-                    ),
-                    _buildMessage(
-                        brandTitle: 'Uni Delivery',
-                        message:
-                            'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
-                        date: 'Thứ Hai, 07:00',
-                        isRead: false),
-                    _buildMessage(
-                      brandTitle: 'Uni Delivery',
-                      message:
-                          'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
-                      date: 'Thứ Hai, 07:00',
-                    ),
-                    _buildMessage(
-                      brandTitle: 'Uni Delivery',
-                      message:
-                          'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
-                      date: 'Thứ Hai, 07:00',
-                    ),
-                    _buildMessage(
-                      brandTitle: 'Uni Delivery',
-                      message:
-                          'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
-                      date: 'Thứ Hai, 07:00',
-                    ),
-                    _buildMessage(
-                      brandTitle: 'Uni Delivery',
-                      message:
-                          'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
-                      date: 'Thứ Hai, 07:00',
-                    ),
-                    _buildMessage(
-                      brandTitle: 'Uni Delivery',
-                      message:
-                          'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
-                      date: 'Thứ Hai, 07:00',
-                    ),
-                  ],
-                ),
-              ),
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    _buildMessage(
-                      brandTitle: 'Uni Delivery',
-                      message:
-                          'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
-                      date: 'Thứ Hai, 07:00',
-                      showMore: true,
-                      function: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => NotificationDetailScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                    _buildMessage(
-                      brandTitle: 'Uni Delivery',
-                      message:
-                          'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
-                      date: 'Thứ Hai, 07:00',
-                      isRead: false,
-                      showMore: true,
-                    ),
-                  ],
-                ),
               ),
             ],
+            indicator: BoxDecoration(),
           ),
         ),
+      ),
+      body: SafeArea(
+        child: TabBarView(
+          controller: _tabController,
+          children: [
+            _buildNoticeTab(),
+            _buildMessageTab(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMessageTab(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          _buildMessage(
+            brandTitle: 'Uni Delivery',
+            message:
+                'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
+            date: 'Thứ Hai, 07:00',
+            showMore: true,
+            function: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => NotificationDetailScreen(),
+                ),
+              );
+            },
+          ),
+          _buildMessage(
+            brandTitle: 'Uni Delivery',
+            message:
+                'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
+            date: 'Thứ Hai, 07:00',
+            isRead: false,
+            showMore: true,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNoticeTab() {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          _buildMessage(
+            brandTitle: 'Uni Delivery',
+            message:
+                'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
+            date: 'Thứ Hai, 07:00',
+          ),
+          _buildMessage(
+              brandTitle: 'Uni Delivery',
+              message:
+                  'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
+              date: 'Thứ Hai, 07:00',
+              isRead: false),
+          _buildMessage(
+            brandTitle: 'Uni Delivery',
+            message:
+                'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
+            date: 'Thứ Hai, 07:00',
+          ),
+          _buildMessage(
+            brandTitle: 'Uni Delivery',
+            message:
+                'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
+            date: 'Thứ Hai, 07:00',
+          ),
+          _buildMessage(
+            brandTitle: 'Uni Delivery',
+            message:
+                'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
+            date: 'Thứ Hai, 07:00',
+          ),
+          _buildMessage(
+            brandTitle: 'Uni Delivery',
+            message:
+                'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
+            date: 'Thứ Hai, 07:00',
+          ),
+          _buildMessage(
+            brandTitle: 'Uni Delivery',
+            message:
+                'Thương hiệu bạn yêu thích có lời nhắn gửi cho bạn đấy. Kiếm tra tin nhắn nha',
+            date: 'Thứ Hai, 07:00',
+          ),
+        ],
       ),
     );
   }
@@ -164,16 +190,21 @@ class _TabNotificationScreenState extends State<TabNotificationScreen> {
     bool showMore: false,
     Function function,
   }) {
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
+    return NeumorphicButton(
+      onPressed: () {
+        Navigator.of(homeContext).push(
+          CupertinoPageRoute(
             builder: (context) => NotificationDetailScreen(),
           ),
         );
       },
+      style: neumorphicStyleUpWithSmallRadius,
+      padding: EdgeInsets.all(0),
+      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Container(
-        color: isRead ? Colors.white : Colors.black12,
+        color: isRead
+            ? CustomColors.BACKGROUND_COLOR
+            : CustomColors.TEXT_COLOR.withOpacity(0.5),
         width: double.maxFinite,
         height: 128,
         child: Row(

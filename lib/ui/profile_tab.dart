@@ -1,12 +1,25 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:promotion_platform/ui/edit_profile_screen.dart';
+import 'package:promotion_platform/utils/constant.dart';
+import 'package:promotion_platform/utils/custom_colors.dart';
 import 'package:promotion_platform/utils/custom_widget/point.dart';
 
 class TabProfileScreen extends StatefulWidget {
+  final BuildContext homeContext;
+  TabProfileScreen({
+    @required this.homeContext,
+    Key key,
+  }) : super(key: key);
   @override
-  _TabProfileScreenState createState() => _TabProfileScreenState();
+  _TabProfileScreenState createState() =>
+      _TabProfileScreenState(homeContext: homeContext);
 }
 
 class _TabProfileScreenState extends State<TabProfileScreen> {
+  final BuildContext homeContext;
+  _TabProfileScreenState({@required this.homeContext});
   double deviceWidth;
   @override
   Widget build(BuildContext context) {
@@ -76,11 +89,28 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
         children: [
           Row(
             children: [
-              CircleAvatar(
-                child: Text('Avatar'),
-                backgroundColor: Colors.teal,
-                radius: 32,
+              NeumorphicButton(
+                style: neumorphicStyleUpCircle,
+                onPressed: () {
+                  Navigator.of(homeContext).push(CupertinoPageRoute(
+                    builder: (context) => EditProfileScreen(),
+                    fullscreenDialog: true,
+                  ));
+                },
+                padding: EdgeInsets.all(0),
+                child: Container(
+                  height: 68,
+                  width: 68,
+                  alignment: Alignment.center,
+                  color: Colors.teal,
+                  child: Text('Avatar'),
+                ),
               ),
+              // CircleAvatar(
+              //   child: Text('Avatar'),
+              //   backgroundColor: Colors.teal,
+              //   radius: 32,
+              // ),
               SizedBox(
                 width: 12,
               ),
@@ -89,10 +119,7 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
                 children: [
                   Text(
                     'User Name',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
+                    style: BOLD_TITLE_TEXT_STYLE,
                   ),
                   Text(
                     'Sửa thông tin',
@@ -107,6 +134,7 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
             child: Point(
               point: 1000,
               hasBorder: true,
+              function: () {},
             ),
           ),
         ],
@@ -119,18 +147,31 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
     String title,
     Function function,
   }) {
-    return Card(
+    return NeumorphicButton(
+      onPressed: () {},
+      style: neumorphicStyleUpWithSmallRadius,
       margin: EdgeInsets.symmetric(
-        horizontal: 16,
+        horizontal: 32,
+        vertical: 4,
       ),
-      child: ListTile(
-        leading: Icon(
-          iconData,
+      padding: EdgeInsets.all(16),
+      child: Container(
+        // height: ,
+        width: double.maxFinite,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: DEFAULT_TEXT_STYLE,
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: CustomColors.TEXT_COLOR,
+            ),
+          ],
         ),
-        title: Text(title),
-        trailing: Icon(Icons.arrow_forward_ios),
       ),
-      shape: Border.all(color: Colors.black),
     );
   }
 }

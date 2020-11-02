@@ -13,7 +13,7 @@ class CustomButton extends StatelessWidget {
         style: DEFAULT_TEXT_STYLE,
       ),
       onPressed: () {},
-      style: neumorphicStyleUp,
+      style: neumorphicStyleUpWithHighRadius,
     );
   }
 }

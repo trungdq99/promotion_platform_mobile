@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:promotion_platform/utils/custom_colors.dart';
 import '../bloc/promotion_detail_screen/promotion_detail_screen_bloc.dart';
 import '../bloc/promotion_detail_screen/promotion_detail_screen_event.dart';
 import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
@@ -67,24 +69,29 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
                     info: 'Hệ thống giao hàng cho sinh viên',
                   ),
                   SizedBox(
-                    height: 72,
+                    height: 100,
                   ),
                 ]),
               ),
             ],
           ),
           Positioned(
-            bottom: 32,
-            left: 32,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: Colors.teal,
+            bottom: 0,
+            child: NeumorphicButton(
+              style: neumorphicStyleDownWithHighRadius,
+              onPressed: () {},
+              margin: EdgeInsets.all(32),
+              padding: EdgeInsets.all(0),
+              child: Container(
+                width: deviceWidth - 64,
+                padding: EdgeInsets.all(16),
+                alignment: Alignment.center,
+                // color: CustomColors.GREEN,
+                child: Text(
+                  'Đổi quà',
+                  style: DEFAULT_TEXT_STYLE,
+                ),
               ),
-              alignment: Alignment.center,
-              padding: EdgeInsets.all(16),
-              width: deviceWidth - 60,
-              child: Text('Đổi quà'),
             ),
           ),
         ],
@@ -153,7 +160,7 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
         padding: EdgeInsets.only(left: 16),
         child: InkWell(
           onTap: () {
-            giftDetailScreenBloc.emitEvent(PromotionDetailScreenEventClose());
+            //giftDetailScreenBloc.emitEvent(PromotionDetailScreenEventClose());
             Navigator.of(context).pop();
           },
           child: CircleAvatar(

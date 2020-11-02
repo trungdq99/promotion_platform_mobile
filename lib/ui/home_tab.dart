@@ -1,4 +1,8 @@
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:promotion_platform/utils/custom_widget/icon/game_icon.dart';
 import 'package:promotion_platform/bloc/brand/brand_bloc.dart';
 import 'package:promotion_platform/bloc/brand/brand_event.dart';
 import 'package:promotion_platform/bloc/brand/brand_state.dart';
@@ -6,7 +10,8 @@ import 'package:promotion_platform/bloc/brand_detail_screen/brand_detail_screen_
 import 'package:promotion_platform/bloc/brand_detail_screen/brand_detail_screen_event.dart';
 import 'package:promotion_platform/bloc/customer/customer_bloc.dart';
 import 'package:promotion_platform/bloc/customer/customer_state.dart';
-import 'package:promotion_platform/utils/custom_widget/progressing.dart';
+import 'package:promotion_platform/utils/custom_widget/ads_widget.dart';
+import 'package:promotion_platform/utils/custom_widget/full_screen_progressing.dart';
 import '../bloc/promotion_detail_screen/promotion_detail_screen_bloc.dart';
 import '../bloc/promotion_detail_screen/promotion_detail_screen_event.dart';
 import 'package:promotion_platform/models/brand_model.dart';
@@ -18,26 +23,51 @@ import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
 import '../utils/constant.dart';
 import '../utils/custom_widget/point.dart';
 import '../utils/custom_widget/group_title.dart';
-import '../utils/custom_widget/voucher.dart';
+import '../utils/custom_widget/promotion_widget.dart';
 
 class HomeTab extends StatefulWidget {
+  final CupertinoTabController cupertinoTabController;
+  final BuildContext homeContext;
+  HomeTab({
+    @required this.cupertinoTabController,
+    @required this.homeContext,
+  });
   @override
-  _HomeTabState createState() => _HomeTabState();
+  _HomeTabState createState() => _HomeTabState(
+        cupertinoTabController: cupertinoTabController,
+        homeContext: homeContext,
+      );
 }
 
 class _HomeTabState extends State<HomeTab> {
+  final CupertinoTabController cupertinoTabController;
+  final BuildContext homeContext;
+
+  _HomeTabState({
+    @required this.cupertinoTabController,
+    @required this.homeContext,
+  });
   double deviceWidth;
   CustomerBloc _customerBloc;
   BrandBloc _brandBLoc;
   BrandDetailScreenBloc _brandDetailScreenBloc;
+  PromotionDetailScreenBloc _promotionDetailScreenBloc;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final _promotionDetailScreenBloc =
+    _promotionDetailScreenBloc =
         BlocProvider.of<PromotionDetailScreenBloc>(context);
     _brandDetailScreenBloc = BlocProvider.of<BrandDetailScreenBloc>(context);
     _customerBloc = BlocProvider.of<CustomerBloc>(context);
     _brandBLoc = BlocProvider.of<BrandBloc>(context);
-    _brandBLoc.emitEvent(BrandEventLoadList());
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (_brandBLoc != null) _brandBLoc.emitEvent(BrandEventLoadList());
+    });
     deviceWidth = MediaQuery.of(context).size.width;
     // final deviceHeight = MediaQuery.of(context).size.height;
     return BlocEventStateBuilder<CustomerState>(
@@ -50,8 +80,8 @@ class _HomeTabState extends State<HomeTab> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildAppBar(deviceWidth),
-                      _buildAds(),
+                      _buildAppBar(),
+                      AdsWidget(),
                       GroupTitle(
                         title: 'Thương hiệu nổi bật',
                         canShowAll: true,
@@ -60,42 +90,11 @@ class _HomeTabState extends State<HomeTab> {
                       GroupTitle(
                         title: 'Quà ngon được săn đón',
                         canShowAll: true,
+                        function: () {
+                          cupertinoTabController.index = 1;
+                        },
                       ),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            Voucher(
-                              voucherTitle: 'Voucher 500,000 VND',
-                              brandTitle: 'Uni Delivery',
-                              price: 1000,
-                              function: () =>
-                                  _promotionDetailScreenBloc.emitEvent(
-                                PromotionDetailScreenEventOpen(),
-                              ),
-                            ),
-                            Voucher(
-                              voucherTitle: 'Voucher 500,000 VND',
-                              brandTitle: 'Uni Delivery',
-                              price: 1000,
-                              function: () =>
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => PromotionDetailScreen(),
-                              )),
-                            ),
-                            Voucher(
-                              voucherTitle: 'Voucher 500,000 VND',
-                              brandTitle: 'Uni Delivery',
-                              price: 1000,
-                            ),
-                            Voucher(
-                              voucherTitle: 'Voucher 500,000 VND',
-                              brandTitle: 'Uni Delivery',
-                              price: 1000,
-                            ),
-                          ],
-                        ),
-                      ),
+                      _buildListPromotion(),
                     ],
                   ),
                 ),
@@ -105,27 +104,63 @@ class _HomeTabState extends State<HomeTab> {
                 right: 0,
                 child: SafeArea(
                   child: Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: Colors.black,
-                        width: 2,
-                      ),
-                      shape: BoxShape.circle,
+                    height: 80,
+                    width: 80,
+                    child: NeumorphicButton(
+                      onPressed: () {},
+                      style: neumorphicStyleDownCircle,
+                      child: GameIcon(),
                     ),
-                    alignment: Alignment.center,
-                    child: Text('Game'),
                   ),
                 ),
               ),
-              state.isLoading ? Progressing() : Container(),
+              state.isLoading ? FullScreenProgressing() : Container(),
             ],
           ),
         );
       },
       bloc: _customerBloc,
+    );
+  }
+
+  Function pushPromotionDetailScreen() => () async {
+        await Future.delayed(Duration(milliseconds: 50));
+        Navigator.of(homeContext).push(MaterialPageRoute(
+          builder: (context) => PromotionDetailScreen(),
+        ));
+      };
+  Widget _buildListPromotion() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: EdgeInsets.all(8),
+      child: Row(
+        children: [
+          PromotionWidget(
+            voucherTitle: 'Voucher 500,000 VND',
+            brandTitle: 'Uni Delivery',
+            price: 1000,
+            function: pushPromotionDetailScreen(),
+          ),
+          PromotionWidget(
+            voucherTitle: 'Voucher 500,000 VND',
+            brandTitle: 'Uni Delivery',
+            price: 1000,
+            function: () => _promotionDetailScreenBloc.emitEvent(
+              PromotionDetailScreenEventOpen(),
+            ),
+          ),
+          PromotionWidget(
+            voucherTitle: 'Voucher 500,000 VND',
+            brandTitle: 'Uni Delivery',
+            price: 1000,
+          ),
+          PromotionWidget(
+            voucherTitle: 'Voucher 500,000 VND',
+            brandTitle: 'Uni Delivery',
+            price: 1000,
+          ),
+        ],
+      ),
     );
   }
 
@@ -158,6 +193,7 @@ class _HomeTabState extends State<HomeTab> {
         }
         return SingleChildScrollView(
           scrollDirection: Axis.horizontal,
+          padding: EdgeInsets.all(8),
           child: listBrands != null
               ? Row(
                   children: children,
@@ -174,20 +210,7 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  Widget _buildAds() {
-    return Container(
-      child: Text('Quảng cáo'),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black),
-      ),
-      padding: EdgeInsets.all(8),
-      height: 150,
-      width: deviceWidth,
-      margin: EdgeInsets.all(16),
-    );
-  }
-
-  Widget _buildAppBar(double deviceWidth) {
+  Widget _buildAppBar() {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 16,
@@ -205,9 +228,15 @@ class _HomeTabState extends State<HomeTab> {
               Row(
                 children: [
                   customerModel != null
-                      ? CircleAvatar(
-                          radius: 24,
-                          backgroundImage: NetworkImage(customerModel.picUrl),
+                      ? Neumorphic(
+                          style: NeumorphicStyle(
+                            boxShape: NeumorphicBoxShape.circle(),
+                          ),
+                          child: Image.network(
+                            customerModel.picUrl,
+                            height: 68,
+                            width: 68,
+                          ),
                         )
                       : CircleAvatar(
                           child: Text('Logo'),
@@ -215,19 +244,19 @@ class _HomeTabState extends State<HomeTab> {
                           radius: 24,
                         ),
                   SizedBox(
-                    width: 12,
+                    width: 16,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Good morning,',
+                        'Xin chào !',
                         style: DEFAULT_TEXT_STYLE,
                       ),
                       Text(
                         customerModel != null
                             ? customerModel.name
-                            : 'User Name',
+                            : 'Bạn chưa đăng nhập',
                         style: BOLD_TITLE_TEXT_STYLE,
                       ),
                     ],
@@ -240,6 +269,7 @@ class _HomeTabState extends State<HomeTab> {
                   point:
                       customerModel != null ? customerModel.lastBalance : 1000,
                   hasBorder: true,
+                  function: () {},
                 ),
               ),
             ],
@@ -250,9 +280,6 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  showBrandDetailScreen({@required int id}) =>
-      _brandDetailScreenBloc.emitEvent(BrandDetailScreenEventOpen(brandId: id));
-
   // Show brand
   Widget _buildBrand({
     @required String brandTitle,
@@ -260,41 +287,44 @@ class _HomeTabState extends State<HomeTab> {
     String imageUrl,
     int brandId,
   }) {
-    return InkWell(
-      onTap: () {
+    return NeumorphicButton(
+      onPressed: () {
         _brandDetailScreenBloc
             .emitEvent(BrandDetailScreenEventOpen(brandId: brandId));
       },
+      margin: EdgeInsets.all(16),
+      padding: EdgeInsets.all(0),
       child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.black,
-          ),
-        ),
-        padding: EdgeInsets.all(16),
-        margin: EdgeInsets.only(
-          left: 16,
-        ),
-        height: 150,
-        width: 250,
+        width: 124,
+        height: 124,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              color: Colors.teal,
+              width: 124,
               height: 64,
-              width: 64,
-              alignment: Alignment.center,
-              child: Text('Uni'),
+              child: Image.network(
+                'https://brasol.vn/public/uploads/1528692055-29.png',
+                fit: BoxFit.cover,
+              ),
             ),
-            Text(
-              brandTitle,
-              style: BOLD_TITLE_TEXT_STYLE,
-              overflow: TextOverflow.ellipsis,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                brandTitle,
+                style: BOLD_SMALL_TEXT_STYLE,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
-            Text(
-              '$promotions khuyến mãi',
-              style: SMALL_TEXT_STYLE,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                '$promotions khuyến mãi',
+                style: SMALL_TEXT_STYLE,
+              ),
+            ),
+            SizedBox(
+              height: 8,
             ),
           ],
         ),

@@ -2,18 +2,19 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:promotion_platform/Component71.dart';
 import 'package:promotion_platform/bloc/authentication/authentication_bloc.dart';
 import 'package:promotion_platform/bloc/authentication/authentication_event.dart';
 import 'package:promotion_platform/bloc/authentication/authentication_state.dart';
-import 'package:promotion_platform/googlehangouts.dart';
+import 'package:promotion_platform/login_background.dart';
+
 import 'package:promotion_platform/ui/home_screen.dart';
 import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
 import 'package:promotion_platform/utils/constant.dart';
 import 'package:promotion_platform/utils/custom_colors.dart';
 import 'package:promotion_platform/utils/custom_widget/error_alert.dart';
-import 'package:promotion_platform/utils/custom_widget/progressing.dart';
+import 'package:promotion_platform/utils/custom_widget/icon/google_icon.dart';
+import 'package:promotion_platform/utils/custom_widget/full_screen_progressing.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -77,9 +78,13 @@ class _LoginScreenState extends State<LoginScreen> {
         body: Stack(
           children: [
             Container(
-              child: Component71(),
+              child: login_background(),
               height: deviceHeight / 3,
             ),
+            // Container(
+            //   child: login_bean(),
+            //   height: deviceHeight / 3,
+            // ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -89,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     : _buildLoginByGoogleButton(),
               ],
             ),
-            isProgressing ? Progressing() : Container(),
+            isProgressing ? FullScreenProgressing() : Container(),
             Positioned(
               bottom: MediaQuery.of(context).orientation == Orientation.portrait
                   ? deviceHeight / 6
@@ -133,7 +138,9 @@ class _LoginScreenState extends State<LoginScreen> {
     return Neumorphic(
       margin: EdgeInsets.all(32),
       //padding: EdgeInsets.all(8),
-      style: isLoginByPhone ? neumorphicStyleDown : neumorphicStyleUp,
+      style: isLoginByPhone
+          ? neumorphicStyleDownWithHighRadius
+          : neumorphicStyleUpWithHighRadius,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextField(
@@ -170,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         );
       },
-      style: neumorphicStyleUp,
+      style: neumorphicStyleUpWithHighRadius,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           vertical: 8,
@@ -188,7 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildLoginByGoogleButton() {
     return NeumorphicButton(
       onPressed: () {
-        //_authenticationBloc.emitEvent(AuthenticationEventGoogleSignIn());
+        _authenticationBloc.emitEvent(AuthenticationEventGoogleSignIn());
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -206,7 +213,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ],
         ),
       ),
-      style: neumorphicStyleUp,
+      style: neumorphicStyleUpWithHighRadius,
       margin: EdgeInsets.all(32),
     );
   }

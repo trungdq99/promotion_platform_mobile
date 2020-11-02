@@ -31,7 +31,7 @@ class _ShowDetailState extends State<ShowDetail> {
         InkWell(
           onTap: _showMoreOrLess,
           child: Container(
-            height: isShowMore ? null : 200,
+            height: (isShowMore || this.detail.isEmpty) ? null : 200,
             padding: EdgeInsets.all(16),
             child: Text(
               this.detail,
