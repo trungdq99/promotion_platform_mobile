@@ -34,7 +34,7 @@ class GroupTitle extends StatelessWidget {
           ),
           canShowAll
               ? InkWell(
-                  onTap: function?.call(),
+                  onTap: function,
                   child: Text(
                     'Tất cả',
                     style: DEFAULT_TEXT_STYLE,

@@ -52,9 +52,25 @@ class AuthenticationBloc
         yield AuthenticationState.authenticated(token: token);
       }
     } else if (event is AuthenticationEventSignOut) {
-      Helper.removeData(ACCESS_TOKEN_KEY);
+      yield AuthenticationState.authenticating();
+      await Future.delayed(Duration(milliseconds: 1000));
+      _handleGoogleSignOut();
       yield AuthenticationState.notAuthenticated();
+    } else if (event is AuthenticationEventLoadLogin) {
+      yield AuthenticationState.authenticating();
+      String token;
+      token = await _loadToken();
+      if (token != null && token.isNotEmpty) {
+        yield AuthenticationState.authenticated(token: token);
+      } else {
+        yield AuthenticationState.notAuthenticated();
+      }
     }
+  }
+
+  Future<String> _loadToken() async {
+    String token = await Helper.loadData(ACCESS_TOKEN_KEY, SavingType.String);
+    return token;
   }
 
   Future<String> _signInSever({@required String firebaseToken}) async {
@@ -92,6 +108,12 @@ class AuthenticationBloc
     final User user = (await _auth.signInWithCredential(credential)).user;
     print("signed in " + user.displayName);
     return user;
+  }
+
+  Future _handleGoogleSignOut() async {
+    await _googleSignIn.signOut();
+    await _auth.signOut();
+    Helper.removeData(ACCESS_TOKEN_KEY);
   }
 
   Future<void> _googleSignInError() async {

@@ -19,8 +19,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  CupertinoTabController _tabController =
-      CupertinoTabController(initialIndex: 0);
+  CupertinoTabController _tabController;
 
   // Used to handle Android back button navigation with tab specific navigator.
   final GlobalKey<NavigatorState> firstTabNavKey = GlobalKey<NavigatorState>();
@@ -31,21 +30,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    _tabController = CupertinoTabController(initialIndex: 0);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final customerBloc = BlocProvider.of<CustomerBloc>(context);
     final authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
     return BlocEventStateBuilder<AuthenticationState>(
       builder: (context, authenticationState) {
         if (authenticationState.isAuthenticated) {
-          WidgetsFlutterBinding.ensureInitialized()
-              .addPostFrameCallback((timeStamp) {
-            customerBloc
-                .emitEvent(CustomerEventLoad(token: authenticationState.token));
-          });
+          // WidgetsFlutterBinding.ensureInitialized()
+          //     .addPostFrameCallback((timeStamp) {
+          //   customerBloc
+          //       .emitEvent(CustomerEventLoad(token: authenticationState.token));
+          // });
           // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
           //   customerBloc
           //       .emitEvent(CustomerEventLoad(token: authenticationState.token));
@@ -70,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
         tabBuilder: (context, index) {
           CupertinoTabView returnValue = _buildTabView(
             tabView: HomeTab(
-              cupertinoTabController: _tabController,
+              tabController: _tabController,
               homeContext: context,
             ),
             navKey: firstTabNavKey,
@@ -80,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
             case 0:
               returnValue = _buildTabView(
                 tabView: HomeTab(
-                  cupertinoTabController: _tabController,
+                  tabController: _tabController,
                   homeContext: context,
                 ),
                 navKey: firstTabNavKey,
@@ -98,12 +97,8 @@ class _HomeScreenState extends State<HomeScreen> {
               returnValue = _buildTabView(
                 tabView: Scaffold(
                   body: Center(
-                      child: FlatButton(
-                    child: Text('Click'),
-                    onPressed: () {
-                      _tabController.index = 1;
-                    },
-                  )),
+                    child: Text('Scan'),
+                  ),
                 ),
                 navKey: thirdTabNavKey,
               );

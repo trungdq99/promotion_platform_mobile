@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:promotion_platform/utils/custom_colors.dart';
 import 'package:promotion_platform/utils/custom_widget/icon/game_icon.dart';
 import 'package:promotion_platform/bloc/brand/brand_bloc.dart';
 import 'package:promotion_platform/bloc/brand/brand_event.dart';
@@ -20,10 +21,10 @@ import '../utils/custom_widget/group_title.dart';
 import '../utils/custom_widget/promotion_widget.dart';
 
 class HomeTab extends StatefulWidget {
-  final CupertinoTabController cupertinoTabController;
+  final CupertinoTabController tabController;
   final BuildContext homeContext;
   HomeTab({
-    @required this.cupertinoTabController,
+    @required this.tabController,
     @required this.homeContext,
   });
   @override
@@ -47,9 +48,9 @@ class _HomeTabState extends State<HomeTab> {
     // WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((timeStamp) {
     //   _brandBLoc.emitEvent(BrandEventLoadList());
     // });
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (_brandBLoc != null) _brandBLoc.emitEvent(BrandEventLoadList());
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   if (_brandBLoc != null) _brandBLoc.emitEvent(BrandEventLoadList());
+    // });
     deviceWidth = MediaQuery.of(context).size.width;
     // final deviceHeight = MediaQuery.of(context).size.height;
     return BlocEventStateBuilder<CustomerState>(
@@ -73,7 +74,7 @@ class _HomeTabState extends State<HomeTab> {
                         title: 'Quà ngon được săn đón',
                         canShowAll: true,
                         function: () {
-                          widget.cupertinoTabController.index = 1;
+                          widget.tabController.index = 1;
                         },
                       ),
                       _buildListPromotion(),
@@ -213,22 +214,24 @@ class _HomeTabState extends State<HomeTab> {
             children: [
               Row(
                 children: [
-                  customerModel != null
-                      ? Neumorphic(
-                          style: NeumorphicStyle(
-                            boxShape: NeumorphicBoxShape.circle(),
-                          ),
-                          child: Image.network(
+                  Neumorphic(
+                    style: NeumorphicStyle(
+                      boxShape: NeumorphicBoxShape.circle(),
+                    ),
+                    child: customerModel != null
+                        ? Image.network(
                             customerModel.picUrl,
                             height: 68,
                             width: 68,
+                          )
+                        : Container(
+                            height: 68,
+                            width: 68,
+                            color: CustomColors.GREEN,
+                            alignment: Alignment.center,
+                            child: Text('Avatar'),
                           ),
-                        )
-                      : CircleAvatar(
-                          child: Text('Logo'),
-                          backgroundColor: Colors.teal,
-                          radius: 24,
-                        ),
+                  ),
                   SizedBox(
                     width: 16,
                   ),

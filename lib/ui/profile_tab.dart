@@ -1,7 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:promotion_platform/bloc/authentication/authentication_bloc.dart';
+import 'package:promotion_platform/bloc/authentication/authentication_event.dart';
+import 'package:promotion_platform/bloc/customer/customer_bloc.dart';
+import 'package:promotion_platform/bloc/customer/customer_event.dart';
+import 'package:promotion_platform/bloc/customer/customer_state.dart';
+import 'package:promotion_platform/models/customer_model.dart';
 import 'package:promotion_platform/ui/edit_profile_screen.dart';
+import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
+import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
 import 'package:promotion_platform/utils/constant.dart';
 import 'package:promotion_platform/utils/custom_colors.dart';
 import 'package:promotion_platform/utils/custom_widget/point.dart';
@@ -17,64 +25,83 @@ class TabProfileScreen extends StatefulWidget {
 
 class _TabProfileScreenState extends State<TabProfileScreen> {
   double deviceWidth;
+  CustomerBloc _customerBloc;
+  CustomerModel _customerModel;
   @override
   Widget build(BuildContext context) {
+    _customerBloc = BlocProvider.of<CustomerBloc>(context);
+    final _authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
     deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Stack(
-        children: [
-          SafeArea(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  _buildAppBar(),
-                  _buildButton(
-                    title: 'Thành viên vàng',
-                    iconData: Icons.leaderboard,
+      body: BlocEventStateBuilder<CustomerState>(
+        builder: (context, customerState) {
+          if (customerState.isLoad) {
+            _customerModel = customerState.customerModel;
+          }
+          return Stack(
+            children: [
+              SafeArea(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      _buildAppBar(),
+                      _buildButton(
+                        title: 'Thành viên vàng',
+                        iconData: Icons.leaderboard,
+                      ),
+                      _buildButton(
+                        title: 'Quà đã đổi',
+                        iconData: Icons.card_giftcard,
+                      ),
+                      _buildButton(
+                        title: 'Lịch sử Bean',
+                        iconData: Icons.history,
+                      ),
+                      _buildButton(
+                        title: 'Thương hiệu',
+                        iconData: Icons.shop,
+                      ),
+                      _buildButton(
+                        title: 'Game',
+                        iconData: Icons.videogame_asset,
+                      ),
+                      SizedBox(
+                        height: 24,
+                      ),
+                      _buildButton(
+                        title: 'Về Uni Bean',
+                      ),
+                      _buildButton(
+                        title: 'Hỗ trợ',
+                        iconData: Icons.settings_input_svideo,
+                      ),
+                      _buildButton(
+                        title: 'Cài đặt',
+                        iconData: Icons.settings,
+                      ),
+                      SizedBox(
+                        height: 24,
+                      ),
+                      _buildButton(
+                          title: 'Đăng xuất',
+                          iconData: Icons.logout,
+                          function: () {
+                            _authenticationBloc
+                                .emitEvent(AuthenticationEventSignOut());
+                          }),
+                    ],
                   ),
-                  _buildButton(
-                    title: 'Quà đã đổi',
-                    iconData: Icons.card_giftcard,
-                  ),
-                  _buildButton(
-                    title: 'Lịch sử Bean',
-                    iconData: Icons.history,
-                  ),
-                  _buildButton(
-                    title: 'Thương hiệu',
-                    iconData: Icons.shop,
-                  ),
-                  _buildButton(
-                    title: 'Game',
-                    iconData: Icons.videogame_asset,
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  _buildButton(
-                    title: 'Về Uni Bean',
-                  ),
-                  _buildButton(
-                    title: 'Hỗ trợ',
-                    iconData: Icons.settings_input_svideo,
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  _buildButton(
-                    title: 'Cài đặt',
-                    iconData: Icons.settings,
-                  ),
-                ],
-              ),
-            ),
-          )
-        ],
+                ),
+              )
+            ],
+          );
+        },
+        bloc: _customerBloc,
       ),
     );
   }
 
-  Container _buildAppBar() {
+  Widget _buildAppBar() {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 16,
@@ -85,35 +112,54 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
         children: [
           Row(
             children: [
-              NeumorphicButton(
-                style: neumorphicStyleUpCircle,
-                onPressed: () {
-                  Navigator.push(
-                    widget.homeContext,
-                    CupertinoPageRoute(
-                      builder: (context) => EditProfileScreen(),
-                      fullscreenDialog: true,
-                    ),
-                  );
-                  // Navigator.of(homeContext).push(CupertinoPageRoute(
-                  //   builder: (context) => EditProfileScreen(),
-                  //   fullscreenDialog: true,
-                  // ));
-                },
-                padding: EdgeInsets.all(0),
-                child: Container(
-                  height: 68,
-                  width: 68,
-                  alignment: Alignment.center,
-                  color: Colors.teal,
-                  child: Text('Avatar'),
-                ),
-              ),
-              // CircleAvatar(
-              //   child: Text('Avatar'),
-              //   backgroundColor: Colors.teal,
-              //   radius: 32,
+              // NeumorphicButton(
+              //   style: neumorphicStyleUpCircle,
+              //   onPressed: () {
+              //     Navigator.push(
+              //       widget.homeContext,
+              //       CupertinoPageRoute(
+              //         builder: (context) => EditProfileScreen(
+              //           name: 'Trung Shin',
+              //           birthday: '17/05/1999',
+              //           email: 'nhocchjpts99@gmail.com',
+              //           gender: true,
+              //           phone: '0917920689',
+              //         ),
+              //         fullscreenDialog: true,
+              //       ),
+              //     );
+              //     // Navigator.of(homeContext).push(CupertinoPageRoute(
+              //     //   builder: (context) => EditProfileScreen(),
+              //     //   fullscreenDialog: true,
+              //     // ));
+              //   },
+              //   padding: EdgeInsets.all(0),
+              //   child: Container(
+              //     height: 68,
+              //     width: 68,
+              //     alignment: Alignment.center,
+              //     color: Colors.teal,
+              //     child: Text('Avatar'),
+              //   ),
               // ),
+              Neumorphic(
+                style: NeumorphicStyle(
+                  boxShape: NeumorphicBoxShape.circle(),
+                ),
+                child: _customerModel != null
+                    ? Image.network(
+                        _customerModel.picUrl,
+                        height: 68,
+                        width: 68,
+                      )
+                    : Container(
+                        height: 68,
+                        width: 68,
+                        color: CustomColors.GREEN,
+                        alignment: Alignment.center,
+                        child: Text('Avatar'),
+                      ),
+              ),
               SizedBox(
                 width: 12,
               ),
@@ -121,12 +167,41 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'User Name',
+                    _customerModel != null ? _customerModel.name : 'User Name',
                     style: BOLD_TITLE_TEXT_STYLE,
                   ),
-                  Text(
-                    'Sửa thông tin',
-                    style: TextStyle(color: Colors.teal),
+                  InkWell(
+                    onTap: () {
+                      String name = '';
+                      String birthday = '';
+                      String email = '';
+                      bool gender;
+                      String phone = '';
+                      if (_customerModel != null) {
+                        name = _customerModel.name;
+                        birthday = _customerModel.birthDay;
+                        email = _customerModel.email;
+                        gender = _customerModel.gender;
+                        phone = _customerModel.phone;
+                      }
+                      Navigator.push(
+                        widget.homeContext,
+                        CupertinoPageRoute(
+                          builder: (context) => EditProfileScreen(
+                            name: name,
+                            birthday: birthday,
+                            email: email,
+                            gender: gender,
+                            phone: phone,
+                          ),
+                          fullscreenDialog: true,
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'Sửa thông tin',
+                      style: TextStyle(color: Colors.teal),
+                    ),
                   ),
                 ],
               ),
@@ -135,7 +210,7 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
           Positioned(
             right: 0,
             child: Point(
-              point: 1000,
+              point: _customerModel != null ? _customerModel.lastBalance : 1000,
               hasBorder: true,
               function: () {},
             ),
@@ -148,10 +223,10 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
   Widget _buildButton({
     IconData iconData: Icons.settings,
     String title: '',
-    //Function function: const (){},
+    Function function,
   }) {
     return NeumorphicButton(
-      onPressed: () {},
+      onPressed: function ?? () {},
       style: neumorphicStyleUpWithSmallRadius,
       margin: EdgeInsets.symmetric(
         horizontal: 32,

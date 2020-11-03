@@ -3,6 +3,9 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:promotion_platform/bloc/authentication/authentication_bloc.dart';
 import 'package:promotion_platform/bloc/brand/brand_bloc.dart';
 import 'package:promotion_platform/bloc/customer/customer_bloc.dart';
+import 'package:promotion_platform/ui/authentication_screen.dart';
+import 'package:promotion_platform/ui/login_screen.dart';
+import 'package:promotion_platform/ui/splash_screen.dart';
 import 'package:promotion_platform/utils/custom_colors.dart';
 import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import 'package:promotion_platform/utils/constant.dart';
@@ -38,7 +41,8 @@ class App extends StatelessWidget {
               depth: 6,
             ),
             // home: LoginScreen(),
-            home: HomeScreen(),
+            // home: HomeScreen(),
+            home: SplashScreen(),
           ),
         ),
       ),

@@ -14,12 +14,12 @@ class BrandBloc extends BlocEventStateBase<BrandEvent, BrandState> {
   Stream<BrandState> eventHandler(
       BrandEvent event, BrandState currentState) async* {
     if (event is BrandEventLoadList) {
-      yield BrandState.loading();
-      List<BrandModel> listBrandModel;
-      listBrandModel = await loadBrands();
-      if (listBrandModel != null) {
-        yield BrandState.loaded(listBrandModel: listBrandModel);
-      }
+      // yield BrandState.loading();
+      // List<BrandModel> listBrandModel;
+      // listBrandModel = await loadBrands();
+      // if (listBrandModel != null) {
+      //   yield BrandState.loaded(listBrandModel: listBrandModel);
+      // }
     }
   }
 

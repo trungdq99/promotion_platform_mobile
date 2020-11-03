@@ -147,7 +147,7 @@ const TextStyle HEADER_TEXT_STYLE = TextStyle(
 const TextStyle DEFAULT_TEXT_STYLE = TextStyle(
   fontSize: DEFAULT_FONT_SIZE,
   color: CustomColors.TEXT_COLOR,
-  fontFamily: 'Segoe UI',
+  //fontFamily: 'Segoe UI',
   //fontStyle: FontStyle.italic,
 );
 
@@ -155,26 +155,26 @@ const TextStyle DEFAULT_TEXT_STYLE = TextStyle(
 const TextStyle POINT_TEXT_STYLE = TextStyle(
   fontSize: DEFAULT_FONT_SIZE,
   color: CustomColors.GREEN,
-  fontFamily: 'Segoe UI',
+  //fontFamily: 'Segoe UI',
   //fontStyle: FontStyle.italic,
 );
 
 const TextStyle SMALL_TEXT_STYLE = TextStyle(
   fontSize: SMALL_FONT_SIZE,
   color: CustomColors.TEXT_COLOR,
-  fontFamily: 'Segoe UI',
+  //fontFamily: 'Segoe UI',
 );
 
 const TextStyle BOLD_SMALL_TEXT_STYLE = TextStyle(
   fontSize: SMALL_FONT_SIZE,
   color: CustomColors.TEXT_COLOR,
   fontWeight: FontWeight.bold,
-  fontFamily: 'Segoe UI',
+  //fontFamily: 'Segoe UI',
 );
 
 const TextStyle SUPER_SMALL_TEXT_STYLE = TextStyle(
   fontSize: SUPER_SMALL_FONT_SIZE,
-  fontFamily: 'Segoe UI',
+  //fontFamily: 'Segoe UI',
   color: CustomColors.TEXT_COLOR,
 );
 

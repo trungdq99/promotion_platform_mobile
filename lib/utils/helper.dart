@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import './constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -77,5 +76,9 @@ class Helper {
 
   static String formatDateTime(DateTime date) {
     return DateFormat('dd/MM/yyyy').format(date);
+  }
+
+  static DateTime convertStringToDateTime(String date) {
+    return DateFormat('dd/MM/yyyy').parse(date);
   }
 }

@@ -15,8 +15,16 @@ class ApplicationInitializationBloc extends BlocEventStateBase<
       ApplicationInitializationState state) async* {
     if (event.applicationInitializationEventType ==
         ApplicationInitializationEventType.initialized) {
-      yield ApplicationInitializationState.initializing();
-      await Future.delayed(Duration(milliseconds: 2500));
+      await Future.delayed(Duration(milliseconds: 1000));
+      double percent = 0;
+      while (percent <= 1) {
+        yield ApplicationInitializationState.initializing(percent: percent);
+        if (percent <= 0.5)
+          await Future.delayed(Duration(milliseconds: 300));
+        else
+          await Future.delayed(Duration(milliseconds: 100));
+        percent += 0.1;
+      }
       yield ApplicationInitializationState.initialized();
     }
   }

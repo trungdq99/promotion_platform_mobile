@@ -39,21 +39,6 @@ class _LoginScreenState extends State<LoginScreen> {
     deviceHeight = MediaQuery.of(context).size.height;
     return BlocEventStateBuilder<AuthenticationState>(
       builder: (context, state) {
-        if (state.isAuthenticated) {
-          WidgetsFlutterBinding.ensureInitialized()
-              .addPostFrameCallback((timeStamp) {
-            Navigator.pushReplacement(
-                context,
-                CupertinoPageRoute(
-                  builder: (context) => HomeScreen(),
-                ));
-          });
-          // WidgetsBinding.instance.addPostFrameCallback((_) {
-          //   Navigator.of(context).pushReplacement(MaterialPageRoute(
-          //     builder: (context) => HomeScreen(),
-          //   ));
-          // });
-        }
         if (state.isError) {
           showDialog(
             context: context,
