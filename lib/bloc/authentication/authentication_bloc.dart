@@ -60,6 +60,7 @@ class AuthenticationBloc
       yield AuthenticationState.authenticating();
       String token;
       token = await _loadToken();
+      print('Token: $token');
       if (token != null && token.isNotEmpty) {
         yield AuthenticationState.authenticated(token: token);
       } else {

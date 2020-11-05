@@ -15,13 +15,14 @@ class EditProfileScreen extends StatefulWidget {
   final String email;
   final String birthday;
   final bool gender;
-
+  final String picUrl;
   EditProfileScreen({
     this.name,
     this.phone,
     this.email,
     this.birthday,
     this.gender,
+    this.picUrl,
   });
   @override
   _EditProfileScreenState createState() => _EditProfileScreenState();
@@ -31,16 +32,34 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   bool _isSelectGender = false;
 
   TextEditingController _firstNameController;
+  TextEditingController _familyNameController;
   TextEditingController _phoneController;
   TextEditingController _emailController;
   String _birthday;
   String _gender;
   @override
   void initState() {
-    _firstNameController = TextEditingController(text: widget.name);
+    String name = widget.name;
+    List<String> list = name.split(' ');
+    int count = 0;
+    String firstName = '';
+    String familyName = '';
+    list.forEach((element) {
+      if (count == 0) {
+        firstName = element;
+      } else {
+        familyName += element + ' ';
+      }
+      count++;
+    });
+    _firstNameController = TextEditingController(text: firstName.trim());
+    _familyNameController = TextEditingController(text: familyName.trim());
     _phoneController = TextEditingController(text: widget.phone);
     _emailController = TextEditingController(text: widget.email);
-    _birthday = widget.birthday;
+    // print(Helper.convertStringToDateTimeVer2(widget.birthday).toString());
+    // print(DateTime.now().toString());
+    _birthday = Helper.formatDateTime(
+        Helper.convertStringToDateTimeVer2(widget.birthday));
     if (widget.gender == null) {
       _gender = 'Giới tính';
     } else if (widget.gender) {
@@ -259,7 +278,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         width: 184,
         height: 184,
         color: Colors.teal,
-        child: Text('AVATAR'),
+        child: widget.picUrl.isEmpty
+            ? Text('AVATAR')
+            : Image.network(
+                widget.picUrl,
+                width: 184,
+                height: 184,
+                fit: BoxFit.fill,
+              ),
         alignment: Alignment.center,
       ),
     );
@@ -286,7 +312,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         Expanded(
           flex: 1,
           child: CustomTextField(
-            controller: _firstNameController,
+            controller: _familyNameController,
             margin: EdgeInsets.only(
               top: 16,
               left: 8,
@@ -294,7 +320,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               bottom: 8,
             ),
             padding: EdgeInsets.all(0),
-            hintText: 'Tên',
+            hintText: 'Họ',
             keyboardType: TextInputType.name,
           ),
         ),

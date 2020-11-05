@@ -11,6 +11,7 @@ import 'package:promotion_platform/ui/authentication_screen.dart';
 import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
 import 'package:promotion_platform/utils/custom_colors.dart';
+import 'package:promotion_platform/utils/custom_widget/progressing.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -49,32 +50,14 @@ class _SplashScreenState extends State<SplashScreen> {
               );
             });
           }
-          return BlocEventStateBuilder<AuthenticationState>(
-              builder: (context, authenticationState) {
-                if (authenticationState.isAuthenticated) {}
-                return Center(
-                  child: Container(
-                    height: 10,
-                    width: double.maxFinite,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 32,
-                    ),
-                    child: NeumorphicProgressIndeterminate(
-                      duration: Duration(milliseconds: 1000),
-                      style: ProgressStyle(
-                        lightSource: LightSource.topLeft,
-                        depth: 20,
-                        border: NeumorphicBorder(width: 0.8),
-                        accent: CustomColors.GREEN,
-                        gradientBorderRadius: BorderRadius.circular(50),
-                        borderRadius: BorderRadius.circular(50),
-                        variant: CustomColors.TEXT_COLOR,
-                      ),
-                    ),
-                  ),
-                );
-              },
-              bloc: _authenticationBloc);
+          return Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 32),
+              child: Progressing(
+                width: double.maxFinite,
+              ),
+            ),
+          );
         },
       ),
     );

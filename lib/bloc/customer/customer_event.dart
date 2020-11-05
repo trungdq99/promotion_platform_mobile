@@ -11,3 +11,9 @@ abstract class CustomerEvent extends BlocEvent {
 class CustomerEventLoad extends CustomerEvent {
   CustomerEventLoad({@required String token}) : super(token: token);
 }
+
+class CustomerEventUpdate extends CustomerEvent {
+  CustomerEventUpdate({
+    @required String token,
+  }) : super(token: token);
+}

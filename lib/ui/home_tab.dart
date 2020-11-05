@@ -35,7 +35,7 @@ class _HomeTabState extends State<HomeTab> {
   double deviceWidth;
   CustomerBloc _customerBloc;
   BrandBloc _brandBLoc;
-
+  CustomerModel _customerModel;
   @override
   void initState() {
     super.initState();
@@ -55,6 +55,9 @@ class _HomeTabState extends State<HomeTab> {
     // final deviceHeight = MediaQuery.of(context).size.height;
     return BlocEventStateBuilder<CustomerState>(
       builder: (context, state) {
+        if (state.isLoad) {
+          _customerModel = state.customerModel;
+        }
         return Scaffold(
           body: Stack(
             children: [
@@ -197,74 +200,64 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  Widget _buildAppBar() {
+  Widget _buildAppBar({
+    bool isProgressing: false,
+  }) {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 16,
         vertical: 8,
       ),
       width: deviceWidth,
-      child: BlocEventStateBuilder<CustomerState>(
-        builder: (context, state) {
-          CustomerModel customerModel;
-          if (state.isLoad) {
-            customerModel = state.customerModel;
-          }
-          return Stack(
+      child: Stack(
+        children: [
+          Row(
             children: [
-              Row(
+              Neumorphic(
+                style: NeumorphicStyle(
+                  boxShape: NeumorphicBoxShape.circle(),
+                ),
+                child: _customerModel != null
+                    ? Image.network(
+                        _customerModel.picUrl,
+                        height: 68,
+                        width: 68,
+                      )
+                    : Container(
+                        height: 68,
+                        width: 68,
+                        color: CustomColors.GREEN,
+                        alignment: Alignment.center,
+                        child: Text('Avatar'),
+                      ),
+              ),
+              SizedBox(
+                width: 16,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Neumorphic(
-                    style: NeumorphicStyle(
-                      boxShape: NeumorphicBoxShape.circle(),
-                    ),
-                    child: customerModel != null
-                        ? Image.network(
-                            customerModel.picUrl,
-                            height: 68,
-                            width: 68,
-                          )
-                        : Container(
-                            height: 68,
-                            width: 68,
-                            color: CustomColors.GREEN,
-                            alignment: Alignment.center,
-                            child: Text('Avatar'),
-                          ),
+                  Text(
+                    'Xin chào !',
+                    style: DEFAULT_TEXT_STYLE,
                   ),
-                  SizedBox(
-                    width: 16,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Xin chào !',
-                        style: DEFAULT_TEXT_STYLE,
-                      ),
-                      Text(
-                        customerModel != null
-                            ? customerModel.name
-                            : 'Bạn chưa đăng nhập',
-                        style: BOLD_TITLE_TEXT_STYLE,
-                      ),
-                    ],
+                  Text(
+                    _customerModel != null ? _customerModel.name : 'User name',
+                    style: BOLD_TITLE_TEXT_STYLE,
                   ),
                 ],
               ),
-              Positioned(
-                right: 0,
-                child: Point(
-                  point:
-                      customerModel != null ? customerModel.lastBalance : 1000,
-                  hasBorder: true,
-                  function: () {},
-                ),
-              ),
             ],
-          );
-        },
-        bloc: _customerBloc,
+          ),
+          Positioned(
+            right: 0,
+            child: Point(
+              point: _customerModel != null ? _customerModel.lastBalance : 0,
+              hasBorder: true,
+              function: () {},
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -37,4 +37,15 @@ class Repository {
         UN_AUTHORIZE_HEADER,
         '',
       );
+
+  Future makeTransactions({
+    @required String token,
+    @required String body,
+  }) =>
+      _apiProvider.fetchData(
+        TRANSACTION_API,
+        RequestMethod.POST,
+        Helper.getAuthorizeHeader(token),
+        body,
+      );
 }

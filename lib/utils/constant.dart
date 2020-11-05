@@ -22,7 +22,7 @@ const String BASE_URL = 'https://loyaltyapiws.azurewebsites.net';
 const String LOGIN_API = 'api/v1/auth/google';
 const String CUSTOMER_API = 'api/v1/customer-info';
 const String BRANDS_API = 'api/v1/brands';
-
+const String TRANSACTION_API = 'api/v1/transaction';
 // List Bottom Navigation Bar Items
 List<BottomNavigationBarItem> bottomNavigationBarItems = [
   BottomNavigationBarItem(

@@ -81,4 +81,8 @@ class Helper {
   static DateTime convertStringToDateTime(String date) {
     return DateFormat('dd/MM/yyyy').parse(date);
   }
+
+  static DateTime convertStringToDateTimeVer2(String date) {
+    return DateFormat('yyyy-MM-ddThh:mm:ss').parse(date);
+  }
 }

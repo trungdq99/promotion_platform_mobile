@@ -4,6 +4,7 @@ import 'package:promotion_platform/bloc/authentication/authentication_bloc.dart'
 import 'package:promotion_platform/bloc/authentication/authentication_state.dart';
 import 'package:promotion_platform/bloc/customer/customer_bloc.dart';
 import 'package:promotion_platform/bloc/customer/customer_event.dart';
+import 'package:promotion_platform/ui/qrcode_scan_tab.dart';
 import 'package:promotion_platform/utils/custom_colors.dart';
 import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
@@ -36,24 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
-    return BlocEventStateBuilder<AuthenticationState>(
-      builder: (context, authenticationState) {
-        if (authenticationState.isAuthenticated) {
-          // WidgetsFlutterBinding.ensureInitialized()
-          //     .addPostFrameCallback((timeStamp) {
-          //   customerBloc
-          //       .emitEvent(CustomerEventLoad(token: authenticationState.token));
-          // });
-          // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-          //   customerBloc
-          //       .emitEvent(CustomerEventLoad(token: authenticationState.token));
-          // });
-        }
-        return _buildHomeScreen();
-      },
-      bloc: authenticationBloc,
-    );
+    return _buildHomeScreen();
   }
 
   Widget _buildHomeScreen() {
@@ -95,10 +79,8 @@ class _HomeScreenState extends State<HomeScreen> {
               break;
             case 2:
               returnValue = _buildTabView(
-                tabView: Scaffold(
-                  body: Center(
-                    child: Text('Scan'),
-                  ),
+                tabView: QrCodeScanTab(
+                  tabController: _tabController,
                 ),
                 navKey: thirdTabNavKey,
               );

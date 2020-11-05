@@ -177,12 +177,14 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
                       String email = '';
                       bool gender;
                       String phone = '';
+                      String picUrl = '';
                       if (_customerModel != null) {
                         name = _customerModel.name;
                         birthday = _customerModel.birthDay;
                         email = _customerModel.email;
                         gender = _customerModel.gender;
                         phone = _customerModel.phone;
+                        picUrl = _customerModel.picUrl;
                       }
                       Navigator.push(
                         widget.homeContext,
@@ -193,6 +195,7 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
                             email: email,
                             gender: gender,
                             phone: phone,
+                            picUrl: picUrl,
                           ),
                           fullscreenDialog: true,
                         ),
