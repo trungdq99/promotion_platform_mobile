@@ -39,26 +39,27 @@ class _LoginScreenState extends State<LoginScreen> {
     deviceHeight = MediaQuery.of(context).size.height;
     return BlocEventStateBuilder<AuthenticationState>(
       builder: (context, state) {
-        if (state.isError) {
-          showDialog(
-            context: context,
-            builder: (context) => ErrorAlert(errMsg: state.errorMessage),
-          ).whenComplete(() =>
-              _authenticationBloc.emitEvent(AuthenticationEventSignOut()));
-        }
+        // if (state.isError) {
+        //   showDialog(
+        //     context: context,
+        //     builder: (context) => ErrorAlert(errMsg: state.errorMessage),
+        //   );
+        // }
         return _buildScreen(
-          context,
-          state.isAuthenticating,
+          isProgressing: state.isAuthenticating,
+          isError: state.isError,
+          errMsg: state.errorMessage,
         );
       },
       bloc: _authenticationBloc,
     );
   }
 
-  Widget _buildScreen(
-    BuildContext context,
+  Widget _buildScreen({
     bool isProgressing,
-  ) {
+    bool isError,
+    String errMsg,
+  }) {
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -88,6 +89,13 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
             isProgressing ? FullScreenProgressing() : Container(),
+            isError
+                ? ErrorAlert(
+                    errMsg: errMsg,
+                    function: () => _authenticationBloc
+                        .emitEvent(AuthenticationEventNotLogin()),
+                  )
+                : Container(),
             Positioned(
               bottom: MediaQuery.of(context).orientation == Orientation.portrait
                   ? deviceHeight / 6

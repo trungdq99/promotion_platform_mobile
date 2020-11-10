@@ -1,7 +1,9 @@
 // Author: Trung Shin
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:promotion_platform/bloc/authentication/authentication_bloc.dart';
+import 'package:promotion_platform/bloc/authentication/authentication_event.dart';
 import 'package:promotion_platform/bloc/authentication/authentication_state.dart';
 import 'package:promotion_platform/bloc/brand/brand_bloc.dart';
 import 'package:promotion_platform/bloc/brand/brand_event.dart';
@@ -9,6 +11,7 @@ import 'package:promotion_platform/bloc/customer/customer_bloc.dart';
 import 'package:promotion_platform/bloc/customer/customer_event.dart';
 import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
+import 'package:promotion_platform/utils/custom_widget/error_alert.dart';
 import 'package:promotion_platform/utils/custom_widget/full_screen_progressing.dart';
 
 import '../ui/home_screen.dart';
@@ -29,8 +32,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
       builder: (BuildContext context, AuthenticationState state) {
         if (state.isAuthenticated) {
           WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-            _customerBloc
-                .emitEvent(CustomerEventLoad(token: state.token));
+            _customerBloc.emitEvent(CustomerEventLoad(token: state.token));
             _brandBloc.emitEvent(BrandEventLoadList());
           });
           return HomeScreen();

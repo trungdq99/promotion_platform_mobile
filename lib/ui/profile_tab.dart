@@ -46,7 +46,7 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
                     children: [
                       _buildAppBar(),
                       _buildButton(
-                        title: 'Thành viên vàng',
+                        title: 'Thẻ thành viên',
                         iconData: Icons.leaderboard,
                       ),
                       _buildButton(
@@ -101,6 +101,38 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
     );
   }
 
+  void showEditProfileScreen() async {
+    await Future.delayed(Duration(milliseconds: 100));
+    String name = '';
+    String birthday = '';
+    String email = '';
+    bool gender;
+    String phone = '';
+    String picUrl = '';
+    if (_customerModel != null) {
+      name = _customerModel.name;
+      birthday = _customerModel.birthDay;
+      email = _customerModel.email;
+      gender = _customerModel.gender;
+      phone = _customerModel.phone;
+      picUrl = _customerModel.picUrl;
+    }
+    Navigator.push(
+      widget.homeContext,
+      CupertinoPageRoute(
+        builder: (context) => EditProfileScreen(
+          name: name,
+          birthday: birthday,
+          email: email,
+          gender: gender,
+          phone: phone,
+          picUrl: picUrl,
+        ),
+        fullscreenDialog: true,
+      ),
+    );
+  }
+
   Widget _buildAppBar() {
     return Container(
       padding: EdgeInsets.symmetric(
@@ -112,40 +144,10 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
         children: [
           Row(
             children: [
-              // NeumorphicButton(
-              //   style: neumorphicStyleUpCircle,
-              //   onPressed: () {
-              //     Navigator.push(
-              //       widget.homeContext,
-              //       CupertinoPageRoute(
-              //         builder: (context) => EditProfileScreen(
-              //           name: 'Trung Shin',
-              //           birthday: '17/05/1999',
-              //           email: 'nhocchjpts99@gmail.com',
-              //           gender: true,
-              //           phone: '0917920689',
-              //         ),
-              //         fullscreenDialog: true,
-              //       ),
-              //     );
-              //     // Navigator.of(homeContext).push(CupertinoPageRoute(
-              //     //   builder: (context) => EditProfileScreen(),
-              //     //   fullscreenDialog: true,
-              //     // ));
-              //   },
-              //   padding: EdgeInsets.all(0),
-              //   child: Container(
-              //     height: 68,
-              //     width: 68,
-              //     alignment: Alignment.center,
-              //     color: Colors.teal,
-              //     child: Text('Avatar'),
-              //   ),
-              // ),
-              Neumorphic(
-                style: NeumorphicStyle(
-                  boxShape: NeumorphicBoxShape.circle(),
-                ),
+              NeumorphicButton(
+                style: neumorphicStyleUpCircle,
+                onPressed: showEditProfileScreen,
+                padding: EdgeInsets.all(0),
                 child: _customerModel != null
                     ? Image.network(
                         _customerModel.picUrl,
@@ -171,39 +173,13 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
                     style: BOLD_TITLE_TEXT_STYLE,
                   ),
                   InkWell(
-                    onTap: () {
-                      String name = '';
-                      String birthday = '';
-                      String email = '';
-                      bool gender;
-                      String phone = '';
-                      String picUrl = '';
-                      if (_customerModel != null) {
-                        name = _customerModel.name;
-                        birthday = _customerModel.birthDay;
-                        email = _customerModel.email;
-                        gender = _customerModel.gender;
-                        phone = _customerModel.phone;
-                        picUrl = _customerModel.picUrl;
-                      }
-                      Navigator.push(
-                        widget.homeContext,
-                        CupertinoPageRoute(
-                          builder: (context) => EditProfileScreen(
-                            name: name,
-                            birthday: birthday,
-                            email: email,
-                            gender: gender,
-                            phone: phone,
-                            picUrl: picUrl,
-                          ),
-                          fullscreenDialog: true,
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'Sửa thông tin',
-                      style: TextStyle(color: Colors.teal),
+                    onTap: showEditProfileScreen,
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'Sửa thông tin',
+                        style: TextStyle(color: Colors.teal),
+                      ),
                     ),
                   ),
                 ],

@@ -20,6 +20,7 @@ class AuthenticationBloc
   Stream<AuthenticationState> eventHandler(
       AuthenticationEvent event, AuthenticationState currentState) async* {
     if (event is AuthenticationEventGoogleSignIn) {
+      await Future.delayed(Duration(milliseconds: 100));
       bool isSuccess = false;
       String errMsg = '';
       String token;
@@ -28,7 +29,6 @@ class AuthenticationBloc
         errMsg = e.toString();
         _googleSignInError();
       });
-
       if (user != null) {
         IdTokenResult fbTokenResult = await user.getIdTokenResult(true);
         String firebaseToken = fbTokenResult.token;
@@ -46,7 +46,8 @@ class AuthenticationBloc
         }
       }
       if (!isSuccess) {
-        yield AuthenticationState.error(errMsg: errMsg);
+        yield AuthenticationState.error(errMsg: 'Something went wrong!');
+        await _googleSignInError();
       } else {
         print('Access token : $token');
         yield AuthenticationState.authenticated(token: token);
@@ -66,6 +67,10 @@ class AuthenticationBloc
       } else {
         yield AuthenticationState.notAuthenticated();
       }
+    } else if (event is AuthenticationEventNotLogin) {
+      await Future.delayed(Duration(milliseconds: 100));
+
+      yield AuthenticationState.notAuthenticated();
     }
   }
 
@@ -97,18 +102,19 @@ class AuthenticationBloc
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     if (googleUser == null) {
       return null;
+    } else {
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final User user = (await _auth.signInWithCredential(credential)).user;
+      print("signed in " + user.displayName);
+      return user;
     }
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
-
-    final AuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    final User user = (await _auth.signInWithCredential(credential)).user;
-    print("signed in " + user.displayName);
-    return user;
   }
 
   Future _handleGoogleSignOut() async {

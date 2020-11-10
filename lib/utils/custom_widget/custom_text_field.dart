@@ -13,6 +13,7 @@ class CustomTextField extends StatefulWidget {
   final EdgeInsets margin;
   final EdgeInsets padding;
   final int maxLength;
+  final bool enable;
   CustomTextField({
     @required this.controller,
     this.prefixIcon,
@@ -21,6 +22,7 @@ class CustomTextField extends StatefulWidget {
     this.margin: const EdgeInsets.all(8),
     this.padding: const EdgeInsets.all(8),
     this.maxLength: 40,
+    this.enable: true,
   });
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
@@ -30,7 +32,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   bool _isEditing;
   @override
   void initState() {
-    _isEditing = false;
+    _isEditing = !widget.enable;
     super.initState();
   }
 
@@ -38,9 +40,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     return FocusScope(
       onFocusChange: (value) {
-        setState(() {
-          _isEditing = value;
-        });
+        if (widget.enable) {
+          setState(() {
+            _isEditing = value;
+          });
+        }
       },
       child: Neumorphic(
         style: _isEditing
@@ -49,6 +53,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         margin: widget.margin,
         padding: widget.padding,
         child: TextField(
+          enabled: widget.enable,
           controller: widget.controller,
           decoration: InputDecoration(
             border: InputBorder.none,

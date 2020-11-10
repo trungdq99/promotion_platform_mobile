@@ -9,3 +9,5 @@ class AuthenticationEventPhoneSignIn extends AuthenticationEvent {}
 class AuthenticationEventSignOut extends AuthenticationEvent {}
 
 class AuthenticationEventLoadLogin extends AuthenticationEvent {}
+
+class AuthenticationEventNotLogin extends AuthenticationEvent {}

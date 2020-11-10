@@ -87,9 +87,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 _buildAvatar(),
                 _buildUsername(),
                 _buildNameTextField(),
+                _buildBirthdayAndGender(),
                 _buildPhoneTextField(),
                 _buildEmailTextField(),
-                _buildBirthdayAndGender(),
               ],
             ),
           ),
@@ -159,42 +159,58 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ),
         Expanded(
           flex: 1,
-          child: NeumorphicButton(
-            style: neumorphicStyleUpWithSmallRadius,
-            margin: EdgeInsets.only(
-              left: 8,
-              top: 8,
-              bottom: 16,
-              right: 16,
-            ),
-            padding: EdgeInsets.all(8),
-            onPressed: () {
-              //Cupertiono
-            },
-            child: Row(
-              children: [
-                Neumorphic(
-                  style: neumorphicStyleDownCircle,
-                  padding: EdgeInsets.all(12),
-                  margin: EdgeInsets.all(0),
-                  child: Icon(
-                    Icons.people_alt_outlined,
-                    size: 24,
-                    color: CustomColors.TEXT_COLOR,
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    _gender,
-                    style: SMALL_TEXT_STYLE,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          child: _buildGender(),
         ),
       ],
+    );
+  }
+
+  void showSelectGenderDialog() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Neumorphic(
+          style: neumorphicStyleDownDefault,
+          child: Container(),
+        );
+      },
+    );
+  }
+
+  Widget _buildGender() {
+    return NeumorphicButton(
+      style: neumorphicStyleUpWithSmallRadius,
+      margin: EdgeInsets.only(
+        left: 8,
+        top: 8,
+        bottom: 16,
+        right: 16,
+      ),
+      padding: EdgeInsets.all(8),
+      onPressed: () {
+        //Cupertiono
+      },
+      child: Row(
+        children: [
+          Neumorphic(
+            style: neumorphicStyleDownCircle,
+            padding: EdgeInsets.all(12),
+            margin: EdgeInsets.all(0),
+            child: Icon(
+              Icons.people_alt_outlined,
+              size: 24,
+              color: CustomColors.TEXT_COLOR,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              _gender,
+              style: SMALL_TEXT_STYLE,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -216,35 +232,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           color: CustomColors.TEXT_COLOR,
         ),
       ),
+      enable: false,
     );
-    // return Neumorphic(
-    //   style: neumorphicStyleDownWithSmallRadius,
-    //   margin: EdgeInsets.symmetric(
-    //     horizontal: 16,
-    //     vertical: 8,
-    //   ),
-    //   padding: EdgeInsets.all(8),
-    //   child: TextField(
-    //     controller: _emailController,
-    //     decoration: InputDecoration(
-    //       border: InputBorder.none,
-    //       hintText: 'Email',
-    //       hintStyle: SMALL_TEXT_STYLE,
-    //       prefixIcon: Neumorphic(
-    //         style: neumorphicStyleDownCircle,
-    //         child: Icon(
-    //           Icons.email,
-    //           size: 24,
-    //           color: CustomColors.TEXT_COLOR,
-    //         ),
-    //       ),
-    //     ),
-    //     textAlign: TextAlign.center,
-    //     style: DEFAULT_TEXT_STYLE,
-    //     keyboardType: TextInputType.emailAddress,
-    //     cursorColor: Colors.teal,
-    //   ),
-    // );
   }
 
   Widget _buildPhoneTextField() {
@@ -266,6 +255,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           color: CustomColors.TEXT_COLOR,
         ),
       ),
+      enable: false,
     );
   }
 
