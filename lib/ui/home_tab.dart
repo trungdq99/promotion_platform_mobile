@@ -15,6 +15,7 @@ import 'package:promotion_platform/models/customer_model.dart';
 import 'package:promotion_platform/ui/promotion_detail_screen.dart';
 import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
+import 'package:promotion_platform/utils/helper.dart';
 import '../utils/constant.dart';
 import '../utils/custom_widget/point.dart';
 import '../utils/custom_widget/group_title.dart';
@@ -110,7 +111,7 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Function pushPromotionDetailScreen() => () async {
-        await Future.delayed(Duration(milliseconds: 50));
+        await Helper.navigationDelay();
         Navigator.push(
           widget.homeContext,
           CupertinoPageRoute(
@@ -232,20 +233,25 @@ class _HomeTabState extends State<HomeTab> {
                       ),
               ),
               SizedBox(
-                width: 16,
+                width: 8,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Xin chào !',
-                    style: DEFAULT_TEXT_STYLE,
-                  ),
-                  Text(
-                    _customerModel != null ? _customerModel.name : 'User name',
-                    style: BOLD_TITLE_TEXT_STYLE,
-                  ),
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Xin chào !',
+                      style: DEFAULT_TEXT_STYLE,
+                    ),
+                    Text(
+                      _customerModel != null
+                          ? _customerModel.name
+                          : 'User name',
+                      style: BOLD_TITLE_TEXT_STYLE,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -270,7 +276,8 @@ class _HomeTabState extends State<HomeTab> {
     int brandId: 0,
   }) {
     return NeumorphicButton(
-      onPressed: () {
+      onPressed: () async {
+        await Helper.navigationDelay();
         // _brandDetailScreenBloc
         //     .emitEvent(BrandDetailScreenEventOpen(brandId: brandId));
       },

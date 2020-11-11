@@ -54,8 +54,8 @@ class _SplashScreenState extends State<SplashScreen> {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 32),
               child: Progressing(
-                width: double.maxFinite,
-              ),
+                  // width: double.maxFinite,
+                  ),
             ),
           );
         },

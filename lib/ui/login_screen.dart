@@ -15,6 +15,7 @@ import 'package:promotion_platform/utils/custom_colors.dart';
 import 'package:promotion_platform/utils/custom_widget/error_alert.dart';
 import 'package:promotion_platform/utils/custom_widget/icon/google_icon.dart';
 import 'package:promotion_platform/utils/custom_widget/full_screen_progressing.dart';
+import 'package:promotion_platform/utils/helper.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -39,12 +40,6 @@ class _LoginScreenState extends State<LoginScreen> {
     deviceHeight = MediaQuery.of(context).size.height;
     return BlocEventStateBuilder<AuthenticationState>(
       builder: (context, state) {
-        // if (state.isError) {
-        //   showDialog(
-        //     context: context,
-        //     builder: (context) => ErrorAlert(errMsg: state.errorMessage),
-        //   );
-        // }
         return _buildScreen(
           isProgressing: state.isAuthenticating,
           isError: state.isError,
@@ -75,10 +70,6 @@ class _LoginScreenState extends State<LoginScreen> {
               child: login_background(),
               height: deviceHeight / 3,
             ),
-            // Container(
-            //   child: login_bean(),
-            //   height: deviceHeight / 3,
-            // ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -92,8 +83,11 @@ class _LoginScreenState extends State<LoginScreen> {
             isError
                 ? ErrorAlert(
                     errMsg: errMsg,
-                    function: () => _authenticationBloc
-                        .emitEvent(AuthenticationEventNotLogin()),
+                    function: () async {
+                      await Helper.navigationDelay();
+                      _authenticationBloc
+                          .emitEvent(AuthenticationEventNotLogin());
+                    },
                   )
                 : Container(),
             Positioned(
@@ -201,7 +195,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildLoginByGoogleButton() {
     return NeumorphicButton(
-      onPressed: () {
+      onPressed: () async {
+        await Helper.navigationDelay();
         _authenticationBloc.emitEvent(AuthenticationEventGoogleSignIn());
       },
       child: Padding(

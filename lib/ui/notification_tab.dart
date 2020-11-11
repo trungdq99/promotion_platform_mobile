@@ -5,6 +5,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:promotion_platform/ui/notification_detail_screen.dart';
 import 'package:promotion_platform/utils/constant.dart';
 import 'package:promotion_platform/utils/custom_colors.dart';
+import 'package:promotion_platform/utils/helper.dart';
 
 class TabNotificationScreen extends StatefulWidget {
   final BuildContext homeContext;
@@ -186,7 +187,8 @@ class _TabNotificationScreenState extends State<TabNotificationScreen>
     //Function function,
   }) {
     return NeumorphicButton(
-      onPressed: () {
+      onPressed: () async {
+        await Helper.navigationDelay();
         Navigator.push(
           widget.homeContext,
           CupertinoPageRoute(

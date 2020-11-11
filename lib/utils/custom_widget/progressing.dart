@@ -5,15 +5,15 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import '../custom_colors.dart';
 
 class Progressing extends StatelessWidget {
-  final double width;
-  Progressing({
-    @required this.width,
-  });
+  // final double width;
+  // Progressing({
+  //   @required this.width,
+  // });
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 10,
-      width: width,
+      // width: width,
       child: NeumorphicProgressIndeterminate(
         duration: Duration(milliseconds: 1000),
         style: ProgressStyle(

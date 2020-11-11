@@ -71,11 +71,15 @@ class Helper {
   }
 
   static String convertDateToString(DateTime date) {
-    return DateFormat('yy/MM/dd').format(date);
+    return DateFormat('dd/MM/yyyy').format(date);
   }
 
-  static String formatDateTime(DateTime date) {
-    return DateFormat('dd/MM/yyyy').format(date);
+  // static String formatDateTime(DateTime date) {
+  //   return DateFormat('dd/MM/yyyy').format(date);
+  // }
+
+  static String formatDateTime(String date) {
+    return DateFormat('dd/MM/yyyy').format(convertStringToDateTimeVer2(date));
   }
 
   static DateTime convertStringToDateTime(String date) {
@@ -85,4 +89,7 @@ class Helper {
   static DateTime convertStringToDateTimeVer2(String date) {
     return DateFormat('yyyy-MM-ddThh:mm:ss').parse(date);
   }
+
+  static Future navigationDelay() =>
+      Future.delayed(Duration(milliseconds: TIME_DELAY));
 }

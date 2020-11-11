@@ -8,11 +8,13 @@ import 'package:promotion_platform/bloc/customer/customer_event.dart';
 import 'package:promotion_platform/bloc/customer/customer_state.dart';
 import 'package:promotion_platform/models/customer_model.dart';
 import 'package:promotion_platform/ui/edit_profile_screen.dart';
+import 'package:promotion_platform/ui/membership_screen.dart';
 import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
 import 'package:promotion_platform/utils/constant.dart';
 import 'package:promotion_platform/utils/custom_colors.dart';
 import 'package:promotion_platform/utils/custom_widget/point.dart';
+import 'package:promotion_platform/utils/helper.dart';
 
 class TabProfileScreen extends StatefulWidget {
   final BuildContext homeContext;
@@ -46,9 +48,16 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
                     children: [
                       _buildAppBar(),
                       _buildButton(
-                        title: 'Thẻ thành viên',
-                        iconData: Icons.leaderboard,
-                      ),
+                          title: 'Thẻ thành viên',
+                          iconData: Icons.leaderboard,
+                          function: () async {
+                            await Helper.navigationDelay();
+                            Navigator.push(
+                                widget.homeContext,
+                                CupertinoPageRoute(
+                                  builder: (context) => MembershipScreen(),
+                                ));
+                          }),
                       _buildButton(
                         title: 'Quà đã đổi',
                         iconData: Icons.card_giftcard,
@@ -85,7 +94,8 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
                       _buildButton(
                           title: 'Đăng xuất',
                           iconData: Icons.logout,
-                          function: () {
+                          function: () async {
+                            await Helper.navigationDelay();
                             _authenticationBloc
                                 .emitEvent(AuthenticationEventSignOut());
                           }),
@@ -102,7 +112,7 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
   }
 
   void showEditProfileScreen() async {
-    await Future.delayed(Duration(milliseconds: 100));
+    await Helper.navigationDelay();
     String name = '';
     String birthday = '';
     String email = '';
@@ -165,24 +175,35 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
               SizedBox(
                 width: 12,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _customerModel != null ? _customerModel.name : 'User Name',
-                    style: BOLD_TITLE_TEXT_STYLE,
-                  ),
-                  InkWell(
-                    onTap: showEditProfileScreen,
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        'Sửa thông tin',
-                        style: TextStyle(color: Colors.teal),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _customerModel != null
+                          ? _customerModel.name
+                          : 'User Name',
+                      style: BOLD_TITLE_TEXT_STYLE,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    InkWell(
+                      onTap: showEditProfileScreen,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 0,
+                          vertical: 4,
+                        ),
+                        child: Text(
+                          'Sửa thông tin',
+                          style: TextStyle(
+                            color: Colors.teal,
+                            fontSize: DEFAULT_FONT_SIZE,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),

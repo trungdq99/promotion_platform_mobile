@@ -58,7 +58,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _emailController = TextEditingController(text: widget.email);
     // print(Helper.convertStringToDateTimeVer2(widget.birthday).toString());
     // print(DateTime.now().toString());
-    _birthday = Helper.formatDateTime(
+    _birthday = Helper.convertDateToString(
         Helper.convertStringToDateTimeVer2(widget.birthday));
     if (widget.gender == null) {
       _gender = 'Giới tính';
@@ -128,7 +128,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 dateFormat: 'dd/MM/yyyy',
                 onConfirm: (dateTime, selectedIndex) {
                   setState(() {
-                    _birthday = Helper.formatDateTime(dateTime);
+                    _birthday = Helper.convertDateToString(dateTime);
                   });
                 },
                 initialDateTime: Helper.convertStringToDateTime(_birthday),
@@ -322,7 +322,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return NeumorphicAppBar(
       leading: NeumorphicButton(
         style: neumorphicStyleUpCircle,
-        onPressed: () => Navigator.pop(context),
+        onPressed: () async {
+          await Helper.navigationDelay();
+          Navigator.pop(context);
+        },
         padding: EdgeInsets.all(0),
         child: Icon(
           Icons.close,

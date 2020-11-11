@@ -23,6 +23,9 @@ const String LOGIN_API = 'api/v1/auth/google';
 const String CUSTOMER_API = 'api/v1/customer-info';
 const String BRANDS_API = 'api/v1/brands';
 const String TRANSACTION_API = 'api/v1/transaction';
+const String MEMBERSHIPS_API = 'api/v1/memberships';
+const String CUSTOMER_ACCOUNT_API = 'api/v1/customerAccount/membershipId';
+
 // List Bottom Navigation Bar Items
 List<BottomNavigationBarItem> bottomNavigationBarItems = [
   BottomNavigationBarItem(
@@ -276,3 +279,5 @@ final NeumorphicStyle neumorphicStyleDownCircle = NeumorphicStyle(
   depth: -20,
   boxShape: NeumorphicBoxShape.circle(),
 );
+
+const int TIME_DELAY = 100;

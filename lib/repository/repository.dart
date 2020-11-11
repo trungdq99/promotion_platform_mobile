@@ -48,4 +48,14 @@ class Repository {
         Helper.getAuthorizeHeader(token),
         body,
       );
+
+  Future fetchMemberships({
+    @required String token,
+  }) =>
+      _apiProvider.fetchData(
+        MEMBERSHIPS_API,
+        RequestMethod.GET,
+        Helper.getAuthorizeHeader(token),
+        '',
+      );
 }
