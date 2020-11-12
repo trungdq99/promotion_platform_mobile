@@ -17,14 +17,15 @@ import 'custom_widget/icon/icon_gift_selected.dart';
 import 'custom_widget/icon/icon_notification_selected.dart';
 import 'custom_widget/icon/icon_user_selected.dart';
 
+const String APP_VERSION = '1.0.0';
 // API constant
 const String BASE_URL = 'https://loyaltyapiws.azurewebsites.net';
 const String LOGIN_API = 'api/v1/auth/google';
 const String CUSTOMER_API = 'api/v1/customer-info';
-const String BRANDS_API = 'api/v1/brands';
+const String TOP_BRANDS_API = 'api/v1/brands';
 const String TRANSACTION_API = 'api/v1/transaction';
 const String MEMBERSHIPS_API = 'api/v1/memberships';
-const String CUSTOMER_ACCOUNT_API = 'api/v1/customerAccount/membershipId';
+const String CUSTOMER_ACCOUNTS_API = 'api/v1/customerAccount/membershipId';
 
 // List Bottom Navigation Bar Items
 List<BottomNavigationBarItem> bottomNavigationBarItems = [
@@ -175,6 +176,20 @@ const TextStyle BOLD_SMALL_TEXT_STYLE = TextStyle(
   //fontFamily: 'Segoe UI',
 );
 
+const TextStyle NUM_TEXT_STYLE = TextStyle(
+  fontSize: SMALL_FONT_SIZE,
+  color: CustomColors.BACKGROUND_COLOR,
+  fontWeight: FontWeight.bold,
+  //fontFamily: 'Segoe UI',
+);
+
+const TextStyle BOLD_SUPER_SMALL_TEXT_STYLE = TextStyle(
+  fontSize: SUPER_SMALL_FONT_SIZE,
+  fontWeight: FontWeight.bold,
+  //fontFamily: 'Segoe UI',
+  color: CustomColors.TEXT_COLOR,
+);
+
 const TextStyle SUPER_SMALL_TEXT_STYLE = TextStyle(
   fontSize: SUPER_SMALL_FONT_SIZE,
   //fontFamily: 'Segoe UI',
@@ -183,7 +198,7 @@ const TextStyle SUPER_SMALL_TEXT_STYLE = TextStyle(
 
 const double DEFAULT_FONT_SIZE = 20;
 const double SMALL_FONT_SIZE = 16;
-const double SUPER_SMALL_FONT_SIZE = 12;
+const double SUPER_SMALL_FONT_SIZE = 14;
 const double BIG_FONT_SIZE = 24;
 
 // Type of data to save on disk
@@ -278,6 +293,13 @@ final NeumorphicStyle neumorphicStyleDownCircle = NeumorphicStyle(
   border: neumorphicBorderDefault,
   depth: -20,
   boxShape: NeumorphicBoxShape.circle(),
+);
+
+final NeumorphicStyle neumorphicStyleDownCircleForNum = NeumorphicStyle(
+  border: neumorphicBorderDefault,
+  depth: 20,
+  boxShape: NeumorphicBoxShape.circle(),
+  // lightSource: LightSource.bottomRight,
 );
 
 const int TIME_DELAY = 100;

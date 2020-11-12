@@ -7,6 +7,8 @@ import 'package:promotion_platform/utils/custom_widget/show_detail.dart';
 import 'package:promotion_platform/utils/custom_widget/promotion_widget.dart';
 
 class BrandDetailScreen extends StatefulWidget {
+  final int brandId;
+  BrandDetailScreen({@required this.brandId});
   @override
   _BrandDetailScreenState createState() => _BrandDetailScreenState();
 }

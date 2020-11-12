@@ -3,6 +3,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:promotion_platform/utils/custom_widget/custom_network_image.dart';
 
 import '../constant.dart';
 
@@ -13,8 +14,10 @@ class AdsWidget extends StatefulWidget {
 
 class _AdsWidgetState extends State<AdsWidget> {
   int _currentIndex = 0;
+  CarouselController _carouselController;
   @override
   void initState() {
+    _carouselController = CarouselController();
     super.initState();
   }
 
@@ -26,8 +29,9 @@ class _AdsWidgetState extends State<AdsWidget> {
           style: neumorphicStyleDownDefault,
           margin: EdgeInsets.all(16),
           child: CarouselSlider(
+            carouselController: _carouselController,
             options: CarouselOptions(
-              height: 150,
+              height: 100,
               aspectRatio: 16 / 9,
               viewportFraction: 1,
               initialPage: 0,
@@ -49,12 +53,11 @@ class _AdsWidgetState extends State<AdsWidget> {
             items: [1, 2, 3, 4, 5].map((i) {
               return Builder(
                 builder: (BuildContext context) {
-                  return Container(
+                  return CustomNetworkImage(
+                    imgUrl:
+                        'https://www.tiendauroi.com/wp-content/uploads/2020/04/93515371_2962625523804435_5994003590329401344_o-750x750.jpg',
                     width: double.maxFinite,
-                    child: Image.network(
-                      'https://www.tiendauroi.com/wp-content/uploads/2020/04/93515371_2962625523804435_5994003590329401344_o-750x750.jpg',
-                      fit: BoxFit.cover,
-                    ),
+                    height: 100,
                   );
                 },
               );
@@ -70,15 +73,25 @@ class _AdsWidgetState extends State<AdsWidget> {
     List<Widget> children = [];
     for (int i = 0; i < 5; i++) {
       children.add(
-        Container(
-          height: 16,
-          width: 16,
+        NeumorphicButton(
+          onPressed: () {
+            _carouselController.animateToPage(
+              i,
+              duration: Duration(milliseconds: 100),
+            );
+            setState(() {
+              _currentIndex = i;
+            });
+          },
+          padding: EdgeInsets.all(0),
           margin: EdgeInsets.symmetric(horizontal: 16),
-          child: Neumorphic(
-            style: NeumorphicStyle(
-              boxShape: NeumorphicBoxShape.circle(),
-              depth: _currentIndex == i ? 20 : -20,
-            ),
+          style: NeumorphicStyle(
+            boxShape: NeumorphicBoxShape.circle(),
+            depth: _currentIndex == i ? 20 : -20,
+          ),
+          child: SizedBox(
+            width: 16,
+            height: 16,
           ),
         ),
       );

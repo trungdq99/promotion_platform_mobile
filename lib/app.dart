@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:promotion_platform/bloc/authentication/authentication_bloc.dart';
-import 'package:promotion_platform/bloc/brand/brand_bloc.dart';
+import 'package:promotion_platform/bloc/top_brands/top_brands_bloc.dart';
 import 'package:promotion_platform/bloc/customer/customer_bloc.dart';
 import 'package:promotion_platform/ui/authentication_screen.dart';
 import 'package:promotion_platform/ui/login_screen.dart';
@@ -18,8 +18,8 @@ class App extends StatelessWidget {
       bloc: AuthenticationBloc(),
       child: BlocProvider<CustomerBloc>(
         bloc: CustomerBloc(),
-        child: BlocProvider<BrandBloc>(
-          bloc: BrandBloc(),
+        child: BlocProvider<TopBrandsBloc>(
+          bloc: TopBrandsBloc(),
           child: NeumorphicApp(
             debugShowCheckedModeBanner: false,
             title: 'Promotion Platform',

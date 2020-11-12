@@ -3,6 +3,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:promotion_platform/utils/bloc_helpers/bloc_event_state.dart';
 
-abstract class BrandEvent extends BlocEvent {}
+abstract class TopBrandsEvent extends BlocEvent {}
 
-class BrandEventLoadList extends BrandEvent {}
+class TopBrandsEventLoadList extends TopBrandsEvent {}

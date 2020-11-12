@@ -4,31 +4,31 @@ import 'package:flutter/foundation.dart';
 import 'package:promotion_platform/models/brand_model.dart';
 import 'package:promotion_platform/utils/bloc_helpers/bloc_event_state.dart';
 
-class BrandState extends BlocState {
+class TopBrandsState extends BlocState {
   bool isLoad;
   bool isLoading;
   bool isError;
   List<BrandModel> listBrandModel;
-  BrandState({
+  TopBrandsState({
     this.isLoad: false,
     this.isLoading: false,
     this.isError: false,
     this.listBrandModel,
   });
 
-  factory BrandState.loaded({@required List<BrandModel> listBrandModel}) {
-    return BrandState(
+  factory TopBrandsState.loaded({@required List<BrandModel> listBrandModel}) {
+    return TopBrandsState(
       isLoad: true,
       listBrandModel: listBrandModel,
     );
   }
-  factory BrandState.loading() {
-    return BrandState(
+  factory TopBrandsState.loading() {
+    return TopBrandsState(
       isLoading: true,
     );
   }
-  factory BrandState.error() {
-    return BrandState(
+  factory TopBrandsState.error() {
+    return TopBrandsState(
       isError: true,
     );
   }

@@ -116,10 +116,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: NeumorphicButton(
             style: neumorphicStyleUpWithSmallRadius,
             margin: EdgeInsets.only(
-              left: 16,
+              left: 32,
               top: 8,
               bottom: 16,
-              right: 8,
+              right: 16,
             ),
             padding: EdgeInsets.all(8),
             onPressed: () {
@@ -138,8 +138,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               children: [
                 Neumorphic(
                   style: neumorphicStyleDownCircle,
-                  padding: EdgeInsets.all(12),
-                  margin: EdgeInsets.all(0),
+                  padding: EdgeInsets.all(10),
                   child: Icon(
                     Icons.calendar_today,
                     size: 24,
@@ -149,7 +148,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 Expanded(
                   child: Text(
                     _birthday,
-                    style: SMALL_TEXT_STYLE,
+                    style: SUPER_SMALL_TEXT_STYLE,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -181,10 +180,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return NeumorphicButton(
       style: neumorphicStyleUpWithSmallRadius,
       margin: EdgeInsets.only(
-        left: 8,
+        left: 16,
         top: 8,
         bottom: 16,
-        right: 16,
+        right: 32,
       ),
       padding: EdgeInsets.all(8),
       onPressed: () {
@@ -194,7 +193,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         children: [
           Neumorphic(
             style: neumorphicStyleDownCircle,
-            padding: EdgeInsets.all(12),
+            padding: EdgeInsets.all(10),
             margin: EdgeInsets.all(0),
             child: Icon(
               Icons.people_alt_outlined,
@@ -205,7 +204,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           Expanded(
             child: Text(
               _gender,
-              style: SMALL_TEXT_STYLE,
+              style: SUPER_SMALL_TEXT_STYLE,
               textAlign: TextAlign.center,
             ),
           ),
@@ -218,7 +217,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return CustomTextField(
       controller: _emailController,
       margin: EdgeInsets.symmetric(
-        horizontal: 16,
+        horizontal: 32,
         vertical: 8,
       ),
       padding: EdgeInsets.all(8),
@@ -240,7 +239,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return CustomTextField(
       controller: _phoneController,
       margin: EdgeInsets.symmetric(
-        horizontal: 16,
+        horizontal: 32,
         vertical: 8,
       ),
       padding: EdgeInsets.all(8),
@@ -289,9 +288,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: CustomTextField(
             controller: _firstNameController,
             margin: EdgeInsets.only(
-              top: 16,
-              left: 16,
-              right: 8,
+              top: 8,
+              left: 32,
+              right: 16,
               bottom: 8,
             ),
             padding: EdgeInsets.all(0),
@@ -304,9 +303,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: CustomTextField(
             controller: _familyNameController,
             margin: EdgeInsets.only(
-              top: 16,
-              left: 8,
-              right: 16,
+              top: 8,
+              left: 16,
+              right: 32,
               bottom: 8,
             ),
             padding: EdgeInsets.all(0),

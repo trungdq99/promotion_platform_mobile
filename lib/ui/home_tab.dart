@@ -1,11 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:promotion_platform/ui/brand_detail_screen.dart';
 import 'package:promotion_platform/utils/custom_colors.dart';
+import 'package:promotion_platform/utils/custom_widget/custom_network_image.dart';
 import 'package:promotion_platform/utils/custom_widget/icon/game_icon.dart';
-import 'package:promotion_platform/bloc/brand/brand_bloc.dart';
-import 'package:promotion_platform/bloc/brand/brand_event.dart';
-import 'package:promotion_platform/bloc/brand/brand_state.dart';
+import 'package:promotion_platform/bloc/top_brands/top_brands_bloc.dart';
+import 'package:promotion_platform/bloc/top_brands/top_brands_event.dart';
+import 'package:promotion_platform/bloc/top_brands/top_brands_state.dart';
 import 'package:promotion_platform/bloc/customer/customer_bloc.dart';
 import 'package:promotion_platform/bloc/customer/customer_state.dart';
 import 'package:promotion_platform/utils/custom_widget/ads_widget.dart';
@@ -15,6 +18,7 @@ import 'package:promotion_platform/models/customer_model.dart';
 import 'package:promotion_platform/ui/promotion_detail_screen.dart';
 import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
+import 'package:promotion_platform/utils/custom_widget/progressing.dart';
 import 'package:promotion_platform/utils/helper.dart';
 import '../utils/constant.dart';
 import '../utils/custom_widget/point.dart';
@@ -35,7 +39,7 @@ class HomeTab extends StatefulWidget {
 class _HomeTabState extends State<HomeTab> {
   double deviceWidth;
   CustomerBloc _customerBloc;
-  BrandBloc _brandBLoc;
+  TopBrandsBloc _brandBLoc;
   CustomerModel _customerModel;
   @override
   void initState() {
@@ -45,13 +49,8 @@ class _HomeTabState extends State<HomeTab> {
   @override
   Widget build(BuildContext context) {
     _customerBloc = BlocProvider.of<CustomerBloc>(context);
-    _brandBLoc = BlocProvider.of<BrandBloc>(context);
-    // WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((timeStamp) {
-    //   _brandBLoc.emitEvent(BrandEventLoadList());
-    // });
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   if (_brandBLoc != null) _brandBLoc.emitEvent(BrandEventLoadList());
-    // });
+    _brandBLoc = BlocProvider.of<TopBrandsBloc>(context);
+
     deviceWidth = MediaQuery.of(context).size.width;
     // final deviceHeight = MediaQuery.of(context).size.height;
     return BlocEventStateBuilder<CustomerState>(
@@ -156,7 +155,7 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Widget _buildListBrand() {
-    return BlocEventStateBuilder<BrandState>(
+    return BlocEventStateBuilder<TopBrandsState>(
       builder: (context, state) {
         List<BrandModel> listBrands;
         List<Widget> children = [];
@@ -169,6 +168,7 @@ class _HomeTabState extends State<HomeTab> {
                   brandTitle: element.brandName ?? '',
                   promotions: 10,
                   brandId: element.id ?? 0,
+                  imageUrl: element.imgUrl ?? '',
                 ),
               );
             },
@@ -219,10 +219,10 @@ class _HomeTabState extends State<HomeTab> {
                   boxShape: NeumorphicBoxShape.circle(),
                 ),
                 child: _customerModel != null
-                    ? Image.network(
-                        _customerModel.picUrl,
-                        height: 68,
+                    ? CustomNetworkImage(
+                        imgUrl: _customerModel.picUrl,
                         width: 68,
+                        height: 68,
                       )
                     : Container(
                         height: 68,
@@ -278,6 +278,7 @@ class _HomeTabState extends State<HomeTab> {
     return NeumorphicButton(
       onPressed: () async {
         await Helper.navigationDelay();
+        Navigator.push(widget.homeContext, CupertinoPageRoute(builder: (context) => BrandDetailScreen(),),);
         // _brandDetailScreenBloc
         //     .emitEvent(BrandDetailScreenEventOpen(brandId: brandId));
       },
@@ -289,13 +290,10 @@ class _HomeTabState extends State<HomeTab> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
+            CustomNetworkImage(
+              imgUrl: imageUrl,
               width: 124,
               height: 64,
-              child: Image.network(
-                'https://brasol.vn/public/uploads/1528692055-29.png',
-                fit: BoxFit.cover,
-              ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 8),
@@ -303,6 +301,7 @@ class _HomeTabState extends State<HomeTab> {
                 brandTitle,
                 style: BOLD_SMALL_TEXT_STYLE,
                 overflow: TextOverflow.ellipsis,
+                textWidthBasis: TextWidthBasis.parent,
               ),
             ),
             Padding(

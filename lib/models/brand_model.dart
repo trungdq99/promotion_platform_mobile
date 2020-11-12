@@ -16,6 +16,8 @@ class BrandModel {
   String securityApiSmsKey;
   int smstype;
   String brandNameSms;
+  String brandUrl;
+  String imgUrl;
 
   BrandModel({
     this.id,
@@ -34,13 +36,17 @@ class BrandModel {
     this.securityApiSmsKey: '',
     this.smstype: 0,
     this.brandNameSms: '',
+    this.brandUrl: '',
+    this.imgUrl: '',
   });
 
   BrandModel.fromMap(Map<String, dynamic> map) {
     this.id = map['id'];
-    this.brandName = map['brandName'];
-    this.description = map['description'];
-    this.contactPerson = map['contactPerson'];
-    this.phoneNumber = map['phoneNumber'];
+    this.brandName = map['brandName'] ?? '';
+    this.description = map['description'] ?? '';
+    this.contactPerson = map['contactPerson'] ?? '';
+    this.phoneNumber = map['phoneNumber'] ?? '';
+    this.brandUrl = map['brandUrl'] ?? '';
+    this.imgUrl = map['imgUrl'] ?? '';
   }
 }

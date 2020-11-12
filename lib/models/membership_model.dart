@@ -26,6 +26,7 @@ class MembershipModel {
   String brandName;
   int level;
   int membershipType;
+  String membershipTypeName;
   bool isSample;
   int storeId;
   String productCode;
@@ -44,6 +45,7 @@ class MembershipModel {
     this.brandName: '',
     this.level: 0,
     this.membershipType: 0,
+    this.membershipTypeName: '',
     this.isSample: false,
     this.storeId: 0,
     this.productCode: '',
@@ -63,6 +65,7 @@ class MembershipModel {
     this.brandName = map['brandName'] ?? '';
     // this.level = map['level'] ?? 0;
     // this.membershipType = map['membershipTypeId'] ?? 0;
+    this.membershipTypeName = map['membershipTypeName'] ?? 0;
     // this.isSample = map['isSample'] ?? false;
     // this.storeId = map['storeId'] ?? 0;
     // this.productCode = map['productCode'] ?? '';

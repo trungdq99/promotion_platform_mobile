@@ -44,7 +44,6 @@ class MembershipsBloc
       if (responseBody != null) {
         listMembership = [];
         responseBody.forEach((element) {
-          print('${element.toString()}');
           Map<String, dynamic> map = element;
           listMembership.add(MembershipModel.fromMap(map));
         });

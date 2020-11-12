@@ -20,16 +20,17 @@ class Point extends StatelessWidget {
             onPressed: function,
             style: neumorphicStyleUpWithHighRadius,
             child: _showPoint(),
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsets.all(16),
           )
         : Padding(
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsets.all(16),
             child: _showPoint(),
           );
   }
 
-  Row _showPoint() {
+  Widget _showPoint() {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Neumorphic(
           style: neumorphicStyleDownCircle,

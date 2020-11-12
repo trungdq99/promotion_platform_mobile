@@ -5,6 +5,7 @@ import 'package:promotion_platform/utils/custom_widget/icon/search_icon.dart';
 import 'package:promotion_platform/utils/constant.dart';
 import 'package:promotion_platform/utils/custom_colors.dart';
 import 'package:promotion_platform/utils/custom_widget/icon/voucher_icon.dart';
+import 'package:promotion_platform/utils/helper.dart';
 import './voucher_screen.dart';
 import '../utils/custom_widget/group_title.dart';
 import '../utils/custom_widget/promotion_widget.dart';
@@ -459,10 +460,6 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
 
   Widget _buildAppBar() {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 8,
-      ),
       width: _deviceWidth,
       child: Stack(
         children: [
@@ -473,7 +470,8 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
               hasBorder: true,
               function: () {},
             ),
-            right: 0,
+            right: 16,
+            top: 16,
           ),
         ],
       ),
@@ -485,13 +483,14 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
       children: [
         NeumorphicButton(
           style: neumorphicStyleUpWithHighRadius,
-          onPressed: () {
-            Navigator.push(
-              widget.homeContext,
-              CupertinoPageRoute(
-                builder: (context) => MyGiftScreen(),
-              ),
-            );
+          onPressed: () async {
+            // await Helper.navigationDelay();
+            // Navigator.push(
+            //   widget.homeContext,
+            //   CupertinoPageRoute(
+            //     builder: (context) => MyGiftScreen(),
+            //   ),
+            // );
             // Navigator.of(homeContext).push(
             //   CupertinoPageRoute(
             //     builder: (context) => MyGiftScreen(),
@@ -499,43 +498,38 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
             // );
           },
           padding: EdgeInsets.all(16),
-          child: Container(
-            width: 136,
-            child: Container(
-              // padding: EdgeInsets.all(8),
-              // margin: EdgeInsets.only(top: 8),
-              // width: 136,
-              child: Row(
-                children: [
-                  VoucherIcon(),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Text(
-                    'Quà của tui',
-                    style: BOLD_SMALL_TEXT_STYLE,
-                  ),
-                ],
+          margin: EdgeInsets.only(
+            left: 16,
+            bottom: 16,
+            top: 16,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              VoucherIcon(),
+              SizedBox(
+                width: 16,
               ),
-            ),
+              Text(
+                'Quà của tui',
+                style: BOLD_TITLE_TEXT_STYLE,
+              ),
+            ],
           ),
         ),
         Positioned(
           right: 0,
-          top: 0,
+          top: 4,
           child: Neumorphic(
-            style: neumorphicStyleDownCircle,
+            style: neumorphicStyleDownCircleForNum,
             child: Container(
-              height: 24,
-              width: 24,
+              height: 32,
+              width: 32,
               alignment: Alignment.center,
               color: CustomColors.GREEN,
               child: Text(
                 '10',
-                style: TextStyle(
-                  fontSize: SUPER_SMALL_FONT_SIZE,
-                  fontFamily: 'Segoe UI',
-                ),
+                style: NUM_TEXT_STYLE,
               ),
             ),
           ),

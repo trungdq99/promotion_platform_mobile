@@ -1,9 +1,15 @@
 // Author: Trung Shin
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:promotion_platform/bloc/customer_accounts/customer_accounts_bloc.dart';
+import 'package:promotion_platform/bloc/customer_accounts/customer_accounts_event.dart';
+import 'package:promotion_platform/bloc/customer_accounts/customer_accounts_state.dart';
+import 'package:promotion_platform/models/customer_account_model.dart';
+import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
 import 'package:promotion_platform/utils/constant.dart';
 import 'package:promotion_platform/utils/custom_colors.dart';
 import 'package:promotion_platform/utils/custom_widget/point.dart';
+import 'package:promotion_platform/utils/custom_widget/progressing.dart';
 import 'package:promotion_platform/utils/helper.dart';
 
 class CustomerAccountsScreen extends StatefulWidget {
@@ -14,18 +20,57 @@ class CustomerAccountsScreen extends StatefulWidget {
 }
 
 class _CustomerAccountsScreenState extends State<CustomerAccountsScreen> {
+  CustomerAccountsBloc _customerAccountsBloc;
+
+  @override
+  void initState() {
+    _customerAccountsBloc = CustomerAccountsBloc();
+    _customerAccountsBloc.emitEvent(
+        CustomerAccountsEventLoad(membershipId: widget.membershipCardId));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildMembershipInfo(),
-            _buildMembershipInfo(),
-          ],
-        ),
-      ),
+      body: _buildListCustomerAccount(),
+    );
+  }
+
+  Widget _buildListCustomerAccount() {
+    return BlocEventStateBuilder<CustomerAccountsState>(
+      builder: (context, state) {
+        List<CustomerAccountModel> listCustomerAccount;
+        if (state.isLoad) {
+          listCustomerAccount = state.listCustomerAccount;
+        }
+        List<Widget> _children = [];
+        if (listCustomerAccount != null && listCustomerAccount.length > 0) {
+          listCustomerAccount.forEach((element) {
+            _children.add(_buildCustomerAccount(
+              name: element.accountName,
+              point: element.balance,
+            ));
+          });
+        }
+        if (state.isLoading) {
+          return Center(child: Progressing());
+        }
+        return _children.length > 0
+            ? SingleChildScrollView(
+                child: Column(
+                  children: _children,
+                ),
+              )
+            : Center(
+                child: Text(
+                  'Bạn hiện đang không có tài khoản nào!',
+                  style: DEFAULT_TEXT_STYLE,
+                ),
+              );
+      },
+      bloc: _customerAccountsBloc,
     );
   }
 
@@ -52,35 +97,16 @@ class _CustomerAccountsScreenState extends State<CustomerAccountsScreen> {
     );
   }
 
-  Widget _buildMembershipInfo() {
+  Widget _buildCustomerAccount({
+    @required String name,
+    @required double point,
+  }) {
     return Neumorphic(
       style: neumorphicStyleDownWithSmallRadius,
       margin: EdgeInsets.all(20),
       padding: EdgeInsets.all(24),
       child: Table(
         children: [
-          TableRow(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 8,
-                ),
-                child: Text(
-                  'Mã tài khoản:',
-                  style: DEFAULT_TEXT_STYLE,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 8,
-                ),
-                child: Text(
-                  'Code',
-                  style: BOLD_TITLE_TEXT_STYLE,
-                ),
-              ),
-            ],
-          ),
           TableRow(
             children: [
               Padding(
@@ -97,7 +123,7 @@ class _CustomerAccountsScreenState extends State<CustomerAccountsScreen> {
                   vertical: 8,
                 ),
                 child: Text(
-                  'Name',
+                  name,
                   style: BOLD_TITLE_TEXT_STYLE,
                 ),
               ),
@@ -110,7 +136,7 @@ class _CustomerAccountsScreenState extends State<CustomerAccountsScreen> {
                   vertical: 8,
                 ),
                 child: Point(
-                  point: 1000,
+                  point: point,
                   hasBorder: false,
                 ),
               ),

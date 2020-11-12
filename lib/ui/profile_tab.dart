@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -13,7 +14,9 @@ import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
 import 'package:promotion_platform/utils/constant.dart';
 import 'package:promotion_platform/utils/custom_colors.dart';
+import 'package:promotion_platform/utils/custom_widget/custom_network_image.dart';
 import 'package:promotion_platform/utils/custom_widget/point.dart';
+import 'package:promotion_platform/utils/custom_widget/progressing.dart';
 import 'package:promotion_platform/utils/helper.dart';
 
 class TabProfileScreen extends StatefulWidget {
@@ -99,6 +102,16 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
                             _authenticationBloc
                                 .emitEvent(AuthenticationEventSignOut());
                           }),
+                      SizedBox(
+                        height: 24,
+                      ),
+                      Text(
+                        'Phiên bản $APP_VERSION',
+                        style: DEFAULT_TEXT_STYLE,
+                      ),
+                      SizedBox(
+                        height: 24,
+                      ),
                     ],
                   ),
                 ),
@@ -159,10 +172,10 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
                 onPressed: showEditProfileScreen,
                 padding: EdgeInsets.all(0),
                 child: _customerModel != null
-                    ? Image.network(
-                        _customerModel.picUrl,
-                        height: 68,
+                    ? CustomNetworkImage(
+                        imgUrl: _customerModel.picUrl,
                         width: 68,
+                        height: 68,
                       )
                     : Container(
                         height: 68,

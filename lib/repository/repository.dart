@@ -24,15 +24,15 @@ class Repository {
         Helper.getAuthorizeHeader(token),
         '',
       );
-  Future fetchBrands() => _apiProvider.fetchData(
-        BRANDS_API,
+  Future fetchTopBrands() => _apiProvider.fetchData(
+        TOP_BRANDS_API,
         RequestMethod.GET,
         UN_AUTHORIZE_HEADER,
         '',
       );
 
   Future fetchBrandDetail({@required int brandId}) => _apiProvider.fetchData(
-        '$BRANDS_API/$brandId',
+        '$TOP_BRANDS_API/$brandId',
         RequestMethod.GET,
         UN_AUTHORIZE_HEADER,
         '',
@@ -56,6 +56,16 @@ class Repository {
         MEMBERSHIPS_API,
         RequestMethod.GET,
         Helper.getAuthorizeHeader(token),
+        '',
+      );
+
+  Future fetchCustomerAccounts({
+    @required int membershipId,
+  }) =>
+      _apiProvider.fetchData(
+        '$CUSTOMER_ACCOUNTS_API=$membershipId',
+        RequestMethod.GET,
+        UN_AUTHORIZE_HEADER,
         '',
       );
 }

@@ -11,20 +11,16 @@ class Progressing extends StatelessWidget {
   // });
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 10,
-      // width: width,
-      child: NeumorphicProgressIndeterminate(
-        duration: Duration(milliseconds: 1000),
-        style: ProgressStyle(
-          lightSource: LightSource.topLeft,
-          depth: 20,
-          border: NeumorphicBorder(width: 0.8),
-          accent: CustomColors.GREEN,
-          gradientBorderRadius: BorderRadius.circular(50),
-          borderRadius: BorderRadius.circular(50),
-          variant: CustomColors.TEXT_COLOR,
-        ),
+    return NeumorphicProgressIndeterminate(
+      duration: Duration(milliseconds: 1000),
+      style: ProgressStyle(
+        lightSource: LightSource.topLeft,
+        depth: 20,
+        border: NeumorphicBorder(width: 0.8),
+        accent: CustomColors.GREEN,
+        gradientBorderRadius: BorderRadius.circular(50),
+        borderRadius: BorderRadius.circular(50),
+        variant: CustomColors.TEXT_COLOR,
       ),
     );
   }
