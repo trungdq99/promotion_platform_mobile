@@ -20,7 +20,7 @@
 class TransactionModel {
   int id;
   int accountId;
-  double amount;
+  int amount;
   String currencyCode;
   double fcamount;
   String date;

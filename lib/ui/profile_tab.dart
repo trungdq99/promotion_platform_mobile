@@ -40,7 +40,7 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
     return Scaffold(
       body: BlocEventStateBuilder<CustomerState>(
         builder: (context, customerState) {
-          if (customerState.isLoad) {
+          if (customerState.isLoaded) {
             _customerModel = customerState.customerModel;
           }
           return Stack(
@@ -49,7 +49,7 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      _buildAppBar(),
+                      _buildAppBar(isProgressing: customerState.isLoading),
                       _buildButton(
                           title: 'Thẻ thành viên',
                           iconData: Icons.leaderboard,
@@ -126,20 +126,8 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
 
   void showEditProfileScreen() async {
     await Helper.navigationDelay();
-    String name = '';
-    String birthday = '';
-    String email = '';
-    bool gender;
-    String phone = '';
-    String picUrl = '';
-    if (_customerModel != null) {
-      name = _customerModel.name;
-      birthday = _customerModel.birthDay;
-      email = _customerModel.email;
-      gender = _customerModel.gender;
-      phone = _customerModel.phone;
-      picUrl = _customerModel.picUrl;
-    }
+
+    if (_customerModel != null) {}
     Navigator.push(
       widget.homeContext,
       CupertinoPageRoute(
@@ -156,80 +144,88 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
     );
   }
 
-  Widget _buildAppBar() {
+  Widget _buildAppBar({
+    bool isProgressing: false,
+  }) {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 16,
         vertical: 8,
       ),
       width: deviceWidth,
-      child: Stack(
-        children: [
-          Row(
-            children: [
-              NeumorphicButton(
-                style: neumorphicStyleUpCircle,
-                onPressed: showEditProfileScreen,
-                padding: EdgeInsets.all(0),
-                child: _customerModel != null
-                    ? CustomNetworkImage(
-                        imgUrl: _customerModel.picUrl,
-                        width: 68,
-                        height: 68,
-                      )
-                    : Container(
-                        height: 68,
-                        width: 68,
-                        color: CustomColors.GREEN,
-                        alignment: Alignment.center,
-                        child: Text('Avatar'),
-                      ),
-              ),
-              SizedBox(
-                width: 12,
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      child: !isProgressing
+          ? Stack(
+              children: [
+                Row(
                   children: [
-                    Text(
-                      _customerModel != null
-                          ? _customerModel.name
-                          : 'User Name',
-                      style: BOLD_TITLE_TEXT_STYLE,
-                      overflow: TextOverflow.ellipsis,
+                    NeumorphicButton(
+                      style: neumorphicStyleUpCircle,
+                      onPressed: showEditProfileScreen,
+                      padding: EdgeInsets.all(0),
+                      child: _customerModel != null
+                          ? CustomNetworkImage(
+                              imgUrl: _customerModel.picUrl,
+                              width: 68,
+                              height: 68,
+                            )
+                          : Container(
+                              height: 68,
+                              width: 68,
+                              color: CustomColors.GREEN,
+                              alignment: Alignment.center,
+                              child: Text('Avatar'),
+                            ),
                     ),
-                    InkWell(
-                      onTap: showEditProfileScreen,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 0,
-                          vertical: 4,
-                        ),
-                        child: Text(
-                          'Sửa thông tin',
-                          style: TextStyle(
-                            color: Colors.teal,
-                            fontSize: DEFAULT_FONT_SIZE,
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _customerModel != null
+                                ? _customerModel.name
+                                : 'User Name',
+                            style: BOLD_TITLE_TEXT_STYLE,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
+                          InkWell(
+                            onTap: showEditProfileScreen,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 0,
+                                vertical: 4,
+                              ),
+                              child: Text(
+                                'Sửa thông tin',
+                                style: TextStyle(
+                                  color: Colors.teal,
+                                  fontSize: DEFAULT_FONT_SIZE,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
-              ),
-            ],
-          ),
-          Positioned(
-            right: 0,
-            child: Point(
-              point: _customerModel != null ? _customerModel.lastBalance : 1000,
-              hasBorder: true,
-              function: () {},
+                Positioned(
+                  right: 0,
+                  child: Point(
+                    point: _customerModel != null
+                        ? _customerModel.lastBalance.toInt()
+                        : 0,
+                    hasBorder: true,
+                    function: () {},
+                  ),
+                ),
+              ],
+            )
+          : Center(
+              child: Progressing(),
             ),
-          ),
-        ],
-      ),
     );
   }
 

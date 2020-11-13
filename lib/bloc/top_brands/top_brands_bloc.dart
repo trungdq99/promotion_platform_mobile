@@ -13,7 +13,7 @@ class TopBrandsBloc extends BlocEventStateBase<TopBrandsEvent, TopBrandsState> {
   @override
   Stream<TopBrandsState> eventHandler(
       TopBrandsEvent event, TopBrandsState currentState) async* {
-    if (event is TopBrandsEventLoadList) {
+    if (event is TopBrandsEventLoad) {
       yield TopBrandsState.loading();
       List<BrandModel> listBrandModel;
       listBrandModel = await loadBrands();

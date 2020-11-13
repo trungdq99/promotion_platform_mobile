@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:promotion_platform/models/customer_model.dart';
 import '../utils/helper.dart';
 
 import '../utils/constant.dart';
@@ -24,6 +25,27 @@ class Repository {
         Helper.getAuthorizeHeader(token),
         '',
       );
+
+  Future updateCustomer({
+    @required String token,
+    @required CustomerModel customerModel,
+  }) =>
+      _apiProvider.fetchData(
+        CUSTOMER_API,
+        RequestMethod.PUT,
+        Helper.getAuthorizeHeader(token),
+        Helper.encodeJson(
+          customerModel.getUpdateParam(),
+        ),
+      );
+
+  Future fetchTopPromotions() => _apiProvider.fetchData(
+        TOP_PROMOTIONS_API,
+        RequestMethod.GET,
+        UN_AUTHORIZE_HEADER,
+        '',
+      );
+
   Future fetchTopBrands() => _apiProvider.fetchData(
         TOP_BRANDS_API,
         RequestMethod.GET,

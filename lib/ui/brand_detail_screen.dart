@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:promotion_platform/bloc/brand_detail/brand_detail_bloc.dart';
+import 'package:promotion_platform/bloc/brand_detail/brand_detail_event.dart';
+import 'package:promotion_platform/bloc/brand_detail/brand_detail_state.dart';
 import 'package:promotion_platform/models/brand_model.dart';
+import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
 import 'package:promotion_platform/utils/constant.dart';
 import 'package:promotion_platform/utils/custom_widget/brand_contact.dart';
 import 'package:promotion_platform/utils/custom_widget/full_screen_progressing.dart';
@@ -16,53 +20,57 @@ class BrandDetailScreen extends StatefulWidget {
 class _BrandDetailScreenState extends State<BrandDetailScreen> {
   ScrollController _scrollController = ScrollController();
   double deviceWidth;
+  BrandDetailBloc _brandDetailBloc;
   @override
   void initState() {
+    _brandDetailBloc = BrandDetailBloc();
+    _brandDetailBloc.emitEvent(BrandDetailEventLoad(brandId: widget.brandId));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     deviceWidth = MediaQuery.of(context).size.width;
-    return _buildScreen(
-      brandModel: BrandModel(),
+    return BlocEventStateBuilder<BrandDetailState>(
+      builder: (context, state) {
+        BrandModel brandModel;
+        if (state.isLoad) {
+          brandModel = state.brandModel;
+        }
+        return _buildScreen(
+          brandModel: brandModel,
+          isProgressing: state.isLoading,
+        );
+      },
+      bloc: _brandDetailBloc,
     );
-    // return BlocEventStateBuilder<BrandDetailScreenState>(
-    //   builder: (context, state) {
-    //     BrandModel brandModel = BrandModel();
-    //     if (state.isOpen) {
-    //       brandModel = state.brandModel;
-    //     }
-    //
-    //     return _buildScreen(
-    //       context,
-    //       state.isOpening,
-    //       brandModel,
-    //     );
-    //   },
-    //   bloc: _brandDetailScreenBloc,
-    // );
   }
 
   Widget _buildScreen({
-    //bool isProgressing,
+    bool isProgressing,
     @required BrandModel brandModel,
   }) {
-    return Stack(
-      children: [
-        Scaffold(
-          body: CustomScrollView(
+    return Scaffold(
+      body: Stack(
+        children: [
+          CustomScrollView(
             controller: _scrollController,
             slivers: [
-              _buildAppBar(context),
+              _buildAppBar(),
               SliverList(
                 delegate: SliverChildListDelegate([
-                  _buildTitle(
-                      brandTitle: brandModel.brandName ?? '',
-                      phone: brandModel.phoneNumber ?? '',
-                      numOfStore: 7,
-                      type: 'Ẩm thực, ăn uống các thứ'),
-                  ShowDetail(detail: brandModel.description ?? ''),
+                  brandModel != null
+                      ? _buildTitle(
+                          brandTitle: brandModel.brandName ?? '',
+                          phone: brandModel.phoneNumber ?? '',
+                          numOfStore: 7,
+                          type: 'Ẩm thực, ăn uống các thứ')
+                      : Container(
+                          child: Text('Empty brand!'),
+                        ),
+                  brandModel != null
+                      ? ShowDetail(detail: brandModel.description ?? '')
+                      : SizedBox(),
                   // ShowDetail(
                   //   detail: 'Hệ thống giao hàng cho sinh viên FPT\n'
                   //       '- Giao hàng tận nơi với mức giá phải chăng.\n'
@@ -80,23 +88,23 @@ class _BrandDetailScreenState extends State<BrandDetailScreen> {
                       child: Row(
                         children: [
                           PromotionWidget(
-                            voucherTitle: 'Voucher 500,000 VND',
-                            brandTitle: 'Uni Delivery',
+                            promotionName: 'Voucher 500,000 VND',
+                            brandName: 'Uni Delivery',
                             price: 1000,
                           ),
                           PromotionWidget(
-                            voucherTitle: 'Voucher 500,000 VND',
-                            brandTitle: 'Uni Delivery',
+                            promotionName: 'Voucher 500,000 VND',
+                            brandName: 'Uni Delivery',
                             price: 1000,
                           ),
                           PromotionWidget(
-                            voucherTitle: 'Voucher 500,000 VND',
-                            brandTitle: 'Uni Delivery',
+                            promotionName: 'Voucher 500,000 VND',
+                            brandName: 'Uni Delivery',
                             price: 1000,
                           ),
                           PromotionWidget(
-                            voucherTitle: 'Voucher 500,000 VND',
-                            brandTitle: 'Uni Delivery',
+                            promotionName: 'Voucher 500,000 VND',
+                            brandName: 'Uni Delivery',
                             price: 1000,
                           ),
                         ],
@@ -107,13 +115,13 @@ class _BrandDetailScreenState extends State<BrandDetailScreen> {
               ),
             ],
           ),
-        ),
-        // isProgressing ? FullScreenProgressing() : Container(),
-      ],
+          isProgressing ? FullScreenProgressing() : SizedBox(),
+        ],
+      ),
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  Widget _buildAppBar() {
     return SliverAppBar(
       backgroundColor: Colors.white,
       flexibleSpace: Container(

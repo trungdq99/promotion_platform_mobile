@@ -76,10 +76,12 @@ class _QrCodeScanTabState extends State<QrCodeScanTab> {
                     return Container(
                       height: 300,
                       width: double.maxFinite,
-                      child: QRView(
-                        key: qrKey,
-                        onQRViewCreated: _onQRViewCreated,
-                      ),
+                      color: Colors.black,
+                      // child: Text('Camera'),
+                      // child: QRView(
+                      //   key: qrKey,
+                      //   onQRViewCreated: _onQRViewCreated,
+                      // ),
                       // alignment: Alignment.center,
                       // child: Text('Camera'),
                     );

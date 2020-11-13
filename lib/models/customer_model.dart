@@ -123,4 +123,13 @@ class CustomerModel {
     this.partnerId = map['partnerId'] ?? 0;
     this.lastBalance = map['lastBalance'] ?? 0;
   }
+
+  Map<String, dynamic> getUpdateParam() {
+    return <String, dynamic>{
+      'name': this.name,
+      'birthDay': this.birthDay,
+      'gender': this.gender,
+      'picUrl': this.picUrl,
+    };
+  }
 }

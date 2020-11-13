@@ -97,7 +97,7 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
   Widget _buildTitle({
     String title: '',
     String brand: '',
-    double point: 0,
+    int point: 0,
   }) {
     return Padding(
       padding: EdgeInsets.all(16.0),

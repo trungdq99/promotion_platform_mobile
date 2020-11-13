@@ -59,23 +59,23 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
                     child: Row(
                       children: [
                         PromotionWidget(
-                          voucherTitle: 'Voucher trị giá 500.000 VNĐ',
-                          brandTitle: 'Uni Delivery',
+                          promotionName: 'Voucher trị giá 500.000 VNĐ',
+                          brandName: 'Uni Delivery',
                           price: 1000,
                         ),
                         PromotionWidget(
-                          voucherTitle: 'Voucher trị giá 500.000 VNĐ',
-                          brandTitle: 'Uni Delivery',
+                          promotionName: 'Voucher trị giá 500.000 VNĐ',
+                          brandName: 'Uni Delivery',
                           price: 1000,
                         ),
                         PromotionWidget(
-                          voucherTitle: 'Voucher trị giá 500.000 VNĐ',
-                          brandTitle: 'Uni Delivery',
+                          promotionName: 'Voucher trị giá 500.000 VNĐ',
+                          brandName: 'Uni Delivery',
                           price: 1000,
                         ),
                         PromotionWidget(
-                          voucherTitle: 'Voucher trị giá 500.000 VNĐ',
-                          brandTitle: 'Uni Delivery',
+                          promotionName: 'Voucher trị giá 500.000 VNĐ',
+                          brandName: 'Uni Delivery',
                           price: 1000,
                         ),
                       ],
@@ -90,23 +90,23 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
                     child: Row(
                       children: [
                         PromotionWidget(
-                          voucherTitle: 'Voucher trị giá 500.000 VNĐ',
-                          brandTitle: 'Uni Delivery',
+                          promotionName: 'Voucher trị giá 500.000 VNĐ',
+                          brandName: 'Uni Delivery',
                           price: 1000,
                         ),
                         PromotionWidget(
-                          voucherTitle: 'Voucher trị giá 500.000 VNĐ',
-                          brandTitle: 'Uni Delivery',
+                          promotionName: 'Voucher trị giá 500.000 VNĐ',
+                          brandName: 'Uni Delivery',
                           price: 1000,
                         ),
                         PromotionWidget(
-                          voucherTitle: 'Voucher trị giá 500.000 VNĐ',
-                          brandTitle: 'Uni Delivery',
+                          promotionName: 'Voucher trị giá 500.000 VNĐ',
+                          brandName: 'Uni Delivery',
                           price: 1000,
                         ),
                         PromotionWidget(
-                          voucherTitle: 'Voucher trị giá 500.000 VNĐ',
-                          brandTitle: 'Uni Delivery',
+                          promotionName: 'Voucher trị giá 500.000 VNĐ',
+                          brandName: 'Uni Delivery',
                           price: 1000,
                         ),
                       ],
@@ -121,23 +121,23 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
                     child: Row(
                       children: [
                         PromotionWidget(
-                          voucherTitle: 'Voucher trị giá 500.000 VNĐ',
-                          brandTitle: 'Uni Delivery',
+                          promotionName: 'Voucher trị giá 500.000 VNĐ',
+                          brandName: 'Uni Delivery',
                           price: 1000,
                         ),
                         PromotionWidget(
-                          voucherTitle: 'Voucher trị giá 500.000 VNĐ',
-                          brandTitle: 'Uni Delivery',
+                          promotionName: 'Voucher trị giá 500.000 VNĐ',
+                          brandName: 'Uni Delivery',
                           price: 1000,
                         ),
                         PromotionWidget(
-                          voucherTitle: 'Voucher trị giá 500.000 VNĐ',
-                          brandTitle: 'Uni Delivery',
+                          promotionName: 'Voucher trị giá 500.000 VNĐ',
+                          brandName: 'Uni Delivery',
                           price: 1000,
                         ),
                         PromotionWidget(
-                          voucherTitle: 'Voucher trị giá 500.000 VNĐ',
-                          brandTitle: 'Uni Delivery',
+                          promotionName: 'Voucher trị giá 500.000 VNĐ',
+                          brandName: 'Uni Delivery',
                           price: 1000,
                         ),
                       ],

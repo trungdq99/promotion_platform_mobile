@@ -6,30 +6,47 @@ import 'package:promotion_platform/utils/bloc_helpers/bloc_event_state.dart';
 
 class CustomerState extends BlocState {
   CustomerModel customerModel;
-  bool isLoad;
+  bool isLoaded;
   bool isLoading;
   bool isError;
+  bool isUpdated;
+  String message;
 
   CustomerState({
     this.customerModel,
-    this.isLoad: false,
+    this.isLoaded: false,
     this.isLoading: false,
     this.isError: false,
+    this.isUpdated: false,
+    this.message: '',
   });
+
   factory CustomerState.loaded({@required CustomerModel customerModel}) {
     return CustomerState(
-      isLoad: true,
+      isLoaded: true,
       customerModel: customerModel,
     );
   }
+
   factory CustomerState.loading() {
     return CustomerState(
       isLoading: true,
     );
   }
-  factory CustomerState.error() {
+
+  factory CustomerState.error({@required String message}) {
     return CustomerState(
       isError: true,
+      message: message,
+    );
+  }
+
+  factory CustomerState.updated({
+    @required String message,
+  }) {
+    return CustomerState(
+      isUpdated: true,
+      message: message,
     );
   }
 }

@@ -92,4 +92,54 @@ class Helper {
 
   static Future navigationDelay() =>
       Future.delayed(Duration(milliseconds: TIME_DELAY));
+
+  static int convertGenderToIndex(bool gender) {
+    if (gender == null) {
+      return 0;
+    } else if (gender == true) {
+      return 1;
+    } else {
+      return 2;
+    }
+  }
+
+  static String convertGenderToString(bool gender) {
+    if (gender == null) {
+      return 'Giới tính';
+    } else if (gender == true) {
+      return 'Nam';
+    } else {
+      return 'Nữ';
+    }
+  }
+
+  static bool convertIndexToGender(int index) {
+    if (index == null || index == 0) {
+      return null;
+    } else if (index == 1) {
+      return true;
+    } else if (index == 2) {
+      return false;
+    }
+  }
+
+  static List<String> splitName(String name) {
+    List<String> list = name.split(' ');
+    int count = 0;
+    String firstName = '';
+    String familyName = '';
+    list.forEach((element) {
+      if (count == 0) {
+        firstName = element;
+      } else {
+        familyName += element + ' ';
+      }
+      count++;
+    });
+    List<String> result = [
+      firstName.trim(),
+      familyName.trim(),
+    ];
+    return result;
+  }
 }

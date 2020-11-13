@@ -30,6 +30,7 @@ class _CustomNetworkImageState extends State<CustomNetworkImage> {
       fit: BoxFit.cover,
       height: widget.height,
       width: widget.width,
+      filterQuality: FilterQuality.high,
     );
   }
 }

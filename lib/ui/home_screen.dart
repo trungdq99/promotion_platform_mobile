@@ -51,14 +51,8 @@ class _HomeScreenState extends State<HomeScreen> {
         controller: _tabController,
         tabBar: _buildTabBar(),
         tabBuilder: (context, index) {
-          CupertinoTabView returnValue = _buildTabView(
-            tabView: HomeTab(
-              tabController: _tabController,
-              homeContext: context,
-            ),
-            navKey: firstTabNavKey,
-          );
-          ;
+          CupertinoTabView returnValue;
+
           switch (index) {
             case 0:
               returnValue = _buildTabView(

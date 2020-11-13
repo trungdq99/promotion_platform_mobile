@@ -4,22 +4,30 @@ import 'package:promotion_platform/utils/constant.dart';
 import 'package:promotion_platform/utils/custom_widget/custom_network_image.dart';
 import 'package:promotion_platform/utils/custom_widget/point.dart';
 
-class PromotionWidget extends StatelessWidget {
+class PromotionWidget extends StatefulWidget {
   const PromotionWidget({
-    @required this.voucherTitle,
-    @required this.brandTitle,
+    @required this.promotionName,
+    @required this.brandName,
     @required this.price,
-    this.function,
+    @required this.id,
+    @required this.imgUrl,
   });
 
-  final String brandTitle;
-  final String voucherTitle;
+  final String brandName;
+  final String promotionName;
   final int price;
-  final Function function;
+  final int id;
+  final String imgUrl;
+
+  @override
+  _PromotionWidgetState createState() => _PromotionWidgetState();
+}
+
+class _PromotionWidgetState extends State<PromotionWidget> {
   @override
   Widget build(BuildContext context) {
     return NeumorphicButton(
-      onPressed: function,
+      onPressed: () {},
       margin: EdgeInsets.all(16),
       padding: EdgeInsets.all(0),
       style: neumorphicStyleUpWithSmallRadius,
@@ -29,15 +37,14 @@ class PromotionWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomNetworkImage(
-              imgUrl:
-                  'https://www.tiendauroi.com/wp-content/uploads/2020/04/93515371_2962625523804435_5994003590329401344_o-750x750.jpg',
+              imgUrl: widget.imgUrl,
               width: 208,
               height: 100,
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 8),
               child: Text(
-                this.voucherTitle,
+                this.widget.promotionName,
                 style: BOLD_SMALL_TEXT_STYLE,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -45,13 +52,13 @@ class PromotionWidget extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 8),
               child: Text(
-                this.brandTitle,
+                this.widget.brandName,
                 style: SMALL_TEXT_STYLE,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
             Point(
-              point: 1000,
+              point: widget.price,
             ),
           ],
         ),

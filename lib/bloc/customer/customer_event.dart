@@ -1,11 +1,16 @@
 // Author: Trung Shin
 
 import 'package:flutter/material.dart';
+import 'package:promotion_platform/models/customer_model.dart';
 import 'package:promotion_platform/utils/bloc_helpers/bloc_event_state.dart';
 
 abstract class CustomerEvent extends BlocEvent {
   final String token;
-  CustomerEvent({@required this.token});
+  final CustomerModel customerModel;
+  CustomerEvent({
+    @required this.token,
+    this.customerModel,
+  });
 }
 
 class CustomerEventLoad extends CustomerEvent {
@@ -15,5 +20,9 @@ class CustomerEventLoad extends CustomerEvent {
 class CustomerEventUpdate extends CustomerEvent {
   CustomerEventUpdate({
     @required String token,
-  }) : super(token: token);
+    @required CustomerModel customerModel,
+  }) : super(
+          token: token,
+          customerModel: customerModel,
+        );
 }

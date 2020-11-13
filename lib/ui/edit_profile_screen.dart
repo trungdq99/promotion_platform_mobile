@@ -4,69 +4,40 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:promotion_platform/models/customer_model.dart';
 import 'package:promotion_platform/utils/constant.dart';
 import 'package:promotion_platform/utils/custom_colors.dart';
+import 'package:promotion_platform/utils/custom_widget/custom_network_image.dart';
 import 'package:promotion_platform/utils/custom_widget/custom_text_field.dart';
+import 'package:promotion_platform/utils/custom_widget/select_gender_widget.dart';
 import 'package:promotion_platform/utils/helper.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  final String name;
-  final String phone;
-  final String email;
-  final String birthday;
-  final bool gender;
-  final String picUrl;
-  EditProfileScreen({
-    this.name,
-    this.phone,
-    this.email,
-    this.birthday,
-    this.gender,
-    this.picUrl,
-  });
+  final CustomerModel customerModel;
+  EditProfileScreen({@required this.customerModel});
   @override
   _EditProfileScreenState createState() => _EditProfileScreenState();
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  bool _isSelectGender = false;
-
   TextEditingController _firstNameController;
   TextEditingController _familyNameController;
   TextEditingController _phoneController;
   TextEditingController _emailController;
-  String _birthday;
-  String _gender;
+  String _birthdayStr;
+  String _genderStr;
+
   @override
   void initState() {
-    String name = widget.name;
-    List<String> list = name.split(' ');
-    int count = 0;
-    String firstName = '';
-    String familyName = '';
-    list.forEach((element) {
-      if (count == 0) {
-        firstName = element;
-      } else {
-        familyName += element + ' ';
-      }
-      count++;
-    });
-    _firstNameController = TextEditingController(text: firstName.trim());
-    _familyNameController = TextEditingController(text: familyName.trim());
-    _phoneController = TextEditingController(text: widget.phone);
-    _emailController = TextEditingController(text: widget.email);
-    // print(Helper.convertStringToDateTimeVer2(widget.birthday).toString());
-    // print(DateTime.now().toString());
-    _birthday = Helper.convertDateToString(
-        Helper.convertStringToDateTimeVer2(widget.birthday));
-    if (widget.gender == null) {
-      _gender = 'Giới tính';
-    } else if (widget.gender) {
-      _gender = 'Nam';
-    } else {
-      _gender = 'Nữ';
-    }
+    List<String> splitName = Helper.splitName(widget.customerModel.name);
+
+    _firstNameController = TextEditingController(text: splitName[0]);
+    _familyNameController = TextEditingController(text: splitName[1]);
+    _phoneController = TextEditingController(text: widget.customerModel.phone);
+    _emailController = TextEditingController(text: widget.customerModel.email);
+    _birthdayStr = Helper.convertDateToString(
+        Helper.convertStringToDateTimeVer2(widget.customerModel.birthDay));
+    _genderStr = Helper.convertGenderToString(widget.customerModel.gender);
     super.initState();
   }
 
@@ -113,48 +84,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       children: [
         Expanded(
           flex: 1,
-          child: NeumorphicButton(
-            style: neumorphicStyleUpWithSmallRadius,
-            margin: EdgeInsets.only(
-              left: 32,
-              top: 8,
-              bottom: 16,
-              right: 16,
-            ),
-            padding: EdgeInsets.all(8),
-            onPressed: () {
-              DatePicker.showDatePicker(
-                context,
-                dateFormat: 'dd/MM/yyyy',
-                onConfirm: (dateTime, selectedIndex) {
-                  setState(() {
-                    _birthday = Helper.convertDateToString(dateTime);
-                  });
-                },
-                initialDateTime: Helper.convertStringToDateTime(_birthday),
-              );
-            },
-            child: Row(
-              children: [
-                Neumorphic(
-                  style: neumorphicStyleDownCircle,
-                  padding: EdgeInsets.all(10),
-                  child: Icon(
-                    Icons.calendar_today,
-                    size: 24,
-                    color: CustomColors.TEXT_COLOR,
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    _birthday,
-                    style: SUPER_SMALL_TEXT_STYLE,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          child: _buildBirthday(),
         ),
         Expanded(
           flex: 1,
@@ -164,16 +94,72 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  void showSelectGenderDialog() {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Neumorphic(
-          style: neumorphicStyleDownDefault,
-          child: Container(),
+  NeumorphicButton _buildBirthday() {
+    return NeumorphicButton(
+      style: neumorphicStyleUpWithSmallRadius,
+      margin: EdgeInsets.only(
+        left: 32,
+        top: 8,
+        bottom: 16,
+        right: 16,
+      ),
+      padding: EdgeInsets.all(8),
+      onPressed: () async {
+        await Helper.navigationDelay();
+        DatePicker.showDatePicker(
+          context,
+          dateFormat: 'dd/MM/yyyy',
+          onConfirm: (dateTime, selectedIndex) {
+            setState(() {
+              _birthdayStr = Helper.convertDateToString(dateTime);
+            });
+          },
+          initialDateTime: Helper.convertStringToDateTime(_birthdayStr),
         );
       },
+      child: Row(
+        children: [
+          Neumorphic(
+            style: neumorphicStyleDownCircle,
+            padding: EdgeInsets.all(10),
+            child: Icon(
+              Icons.calendar_today,
+              size: 24,
+              color: CustomColors.TEXT_COLOR,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              _birthdayStr,
+              style: SUPER_SMALL_TEXT_STYLE,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
     );
+  }
+
+  void showSelectGenderDialog() async {
+    await Helper.navigationDelay();
+    List result = await showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return SelectGenderWidget(
+            selectedIndex: Helper.convertGenderToIndex(widget.gender));
+      },
+      backgroundColor: CustomColors.BACKGROUND_COLOR,
+    );
+    if (result != null) {
+      int value = result[0] ?? 0;
+      bool isChange = result[1] ?? false;
+      if (isChange) {
+        setState(() {
+          widget.gender = Helper.convertIndexToGender(value);
+          _genderStr = Helper.convertGenderToString(widget.gender);
+        });
+      }
+    }
   }
 
   Widget _buildGender() {
@@ -187,7 +173,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
       padding: EdgeInsets.all(8),
       onPressed: () {
-        //Cupertiono
+        showSelectGenderDialog();
       },
       child: Row(
         children: [
@@ -203,7 +189,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
           Expanded(
             child: Text(
-              _gender,
+              _genderStr,
               style: SUPER_SMALL_TEXT_STYLE,
               textAlign: TextAlign.center,
             ),
@@ -269,11 +255,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         color: Colors.teal,
         child: widget.picUrl.isEmpty
             ? Text('AVATAR')
-            : Image.network(
-                widget.picUrl,
+            : CustomNetworkImage(
+                imgUrl: widget.picUrl,
                 width: 184,
                 height: 184,
-                fit: BoxFit.fill,
               ),
         alignment: Alignment.center,
       ),

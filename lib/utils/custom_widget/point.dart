@@ -11,7 +11,7 @@ class Point extends StatelessWidget {
   });
 
   final Function function;
-  final double point;
+  final int point;
   final bool hasBorder;
   @override
   Widget build(BuildContext context) {

@@ -50,7 +50,7 @@ class _CustomerAccountsScreenState extends State<CustomerAccountsScreen> {
           listCustomerAccount.forEach((element) {
             _children.add(_buildCustomerAccount(
               name: element.accountName,
-              point: element.balance,
+              point: element.balance.toInt(),
             ));
           });
         }
@@ -99,7 +99,7 @@ class _CustomerAccountsScreenState extends State<CustomerAccountsScreen> {
 
   Widget _buildCustomerAccount({
     @required String name,
-    @required double point,
+    @required int point,
   }) {
     return Neumorphic(
       style: neumorphicStyleDownWithSmallRadius,

@@ -2,6 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:promotion_platform/bloc/top_promotions/top_promotions_bloc.dart';
+import 'package:promotion_platform/bloc/top_promotions/top_promotions_state.dart';
+import 'package:promotion_platform/models/promotion_model.dart';
 import 'package:promotion_platform/ui/brand_detail_screen.dart';
 import 'package:promotion_platform/utils/custom_colors.dart';
 import 'package:promotion_platform/utils/custom_widget/custom_network_image.dart';
@@ -39,7 +42,8 @@ class HomeTab extends StatefulWidget {
 class _HomeTabState extends State<HomeTab> {
   double deviceWidth;
   CustomerBloc _customerBloc;
-  TopBrandsBloc _brandBLoc;
+  TopBrandsBloc _topBrandsBloc;
+  TopPromotionsBloc _topPromotionsBloc;
   CustomerModel _customerModel;
   @override
   void initState() {
@@ -49,13 +53,13 @@ class _HomeTabState extends State<HomeTab> {
   @override
   Widget build(BuildContext context) {
     _customerBloc = BlocProvider.of<CustomerBloc>(context);
-    _brandBLoc = BlocProvider.of<TopBrandsBloc>(context);
-
+    _topBrandsBloc = BlocProvider.of<TopBrandsBloc>(context);
+    _topPromotionsBloc = BlocProvider.of<TopPromotionsBloc>(context);
     deviceWidth = MediaQuery.of(context).size.width;
     // final deviceHeight = MediaQuery.of(context).size.height;
     return BlocEventStateBuilder<CustomerState>(
       builder: (context, state) {
-        if (state.isLoad) {
+        if (state.isLoaded) {
           _customerModel = state.customerModel;
         }
         return Scaffold(
@@ -66,7 +70,7 @@ class _HomeTabState extends State<HomeTab> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildAppBar(),
+                      _buildAppBar(isProgressing: state.isLoading),
                       AdsWidget(),
                       GroupTitle(
                         title: 'Thương hiệu nổi bật',
@@ -122,35 +126,44 @@ class _HomeTabState extends State<HomeTab> {
         // ));
       };
   Widget _buildListPromotion() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      padding: EdgeInsets.all(8),
-      child: Row(
-        children: [
-          PromotionWidget(
-            voucherTitle: 'Voucher 500,000 VND',
-            brandTitle: 'Uni Delivery',
-            price: 1000,
-            function: pushPromotionDetailScreen(),
-          ),
-          PromotionWidget(
-            voucherTitle: 'Voucher 500,000 VND',
-            brandTitle: 'Uni Delivery',
-            price: 1000,
-            function: () {},
-          ),
-          PromotionWidget(
-            voucherTitle: 'Voucher 500,000 VND',
-            brandTitle: 'Uni Delivery',
-            price: 1000,
-          ),
-          PromotionWidget(
-            voucherTitle: 'Voucher 500,000 VND',
-            brandTitle: 'Uni Delivery',
-            price: 1000,
-          ),
-        ],
-      ),
+    return BlocEventStateBuilder<TopPromotionsState>(
+      builder: (context, state) {
+        List<PromotionModel> listPromotions;
+        List<Widget> children = [];
+        if (state.isLoad) {
+          listPromotions = state.listPromotion;
+          listPromotions.forEach((element) {
+            children.add(PromotionWidget(
+              id: element.id,
+              promotionName: element.promotionName,
+              brandName: element.brandName,
+              imgUrl: element.imgUrl,
+              price: element.price,
+            ));
+          });
+        }
+        if (state.isLoading) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Progressing(),
+          );
+        }
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          padding: EdgeInsets.all(8),
+          child: listPromotions != null
+              ? Row(
+                  children: children,
+                )
+              : Container(
+                  child: Text(
+                    'Empty list promotion',
+                    style: DEFAULT_TEXT_STYLE,
+                  ),
+                ),
+        );
+      },
+      bloc: _topPromotionsBloc,
     );
   }
 
@@ -177,9 +190,7 @@ class _HomeTabState extends State<HomeTab> {
         if (state.isLoading) {
           return Padding(
             padding: const EdgeInsets.all(16.0),
-            child: CircularProgressIndicator(
-              backgroundColor: Colors.teal,
-            ),
+            child: Progressing(),
           );
         }
         return SingleChildScrollView(
@@ -197,7 +208,7 @@ class _HomeTabState extends State<HomeTab> {
                 ),
         );
       },
-      bloc: _brandBLoc,
+      bloc: _topBrandsBloc,
     );
   }
 
@@ -210,61 +221,67 @@ class _HomeTabState extends State<HomeTab> {
         vertical: 8,
       ),
       width: deviceWidth,
-      child: Stack(
-        children: [
-          Row(
-            children: [
-              Neumorphic(
-                style: NeumorphicStyle(
-                  boxShape: NeumorphicBoxShape.circle(),
-                ),
-                child: _customerModel != null
-                    ? CustomNetworkImage(
-                        imgUrl: _customerModel.picUrl,
-                        width: 68,
-                        height: 68,
-                      )
-                    : Container(
-                        height: 68,
-                        width: 68,
-                        color: CustomColors.GREEN,
-                        alignment: Alignment.center,
-                        child: Text('Avatar'),
-                      ),
-              ),
-              SizedBox(
-                width: 8,
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      child: !isProgressing
+          ? Stack(
+              children: [
+                Row(
                   children: [
-                    Text(
-                      'Xin chào !',
-                      style: DEFAULT_TEXT_STYLE,
+                    Neumorphic(
+                      style: NeumorphicStyle(
+                        boxShape: NeumorphicBoxShape.circle(),
+                      ),
+                      child: _customerModel != null
+                          ? CustomNetworkImage(
+                              imgUrl: _customerModel.picUrl,
+                              width: 68,
+                              height: 68,
+                            )
+                          : Container(
+                              height: 68,
+                              width: 68,
+                              color: CustomColors.GREEN,
+                              alignment: Alignment.center,
+                              child: Text('Avatar'),
+                            ),
                     ),
-                    Text(
-                      _customerModel != null
-                          ? _customerModel.name
-                          : 'User name',
-                      style: BOLD_TITLE_TEXT_STYLE,
-                      overflow: TextOverflow.ellipsis,
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Xin chào !',
+                            style: DEFAULT_TEXT_STYLE,
+                          ),
+                          Text(
+                            _customerModel != null
+                                ? _customerModel.name
+                                : 'User name',
+                            style: BOLD_TITLE_TEXT_STYLE,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-              ),
-            ],
-          ),
-          Positioned(
-            right: 0,
-            child: Point(
-              point: _customerModel != null ? _customerModel.lastBalance : 0,
-              hasBorder: true,
-              function: () {},
+                Positioned(
+                  right: 0,
+                  child: Point(
+                    point: _customerModel != null
+                        ? _customerModel.lastBalance.toInt()
+                        : 0,
+                    hasBorder: true,
+                    function: () {},
+                  ),
+                ),
+              ],
+            )
+          : Center(
+              child: Progressing(),
             ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -273,12 +290,19 @@ class _HomeTabState extends State<HomeTab> {
     @required String brandTitle,
     int promotions: 0,
     String imageUrl: '',
-    int brandId: 0,
+    @required int brandId,
   }) {
     return NeumorphicButton(
       onPressed: () async {
         await Helper.navigationDelay();
-        Navigator.push(widget.homeContext, CupertinoPageRoute(builder: (context) => BrandDetailScreen(),),);
+        // Navigator.push(
+        //   widget.homeContext,
+        //   CupertinoPageRoute(
+        //     builder: (context) => BrandDetailScreen(
+        //       brandId: brandId,
+        //     ),
+        //   ),
+        // );
         // _brandDetailScreenBloc
         //     .emitEvent(BrandDetailScreenEventOpen(brandId: brandId));
       },

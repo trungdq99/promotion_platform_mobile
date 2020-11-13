@@ -22,7 +22,8 @@ const String APP_VERSION = '1.0.0';
 const String BASE_URL = 'https://loyaltyapiws.azurewebsites.net';
 const String LOGIN_API = 'api/v1/auth/google';
 const String CUSTOMER_API = 'api/v1/customer-info';
-const String TOP_BRANDS_API = 'api/v1/brands';
+const String TOP_BRANDS_API = 'api/v1/brands/top';
+const String TOP_PROMOTIONS_API = 'api/v1/promotion-detail/top';
 const String TRANSACTION_API = 'api/v1/transaction';
 const String MEMBERSHIPS_API = 'api/v1/memberships';
 const String CUSTOMER_ACCOUNTS_API = 'api/v1/customerAccount/membershipId';
@@ -226,13 +227,6 @@ enum RequestMethod {
 
 // Key to save data on disk
 const String ACCESS_TOKEN_KEY = 'access_token';
-
-final Map<String, WidgetBuilder> listRoutes = {
-  //'/authentication': (BuildContext context) => AuthenticationPage(),
-  '/home': (BuildContext context) => HomeScreen(),
-  '/login': (BuildContext context) => LoginScreen(),
-  '/brand_detail': (BuildContext context) => BrandDetailScreen(),
-};
 
 final NeumorphicStyle neumorphicStyleUpWithHighRadius = NeumorphicStyle(
   border: neumorphicBorderDefault,
