@@ -48,6 +48,8 @@ class AuthenticationBloc
       if (!isSuccess) {
         yield AuthenticationState.error(errMsg: 'Something went wrong!');
         await _googleSignInError();
+        await Future.delayed(Duration(seconds: 2));
+        yield AuthenticationState.notAuthenticated();
       } else {
         print('Access token : $token');
         yield AuthenticationState.authenticated(token: token);

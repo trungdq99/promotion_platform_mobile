@@ -104,7 +104,6 @@ class _HomeTabState extends State<HomeTab> {
                   ),
                 ),
               ),
-              state.isLoading ? FullScreenProgressing() : Container(),
             ],
           ),
         );
@@ -144,7 +143,7 @@ class _HomeTabState extends State<HomeTab> {
         }
         if (state.isLoading) {
           return Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(32.0),
             child: Progressing(),
           );
         }
@@ -189,7 +188,7 @@ class _HomeTabState extends State<HomeTab> {
         }
         if (state.isLoading) {
           return Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(32.0),
             child: Progressing(),
           );
         }
@@ -279,7 +278,8 @@ class _HomeTabState extends State<HomeTab> {
                 ),
               ],
             )
-          : Center(
+          : Padding(
+              padding: EdgeInsets.all(16.0),
               child: Progressing(),
             ),
     );

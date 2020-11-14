@@ -74,6 +74,10 @@ class Helper {
     return DateFormat('dd/MM/yyyy').format(date);
   }
 
+  static String convertDateToStringVer2(DateTime date) {
+    return DateFormat('yyyy-MM-ddThh:mm:ss').format(date);
+  }
+
   // static String formatDateTime(DateTime date) {
   //   return DateFormat('dd/MM/yyyy').format(date);
   // }
@@ -119,6 +123,16 @@ class Helper {
     } else if (index == 1) {
       return true;
     } else if (index == 2) {
+      return false;
+    }
+  }
+
+  static bool convertStringToGender(String genderStr) {
+    if (genderStr == 'Giới tính') {
+      return null;
+    } else if (genderStr == 'Nam') {
+      return true;
+    } else if (genderStr == 'Nữ') {
       return false;
     }
   }

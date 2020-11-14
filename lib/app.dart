@@ -30,12 +30,13 @@ class App extends StatelessWidget {
               theme: NeumorphicThemeData(
                 baseColor: CustomColors.BACKGROUND_COLOR,
                 lightSource: LightSource.topLeft,
-                depth: 20,
+                depth: 10,
                 intensity: 1,
                 borderColor: Color(0xfffffcfc),
                 borderWidth: 0.8,
                 boxShape: NeumorphicBoxShape.rect(),
                 buttonStyle: neumorphicStyleUpWithSmallRadius,
+                shadowLightColor: Colors.black12,
               ),
               darkTheme: NeumorphicThemeData(
                 baseColor: Color(0xFF3E3E3E),

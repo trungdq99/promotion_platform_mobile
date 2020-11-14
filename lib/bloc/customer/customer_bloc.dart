@@ -32,15 +32,16 @@ class CustomerBloc extends BlocEventStateBase<CustomerEvent, CustomerState> {
         token: event.token,
         customerModel: event.customerModel,
       );
-      if(responseModel == null){
+      if (responseModel == null) {
         yield CustomerState.error(message: 'Something went wrong!');
-      }else{
-        if(responseModel.isSuccess){
-          yield CustomerState.updated(message: responseModel.message);
-          yield CustomerState.loaded(customerModel: event.customerModel);
-        }else{
-          yield CustomerState.error(message: responseModel.message);
-        }
+      } else {
+        // if (responseModel.isSuccess) {
+        yield CustomerState.updated(message: responseModel.message);
+        await Future.delayed(Duration(seconds: 4));
+        yield CustomerState.loaded(customerModel: event.customerModel);
+        // } else {
+        //   yield CustomerState.error(message: responseModel.message);
+        // }
       }
     }
   }
@@ -67,7 +68,10 @@ class CustomerBloc extends BlocEventStateBase<CustomerEvent, CustomerState> {
     @required CustomerModel customerModel,
   }) async {
     Repository _repository = Repository();
-    Response response = await _repository.fetchCustomer(token: token);
+    Response response = await _repository.updateCustomer(
+      token: token,
+      customerModel: customerModel,
+    );
     print(response.statusCode);
     print(response.body);
     ResponseModel responseModel;

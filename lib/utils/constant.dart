@@ -22,7 +22,7 @@ const String APP_VERSION = '1.0.0';
 const String BASE_URL = 'https://loyaltyapiws.azurewebsites.net';
 const String LOGIN_API = 'api/v1/auth/google';
 const String CUSTOMER_API = 'api/v1/customer-info';
-const String TOP_BRANDS_API = 'api/v1/brands/top';
+const String TOP_BRANDS_API = 'api/v1/brands';
 const String TOP_PROMOTIONS_API = 'api/v1/promotion-detail/top';
 const String TRANSACTION_API = 'api/v1/transaction';
 const String MEMBERSHIPS_API = 'api/v1/memberships';
@@ -270,6 +270,11 @@ final NeumorphicBorder neumorphicBorderDefault = NeumorphicBorder(
 final NeumorphicStyle neumorphicStyleUpDefault = NeumorphicStyle(
   border: neumorphicBorderDefault,
   boxShape: NeumorphicBoxShape.rect(),
+);
+
+final NeumorphicStyle neumorphicStyleForAlert = NeumorphicStyle(
+  border: neumorphicBorderDefault,
+  boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(8)),
 );
 
 final NeumorphicStyle neumorphicStyleDownDefault = NeumorphicStyle(

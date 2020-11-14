@@ -132,12 +132,7 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
       widget.homeContext,
       CupertinoPageRoute(
         builder: (context) => EditProfileScreen(
-          name: name,
-          birthday: birthday,
-          email: email,
-          gender: gender,
-          phone: phone,
-          picUrl: picUrl,
+          customerModel: _customerModel,
         ),
         fullscreenDialog: true,
       ),

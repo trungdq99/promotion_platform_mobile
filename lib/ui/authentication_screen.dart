@@ -13,7 +13,8 @@ import 'package:promotion_platform/bloc/top_promotions/top_promotions_bloc.dart'
 import 'package:promotion_platform/bloc/top_promotions/top_promotions_event.dart';
 import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
-import 'package:promotion_platform/utils/custom_widget/error_alert.dart';
+import 'package:promotion_platform/utils/custom_colors.dart';
+import 'package:promotion_platform/utils/custom_widget/custom_alert.dart';
 import 'package:promotion_platform/utils/custom_widget/full_screen_progressing.dart';
 
 import '../ui/home_screen.dart';
@@ -43,7 +44,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
         } else if (state.isAuthenticating) {
           return Scaffold(
             body: FullScreenProgressing(),
-            backgroundColor: Colors.white,
+            backgroundColor: CustomColors.BACKGROUND_COLOR,
           );
         } else {
           return LoginScreen();

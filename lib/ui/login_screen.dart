@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:promotion_platform/bloc/authentication/authentication_bloc.dart';
 import 'package:promotion_platform/bloc/authentication/authentication_event.dart';
@@ -12,7 +13,7 @@ import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
 import 'package:promotion_platform/utils/constant.dart';
 import 'package:promotion_platform/utils/custom_colors.dart';
-import 'package:promotion_platform/utils/custom_widget/error_alert.dart';
+import 'package:promotion_platform/utils/custom_widget/custom_alert.dart';
 import 'package:promotion_platform/utils/custom_widget/icon/google_icon.dart';
 import 'package:promotion_platform/utils/custom_widget/full_screen_progressing.dart';
 import 'package:promotion_platform/utils/helper.dart';
@@ -43,10 +44,19 @@ class _LoginScreenState extends State<LoginScreen> {
         return _buildScreen(
           isProgressing: state.isAuthenticating,
           isError: state.isError,
-          errMsg: state.errorMessage,
+          errMsg: state.message,
         );
       },
       bloc: _authenticationBloc,
+    );
+  }
+
+  void showErrorMessage({@required String errMsg}) async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return CustomAlert(errMsg: errMsg);
+      },
     );
   }
 
@@ -81,13 +91,8 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             isProgressing ? FullScreenProgressing() : Container(),
             isError
-                ? ErrorAlert(
+                ? CustomAlert(
                     errMsg: errMsg,
-                    function: () async {
-                      await Helper.navigationDelay();
-                      _authenticationBloc
-                          .emitEvent(AuthenticationEventNotLogin());
-                    },
                   )
                 : Container(),
             Positioned(

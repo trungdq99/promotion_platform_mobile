@@ -4,11 +4,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:promotion_platform/bloc/authentication/authentication_bloc.dart';
+import 'package:promotion_platform/bloc/authentication/authentication_state.dart';
+import 'package:promotion_platform/bloc/customer/customer_bloc.dart';
+import 'package:promotion_platform/bloc/customer/customer_event.dart';
+import 'package:promotion_platform/bloc/customer/customer_state.dart';
 import 'package:promotion_platform/models/customer_model.dart';
+import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
+import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
 import 'package:promotion_platform/utils/constant.dart';
 import 'package:promotion_platform/utils/custom_colors.dart';
+import 'package:promotion_platform/utils/custom_widget/custom_alert.dart';
 import 'package:promotion_platform/utils/custom_widget/custom_network_image.dart';
 import 'package:promotion_platform/utils/custom_widget/custom_text_field.dart';
+import 'package:promotion_platform/utils/custom_widget/full_screen_progressing.dart';
 import 'package:promotion_platform/utils/custom_widget/select_gender_widget.dart';
 import 'package:promotion_platform/utils/helper.dart';
 
@@ -26,7 +35,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   TextEditingController _emailController;
   String _birthdayStr;
   String _genderStr;
-
+  CustomerBloc _customerBloc;
+  AuthenticationBloc _authenticationBloc;
+  String token;
   @override
   void initState() {
     List<String> splitName = Helper.splitName(widget.customerModel.name);
@@ -43,6 +54,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _customerBloc = BlocProvider.of<CustomerBloc>(context);
+    _authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
     return Scaffold(
       appBar: _buildAppBar(),
       body: GestureDetector(
@@ -50,19 +63,50 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           FocusScope.of(context).unfocus();
         },
         child: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _buildAvatar(),
-                _buildUsername(),
-                _buildNameTextField(),
-                _buildBirthdayAndGender(),
-                _buildPhoneTextField(),
-                _buildEmailTextField(),
-              ],
-            ),
+          child: BlocEventStateBuilder<AuthenticationState>(
+            bloc: _authenticationBloc,
+            builder: (context, state) {
+              if (state.isAuthenticated) {
+                token = state.token;
+              }
+              return BlocEventStateBuilder<CustomerState>(
+                bloc: _customerBloc,
+                builder: (context, state) {
+                  // if (state.isUpdated) {
+                  //   showDialog(
+                  //     context: context,
+                  //     builder: (context) {
+                  //       return CustomAlert(
+                  //         errMsg: state.message,
+                  //       );
+                  //     },
+                  //   );
+                  // }
+                  return Stack(
+                    children: [
+                      SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            _buildAvatar(),
+                            _buildUsername(),
+                            _buildNameTextField(),
+                            _buildBirthdayAndGender(),
+                            _buildPhoneTextField(),
+                            _buildEmailTextField(),
+                          ],
+                        ),
+                      ),
+                      state.isLoading ? FullScreenProgressing() : Container(),
+                      state.isUpdated
+                          ? CustomAlert(errMsg: state.message)
+                          : SizedBox(),
+                    ],
+                  );
+                },
+              );
+            },
           ),
         ),
       ),
@@ -73,7 +117,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Padding(
       padding: EdgeInsets.all(16.0),
       child: Text(
-        widget.name,
+        widget.customerModel.name,
         style: HEADER_TEXT_STYLE,
       ),
     );
@@ -146,7 +190,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       context: context,
       builder: (context) {
         return SelectGenderWidget(
-            selectedIndex: Helper.convertGenderToIndex(widget.gender));
+          selectedIndex: Helper.convertGenderToIndex(
+              Helper.convertStringToGender(_genderStr)),
+        );
       },
       backgroundColor: CustomColors.BACKGROUND_COLOR,
     );
@@ -155,8 +201,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       bool isChange = result[1] ?? false;
       if (isChange) {
         setState(() {
-          widget.gender = Helper.convertIndexToGender(value);
-          _genderStr = Helper.convertGenderToString(widget.gender);
+          _genderStr =
+              Helper.convertGenderToString(Helper.convertIndexToGender(value));
         });
       }
     }
@@ -253,10 +299,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         width: 184,
         height: 184,
         color: Colors.teal,
-        child: widget.picUrl.isEmpty
+        child: widget.customerModel.picUrl.isEmpty
             ? Text('AVATAR')
             : CustomNetworkImage(
-                imgUrl: widget.picUrl,
+                imgUrl: widget.customerModel.picUrl,
                 width: 184,
                 height: 184,
               ),
@@ -320,7 +366,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       actions: [
         NeumorphicButton(
           style: neumorphicStyleUpCircle,
-          onPressed: () {},
+          onPressed: () async {
+            await Helper.navigationDelay();
+            CustomerModel customerModel = widget.customerModel;
+            customerModel.gender = Helper.convertStringToGender(_genderStr);
+            customerModel.name =
+                _firstNameController.text + ' ' + _familyNameController.text;
+            customerModel.birthDay = Helper.convertDateToStringVer2(
+                Helper.convertStringToDateTime(_birthdayStr));
+            if (token != null && token.isNotEmpty && customerModel != null) {
+              _customerBloc.emitEvent(
+                CustomerEventUpdate(token: token, customerModel: customerModel),
+              );
+            }
+          },
           padding: EdgeInsets.all(0),
           child: Icon(
             Icons.done,

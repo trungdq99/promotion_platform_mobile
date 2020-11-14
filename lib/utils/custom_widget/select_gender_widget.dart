@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:promotion_platform/utils/helper.dart';
 
 import '../constant.dart';
 import '../custom_colors.dart';
@@ -23,75 +24,62 @@ class _SelectGenderWidgetState extends State<SelectGenderWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text(
-              'Giới tính',
-              style: BOLD_TITLE_TEXT_STYLE,
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                'Giới tính',
+                style: BOLD_TITLE_TEXT_STYLE,
+              ),
             ),
-          ),
-          Neumorphic(
-            style: neumorphicStyleDownDefault,
-            padding: EdgeInsets.all(32),
-            child: Column(
-              children: [
-                _buildSelectItem(
-                  title: 'Nam',
-                  index: 1,
-                ),
-                _buildSelectItem(
-                  title: 'Nữ',
-                  index: 2,
-                ),
-              ],
+            Neumorphic(
+              style: neumorphicStyleDownDefault,
+              padding: EdgeInsets.all(32),
+              child: Column(
+                children: [
+                  _buildSelectItem(
+                    title: 'Nam',
+                    index: 1,
+                  ),
+                  _buildSelectItem(
+                    title: 'Nữ',
+                    index: 2,
+                  ),
+                ],
+              ),
             ),
-          ),
-          // Divider(
-          //   height: 4,
-          //   thickness: 2,
-          // ),
-          // _buildSelectItem(
-          //   title: 'Nam',
-          //   index: 0,
-          // ),
-          // _buildSelectItem(
-          //   title: 'Nữ',
-          //   index: 1,
-          // ),
-          // Divider(
-          //   height: 4,
-          //   thickness: 2,
-          // ),
-          groupValue != null && groupValue > 0
-              ? NeumorphicButton(
-                  style: neumorphicStyleUpWithHighRadius,
-                  onPressed: () {
-                    Navigator.pop(context, [
-                      groupValue,
-                      true,
-                    ]);
-                  },
-                  margin: EdgeInsets.all(16),
-                  padding: EdgeInsets.all(16),
-                  child: Text(
-                    'Chọn',
-                    style: DEFAULT_TEXT_STYLE,
+            groupValue != null && groupValue > 0
+                ? NeumorphicButton(
+                    style: neumorphicStyleUpWithHighRadius,
+                    onPressed: () async {
+                      await Helper.navigationDelay();
+                      Navigator.pop(context, [
+                        groupValue,
+                        true,
+                      ]);
+                    },
+                    margin: EdgeInsets.all(16),
+                    padding: EdgeInsets.all(16),
+                    child: Text(
+                      'Chọn',
+                      style: DEFAULT_TEXT_STYLE,
+                    ),
+                  )
+                : Neumorphic(
+                    style: neumorphicStyleDownWithHighRadius,
+                    margin: EdgeInsets.all(16),
+                    padding: EdgeInsets.all(16),
+                    child: Text(
+                      'Chọn',
+                      style: DEFAULT_TEXT_STYLE,
+                    ),
                   ),
-                )
-              : Neumorphic(
-                  style: neumorphicStyleDownWithHighRadius,
-                  margin: EdgeInsets.all(16),
-                  padding: EdgeInsets.all(16),
-                  child: Text(
-                    'Chọn',
-                    style: DEFAULT_TEXT_STYLE,
-                  ),
-                ),
-        ],
+          ],
+        ),
       ),
     );
   }

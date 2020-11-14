@@ -6,13 +6,13 @@ class AuthenticationState extends BlocState {
   final bool isAuthenticating;
   final String token;
   final bool isError;
-  final String errorMessage;
+  final String message;
   AuthenticationState({
     this.isAuthenticated: false,
     this.isAuthenticating: false,
     this.token: '',
     this.isError: false,
-    this.errorMessage: '',
+    this.message: '',
   });
   factory AuthenticationState.authenticated({@required String token}) {
     return AuthenticationState(
@@ -36,7 +36,7 @@ class AuthenticationState extends BlocState {
   factory AuthenticationState.error({@required String errMsg}) {
     return AuthenticationState(
       isError: true,
-      errorMessage: errMsg,
+      message: errMsg,
     );
   }
 }
