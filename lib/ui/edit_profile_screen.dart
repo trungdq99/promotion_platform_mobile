@@ -368,6 +368,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           style: neumorphicStyleUpCircle,
           onPressed: () async {
             await Helper.navigationDelay();
+            FocusScope.of(context).unfocus();
             CustomerModel customerModel = widget.customerModel;
             customerModel.gender = Helper.convertStringToGender(_genderStr);
             customerModel.name =
