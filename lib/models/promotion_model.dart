@@ -20,7 +20,7 @@ class PromotionModel {
   String description;
   String imgUrl;
   String brandName;
-
+  String categoryName;
   PromotionModel({
     this.id,
     this.promotionId: 0,

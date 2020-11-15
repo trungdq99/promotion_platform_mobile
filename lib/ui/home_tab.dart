@@ -178,7 +178,7 @@ class _HomeTabState extends State<HomeTab> {
               children.add(
                 _buildBrand(
                   brandTitle: element.brandName ?? '',
-                  promotions: 10,
+                  promotions: element.numberOfPromotion,
                   brandId: element.id ?? 0,
                   imageUrl: element.imgUrl ?? '',
                 ),

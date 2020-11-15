@@ -18,6 +18,7 @@ class BrandModel {
   String brandNameSms;
   String brandUrl;
   String imgUrl;
+  int numberOfPromotion;
 
   BrandModel({
     this.id,
@@ -38,6 +39,7 @@ class BrandModel {
     this.brandNameSms: '',
     this.brandUrl: '',
     this.imgUrl: '',
+    this.numberOfPromotion: 0,
   });
 
   BrandModel.fromMap(Map<String, dynamic> map) {
@@ -48,5 +50,6 @@ class BrandModel {
     this.phoneNumber = map['phoneNumber'] ?? '';
     this.brandUrl = map['brandUrl'] ?? '';
     this.imgUrl = map['imgUrl'] ?? '';
+    this.numberOfPromotion = map['numberOfPromotion'] ?? 0;
   }
 }

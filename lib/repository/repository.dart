@@ -39,6 +39,13 @@ class Repository {
         ),
       );
 
+  Future fetchCategories() => _apiProvider.fetchData(
+        CATEGORIES_API,
+        RequestMethod.GET,
+        UN_AUTHORIZE_HEADER,
+        '',
+      );
+
   Future fetchTopPromotions() => _apiProvider.fetchData(
         TOP_PROMOTIONS_API,
         RequestMethod.GET,

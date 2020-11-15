@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:promotion_platform/bloc/authentication/authentication_bloc.dart';
 import 'package:promotion_platform/bloc/authentication/authentication_event.dart';
 import 'package:promotion_platform/bloc/authentication/authentication_state.dart';
+import 'package:promotion_platform/bloc/categories/categories_bloc.dart';
+import 'package:promotion_platform/bloc/categories/categories_event.dart';
 import 'package:promotion_platform/bloc/top_brands/top_brands_bloc.dart';
 import 'package:promotion_platform/bloc/top_brands/top_brands_event.dart';
 import 'package:promotion_platform/bloc/customer/customer_bloc.dart';
@@ -32,6 +34,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
     final _customerBloc = BlocProvider.of<CustomerBloc>(context);
     final _topBrandsBloc = BlocProvider.of<TopBrandsBloc>(context);
     final _topPromotionsBloc = BlocProvider.of<TopPromotionsBloc>(context);
+    final _categoriesBloc = BlocProvider.of<CategoriesBloc>(context);
     return BlocEventStateBuilder<AuthenticationState>(
       builder: (BuildContext context, AuthenticationState state) {
         if (state.isAuthenticated) {
@@ -39,6 +42,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
             _customerBloc.emitEvent(CustomerEventLoad(token: state.token));
             _topBrandsBloc.emitEvent(TopBrandsEventLoad());
             _topPromotionsBloc.emitEvent(TopPromotionsEventLoad());
+            _categoriesBloc.emitEvent(CategoriesEventLoad());
           });
           return HomeScreen();
         } else if (state.isAuthenticating) {

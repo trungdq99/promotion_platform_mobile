@@ -2,12 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:promotion_platform/bloc/authentication/authentication_bloc.dart';
 import 'package:promotion_platform/bloc/authentication/authentication_state.dart';
+import 'package:promotion_platform/bloc/categories/categories_bloc.dart';
+import 'package:promotion_platform/bloc/categories/categories_state.dart';
 import 'package:promotion_platform/bloc/customer/customer_bloc.dart';
 import 'package:promotion_platform/bloc/customer/customer_event.dart';
+import 'package:promotion_platform/bloc/customer/customer_state.dart';
+import 'package:promotion_platform/bloc/top_brands/top_brands_bloc.dart';
+import 'package:promotion_platform/bloc/top_brands/top_brands_state.dart';
+import 'package:promotion_platform/bloc/top_promotions/top_promotions_bloc.dart';
+import 'package:promotion_platform/bloc/top_promotions/top_promotions_state.dart';
 import 'package:promotion_platform/ui/qrcode_scan_tab.dart';
 import 'package:promotion_platform/utils/custom_colors.dart';
 import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
+import 'package:promotion_platform/utils/custom_widget/full_screen_progressing.dart';
 import './promotion_tab.dart';
 import './notification_tab.dart';
 import './profile_tab.dart';
@@ -37,7 +45,37 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildHomeScreen();
+    final _customerBloc = BlocProvider.of<CustomerBloc>(context);
+    final _topBrandsBloc = BlocProvider.of<TopBrandsBloc>(context);
+    final _topPromotionsBloc = BlocProvider.of<TopPromotionsBloc>(context);
+    final _categoriesBloc = BlocProvider.of<CategoriesBloc>(context);
+    return BlocEventStateBuilder<CustomerState>(
+      builder: (context, customerState) =>
+          BlocEventStateBuilder<TopBrandsState>(
+        builder: (context, topBrandsState) =>
+            BlocEventStateBuilder<TopPromotionsState>(
+          builder: (context, topPromotionsState) =>
+              BlocEventStateBuilder<CategoriesState>(
+            builder: (context, categoriesState) {
+              if (customerState.isLoading &&
+                  topBrandsState.isLoading &&
+                  topPromotionsState.isLoading &&
+                  categoriesState.isLoading) {
+                return Scaffold(
+                  body: FullScreenProgressing(),
+                  backgroundColor: CustomColors.BACKGROUND_COLOR,
+                );
+              }
+              return _buildHomeScreen();
+            },
+            bloc: _categoriesBloc,
+          ),
+          bloc: _topPromotionsBloc,
+        ),
+        bloc: _topBrandsBloc,
+      ),
+      bloc: _customerBloc,
+    );
   }
 
   Widget _buildHomeScreen() {
