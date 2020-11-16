@@ -112,18 +112,6 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  Function pushPromotionDetailScreen() => () async {
-        await Helper.navigationDelay();
-        Navigator.push(
-          widget.homeContext,
-          CupertinoPageRoute(
-            builder: (context) => PromotionDetailScreen(),
-          ),
-        );
-        // Navigator.of(widget.homeContext).push(MaterialPageRoute(
-        //   builder: (context) => PromotionDetailScreen(),
-        // ));
-      };
   Widget _buildListPromotion() {
     return BlocEventStateBuilder<TopPromotionsState>(
       builder: (context, state) {
@@ -135,9 +123,20 @@ class _HomeTabState extends State<HomeTab> {
             children.add(PromotionWidget(
               id: element.id,
               promotionName: element.promotionName,
-              brandName: element.brandName,
+              brandName: element.brandModel.brandName,
               imgUrl: element.imgUrl,
               price: element.price,
+              function: () async {
+                await Helper.navigationDelay();
+                Navigator.push(
+                  widget.homeContext,
+                  CupertinoPageRoute(
+                    builder: (context) => PromotionDetailScreen(
+                      id: element.id,
+                    ),
+                  ),
+                );
+              },
             ));
           });
         }
@@ -295,14 +294,14 @@ class _HomeTabState extends State<HomeTab> {
     return NeumorphicButton(
       onPressed: () async {
         await Helper.navigationDelay();
-        // Navigator.push(
-        //   widget.homeContext,
-        //   CupertinoPageRoute(
-        //     builder: (context) => BrandDetailScreen(
-        //       brandId: brandId,
-        //     ),
-        //   ),
-        // );
+        Navigator.push(
+          widget.homeContext,
+          CupertinoPageRoute(
+            builder: (context) => BrandDetailScreen(
+              brandId: brandId,
+            ),
+          ),
+        );
         // _brandDetailScreenBloc
         //     .emitEvent(BrandDetailScreenEventOpen(brandId: brandId));
       },

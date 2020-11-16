@@ -1,5 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:promotion_platform/bloc/authentication/authentication_bloc.dart';
+import 'package:promotion_platform/bloc/customer/customer_bloc.dart';
+import 'package:promotion_platform/bloc/customer/customer_event.dart';
+import 'package:promotion_platform/bloc/promotion_detail/promotion_detail_bloc.dart';
+import 'package:promotion_platform/bloc/promotion_detail/promotion_detail_event.dart';
+import 'package:promotion_platform/bloc/promotion_detail/promotion_detail_state.dart';
+import 'package:promotion_platform/bloc/promotion_transaction/promotion_transaction_bloc.dart';
+import 'package:promotion_platform/bloc/promotion_transaction/promotion_transaction_event.dart';
+import 'package:promotion_platform/bloc/promotion_transaction/promotion_transaction_state.dart';
+import 'package:promotion_platform/bloc/vouchers/vouchers_bloc.dart';
+import 'package:promotion_platform/bloc/vouchers/vouchers_event.dart';
+import 'package:promotion_platform/models/promotion_model.dart';
+import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
+import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
+import 'package:promotion_platform/utils/custom_colors.dart';
+import 'package:promotion_platform/utils/custom_widget/custom_alert.dart';
+import 'package:promotion_platform/utils/custom_widget/custom_network_image.dart';
+import 'package:promotion_platform/utils/custom_widget/full_screen_progressing.dart';
+import 'package:promotion_platform/utils/helper.dart';
 import '../utils/constant.dart';
 import '../utils/custom_widget/point.dart';
 import '../utils/custom_widget/brand_contact.dart';
@@ -7,90 +26,146 @@ import '../utils/custom_widget/show_detail.dart';
 import '../utils/custom_widget/some_brand_info.dart';
 
 class PromotionDetailScreen extends StatefulWidget {
+  final int id;
+
+  PromotionDetailScreen({@required this.id});
   @override
   _PromotionDetailScreenState createState() => _PromotionDetailScreenState();
 }
 
 class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
-  ScrollController _scrollController = ScrollController();
+  ScrollController _scrollController;
   double deviceWidth;
-
+  PromotionDetailBloc _promotionDetailBloc;
+  PromotionModel _promotionModel;
+  PromotionTransactionBloc _promotionTransactionBloc;
   @override
   void initState() {
     super.initState();
+    _promotionDetailBloc = PromotionDetailBloc();
+    _promotionDetailBloc.emitEvent(PromotionDetailEventLoad(id: widget.id));
+    _scrollController = ScrollController();
+    _promotionTransactionBloc = PromotionTransactionBloc();
   }
 
   @override
   Widget build(BuildContext context) {
     deviceWidth = MediaQuery.of(context).size.width;
+    final _authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
+    final _customerBloc = BlocProvider.of<CustomerBloc>(context);
+    final _vouchersBloc = BlocProvider.of<VouchersBloc>(context);
+    String token;
+    if (_authenticationBloc.lastState.isAuthenticated) {
+      token = _authenticationBloc.lastState.token;
+    }
     return Scaffold(
-      body: Stack(
-        children: [
-          CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-              _buildAppBar(context),
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  _buildTitle(
-                    title: 'Voucher 500,000 VNĐ',
-                    brand: 'Uni Delivery',
-                    point: 1000,
+      body: BlocEventStateBuilder<PromotionDetailState>(
+        bloc: _promotionDetailBloc,
+        builder: (context, promotionDetailState) {
+          if (promotionDetailState.isLoaded) {
+            _promotionModel = promotionDetailState.promotionModel;
+          }
+          return BlocEventStateBuilder<PromotionTransactionState>(
+            builder: (context, promotionTransactionState) {
+              if (token != null &&
+                  token.isNotEmpty &&
+                  promotionTransactionState.isTransacted) {
+                _customerBloc.emitEvent(CustomerEventLoadBalance(token: token));
+                _vouchersBloc.emitEvent(VouchersEventLoad(token: token));
+              }
+              return Stack(
+                children: [
+                  CustomScrollView(
+                    controller: _scrollController,
+                    slivers: [
+                      _buildAppBar(),
+                      _buildBody(),
+                    ],
                   ),
-                  Divider(
-                    color: Colors.black,
-                    height: 0,
+                  promotionDetailState.isLoading
+                      ? FullScreenProgressing()
+                      : SizedBox(),
+                  promotionTransactionState.isTransacting
+                      ? FullScreenProgressing()
+                      : SizedBox(),
+                  promotionTransactionState.isError
+                      ? CustomAlert(errMsg: promotionTransactionState.message)
+                      : SizedBox(),
+                  promotionTransactionState.isTransacted
+                      ? CustomAlert(errMsg: promotionTransactionState.message)
+                      : SizedBox(),
+                  Positioned(
+                    bottom: 0,
+                    child: NeumorphicButton(
+                      style: neumorphicStyleUpWithHighRadius,
+                      onPressed: () async {
+                        await Helper.navigationDelay();
+                        if (token != null &&
+                            token.isNotEmpty &&
+                            _promotionModel != null) {
+                          _promotionTransactionBloc
+                              .emitEvent(PromotionTransactionEventTransact(
+                            token: token,
+                            voucherGroupId: _promotionModel.voucherGroupId,
+                          ));
+                        }
+                      },
+                      margin: EdgeInsets.all(32),
+                      padding: EdgeInsets.all(0),
+                      child: Container(
+                        width: deviceWidth - 64,
+                        padding: EdgeInsets.all(16),
+                        alignment: Alignment.center,
+                        // color: CustomColors.GREEN,
+                        child: Text(
+                          'Đổi quà',
+                          style: DEFAULT_TEXT_STYLE,
+                        ),
+                      ),
+                    ),
                   ),
-                  ShowDetail(
-                    detail:
-                        '- Voucher mệnh giá 500,000 VNĐ không giới hạn sản phẩm.\n'
-                        'Lưu ý: Hạn sử dụng mã ưu đãi là 1 tuần kể từ ngày đổi.\n'
-                        'Điều khoản & áp dụng:\n'
-                        '* Áp dụng:\n'
-                        '- Quý khách có thể sử dụng nhiều mã vouchẻ trên cùng 1 hoá đơn.\n'
-                        '- Chỉ áp dụng khi khách hàng đưa mã voucher trên app Uni Bean cho nhân viên tại cửa hàng trước khi thanh toán.\n'
-                        '- Được áp dụng đồng thời với các chương trình khuyến mãi khác.\n'
-                        '* Không áp dụng:\n'
-                        '- Không quy đổi thành tiền mặt, không hoàn trả tiền thừa.\n'
-                        '- Khách hàng có thể được yêu cầu trả thêm tiền nếu sử dụng quá gía trị của voucher.',
-                  ),
-                  BrandContact(
-                    email: 'unidelivery@gmail.com',
-                    numOfStore: 7,
-                    phone: '19001000',
-                  ),
-                  SomeBrandInfo(
-                    brandTitle: 'Uni Delivery',
-                    info: 'Hệ thống giao hàng cho sinh viên',
-                  ),
-                  SizedBox(
-                    height: 100,
-                  ),
-                ]),
-              ),
-            ],
-          ),
-          Positioned(
-            bottom: 0,
-            child: NeumorphicButton(
-              style: neumorphicStyleDownWithHighRadius,
-              onPressed: () {},
-              margin: EdgeInsets.all(32),
-              padding: EdgeInsets.all(0),
-              child: Container(
-                width: deviceWidth - 64,
-                padding: EdgeInsets.all(16),
-                alignment: Alignment.center,
-                // color: CustomColors.GREEN,
-                child: Text(
-                  'Đổi quà',
-                  style: DEFAULT_TEXT_STYLE,
-                ),
-              ),
-            ),
-          ),
-        ],
+                ],
+              );
+            },
+            bloc: _promotionTransactionBloc,
+          );
+        },
       ),
+    );
+  }
+
+  Widget _buildBody() {
+    return SliverList(
+      delegate: SliverChildListDelegate([
+        _buildTitle(
+          title: _promotionModel != null ? _promotionModel.promotionName : '',
+          brand: _promotionModel != null
+              ? _promotionModel.brandModel.brandName
+              : '',
+          point: _promotionModel != null ? _promotionModel.price : 0,
+          brandPicUrl:
+              _promotionModel != null ? _promotionModel.brandModel.imgUrl : '',
+        ),
+        ShowDetail(
+          detail: _promotionModel != null ? _promotionModel.description : '',
+        ),
+        // BrandContact(
+        //   email: 'unidelivery@gmail.com',
+        //   numOfStore: 7,
+        //   phone: '19001000',
+        // ),
+        _promotionModel != null
+            ? SomeBrandInfo(
+                brandTitle: _promotionModel.brandModel.brandName,
+                info: _promotionModel.brandModel.description,
+                brandId: _promotionModel.brandModel.id,
+                imgUrl: _promotionModel.brandModel.imgUrl,
+              )
+            : SizedBox(),
+        SizedBox(
+          height: 100,
+        ),
+      ]),
     );
   }
 
@@ -98,17 +173,28 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
     String title: '',
     String brand: '',
     int point: 0,
+    String brandPicUrl: '',
   }) {
-    return Padding(
-      padding: EdgeInsets.all(16.0),
+    return Neumorphic(
+      style: neumorphicStyleUpDefault,
+      padding: EdgeInsets.all(16),
       child: Row(
         children: [
           Expanded(
             flex: 1,
-            child: Container(
-              color: Colors.teal,
-              width: 50,
-              height: 50,
+            child: Neumorphic(
+              style: neumorphicStyleUpCircle,
+              child: brandPicUrl.isNotEmpty
+                  ? CustomNetworkImage(
+                      imgUrl: brandPicUrl,
+                      width: 80,
+                      height: 80,
+                    )
+                  : Container(
+                      color: CustomColors.BACKGROUND_COLOR,
+                      width: 80,
+                      height: 80,
+                    ),
             ),
           ),
           Expanded(
@@ -116,22 +202,23 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: BOLD_TITLE_TEXT_STYLE,
-                  overflow: TextOverflow.ellipsis,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    title,
+                    style: BOLD_TITLE_TEXT_STYLE,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      brand,
-                      style: DEFAULT_TEXT_STYLE,
-                    ),
-                    Point(
-                      point: point,
-                    ),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    brand,
+                    style: DEFAULT_TEXT_STYLE,
+                  ),
+                ),
+                Point(
+                  point: point,
                 ),
               ],
             ),
@@ -141,48 +228,52 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  Widget _buildAppBar() {
     return SliverAppBar(
       backgroundColor: Colors.white,
-      flexibleSpace: Container(
-        color: Colors.teal,
-      ),
-      expandedHeight: 150,
-      pinned: true,
-      leading: Padding(
-        padding: EdgeInsets.only(left: 16),
-        child: InkWell(
-          onTap: () {
-            //giftDetailScreenBloc.emitEvent(PromotionDetailScreenEventClose());
-            // Navigator.of(context).pop();
-            Navigator.pop(context);
-          },
-          child: CircleAvatar(
-            radius: 20,
-            backgroundColor: Colors.black12,
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-      actions: [
-        Padding(
-          padding: EdgeInsets.only(right: 16),
-          child: InkWell(
-            onTap: () {},
-            child: CircleAvatar(
-              radius: 20,
-              backgroundColor: Colors.black12,
-              child: Icon(
-                Icons.share,
-                color: Colors.white,
+      flexibleSpace: Neumorphic(
+        style: neumorphicStyleDownDefault,
+        child: _promotionModel != null
+            ? CustomNetworkImage(
+                imgUrl: _promotionModel.imgUrl,
+                width: double.maxFinite,
+                height: 350,
+              )
+            : Container(
+                color: CustomColors.BACKGROUND_COLOR,
               ),
-            ),
-          ),
+      ),
+      expandedHeight: 250,
+      pinned: true,
+      leading: NeumorphicButton(
+        style: neumorphicStyleUpCircle,
+        onPressed: () async {
+          await Helper.navigationDelay();
+          Navigator.pop(context);
+        },
+        padding: EdgeInsets.all(16),
+        child: Icon(
+          Icons.close,
+          color: CustomColors.TEXT_COLOR,
+          size: BIG_FONT_SIZE,
         ),
-      ],
+      ),
+      // actions: [
+      //   NeumorphicButton(
+      //     style: neumorphicStyleUpCircle,
+      //     onPressed: () async {
+      //       await Helper.navigationDelay();
+      //       Navigator.pop(context);
+      //     },
+      //     padding: EdgeInsets.all(16),
+      //     margin: EdgeInsets.symmetric(horizontal: 32),
+      //     child: Icon(
+      //       Icons.close,
+      //       color: CustomColors.TEXT_COLOR,
+      //       size: BIG_FONT_SIZE,
+      //     ),
+      //   ),
+      // ],
     );
   }
 }

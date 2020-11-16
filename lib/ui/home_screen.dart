@@ -46,34 +46,21 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final _customerBloc = BlocProvider.of<CustomerBloc>(context);
-    final _topBrandsBloc = BlocProvider.of<TopBrandsBloc>(context);
-    final _topPromotionsBloc = BlocProvider.of<TopPromotionsBloc>(context);
-    final _categoriesBloc = BlocProvider.of<CategoriesBloc>(context);
     return BlocEventStateBuilder<CustomerState>(
-      builder: (context, customerState) =>
-          BlocEventStateBuilder<TopBrandsState>(
-        builder: (context, topBrandsState) =>
-            BlocEventStateBuilder<TopPromotionsState>(
-          builder: (context, topPromotionsState) =>
-              BlocEventStateBuilder<CategoriesState>(
-            builder: (context, categoriesState) {
-              if (customerState.isLoading &&
-                  topBrandsState.isLoading &&
-                  topPromotionsState.isLoading &&
-                  categoriesState.isLoading) {
-                return Scaffold(
-                  body: FullScreenProgressing(),
-                  backgroundColor: CustomColors.BACKGROUND_COLOR,
-                );
-              }
-              return _buildHomeScreen();
-            },
-            bloc: _categoriesBloc,
-          ),
-          bloc: _topPromotionsBloc,
-        ),
-        bloc: _topBrandsBloc,
-      ),
+      builder: (context, customerState) {
+        if (customerState.isLoading) {
+          return Scaffold(
+            body: FullScreenProgressing(),
+            backgroundColor: CustomColors.BACKGROUND_COLOR,
+          );
+        } else if (customerState.isLoaded) {
+          return _buildHomeScreen();
+        } else {
+          return Container(
+            color: CustomColors.BACKGROUND_COLOR,
+          );
+        }
+      },
       bloc: _customerBloc,
     );
   }

@@ -31,7 +31,7 @@ class _AdsWidgetState extends State<AdsWidget> {
           child: CarouselSlider(
             carouselController: _carouselController,
             options: CarouselOptions(
-              height: 100,
+              height: 150,
               aspectRatio: 16 / 9,
               viewportFraction: 1,
               initialPage: 0,
@@ -57,7 +57,7 @@ class _AdsWidgetState extends State<AdsWidget> {
                     imgUrl:
                         'https://www.tiendauroi.com/wp-content/uploads/2020/04/93515371_2962625523804435_5994003590329401344_o-750x750.jpg',
                     width: double.maxFinite,
-                    height: 100,
+                    height: 150,
                   );
                 },
               );

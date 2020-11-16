@@ -13,6 +13,8 @@ import 'package:promotion_platform/bloc/customer/customer_bloc.dart';
 import 'package:promotion_platform/bloc/customer/customer_event.dart';
 import 'package:promotion_platform/bloc/top_promotions/top_promotions_bloc.dart';
 import 'package:promotion_platform/bloc/top_promotions/top_promotions_event.dart';
+import 'package:promotion_platform/bloc/vouchers/vouchers_bloc.dart';
+import 'package:promotion_platform/bloc/vouchers/vouchers_event.dart';
 import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
 import 'package:promotion_platform/utils/custom_colors.dart';
@@ -32,17 +34,13 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
   Widget build(BuildContext context) {
     final _authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
     final _customerBloc = BlocProvider.of<CustomerBloc>(context);
-    final _topBrandsBloc = BlocProvider.of<TopBrandsBloc>(context);
-    final _topPromotionsBloc = BlocProvider.of<TopPromotionsBloc>(context);
-    final _categoriesBloc = BlocProvider.of<CategoriesBloc>(context);
+    final _vouchersBloc = BlocProvider.of<VouchersBloc>(context);
     return BlocEventStateBuilder<AuthenticationState>(
       builder: (BuildContext context, AuthenticationState state) {
         if (state.isAuthenticated) {
           WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
             _customerBloc.emitEvent(CustomerEventLoad(token: state.token));
-            _topBrandsBloc.emitEvent(TopBrandsEventLoad());
-            _topPromotionsBloc.emitEvent(TopPromotionsEventLoad());
-            _categoriesBloc.emitEvent(CategoriesEventLoad());
+            _vouchersBloc.emitEvent(VouchersEventLoad(token: state.token));
           });
           return HomeScreen();
         } else if (state.isAuthenticating) {

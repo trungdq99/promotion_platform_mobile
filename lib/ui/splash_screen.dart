@@ -7,6 +7,14 @@ import 'package:promotion_platform/bloc/application_initialization/application_i
 import 'package:promotion_platform/bloc/authentication/authentication_bloc.dart';
 import 'package:promotion_platform/bloc/authentication/authentication_event.dart';
 import 'package:promotion_platform/bloc/authentication/authentication_state.dart';
+import 'package:promotion_platform/bloc/categories/categories_bloc.dart';
+import 'package:promotion_platform/bloc/categories/categories_event.dart';
+import 'package:promotion_platform/bloc/promotions/promotions_bloc.dart';
+import 'package:promotion_platform/bloc/promotions/promotions_event.dart';
+import 'package:promotion_platform/bloc/top_brands/top_brands_bloc.dart';
+import 'package:promotion_platform/bloc/top_brands/top_brands_event.dart';
+import 'package:promotion_platform/bloc/top_promotions/top_promotions_bloc.dart';
+import 'package:promotion_platform/bloc/top_promotions/top_promotions_event.dart';
 import 'package:promotion_platform/ui/authentication_screen.dart';
 import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
@@ -20,8 +28,6 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   ApplicationInitializationBloc _applicationInitializationBloc;
-  AuthenticationBloc _authenticationBloc;
-
   @override
   void initState() {
     _applicationInitializationBloc = ApplicationInitializationBloc();
@@ -34,8 +40,17 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
+    final _authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
+    final _topBrandsBloc = BlocProvider.of<TopBrandsBloc>(context);
+    final _topPromotionsBloc = BlocProvider.of<TopPromotionsBloc>(context);
+    final _categoriesBloc = BlocProvider.of<CategoriesBloc>(context);
+    final _promotionsBloc = BlocProvider.of<PromotionsBloc>(context);
     _authenticationBloc.emitEvent(AuthenticationEventLoadLogin());
+    _topBrandsBloc.emitEvent(TopBrandsEventLoad());
+    _topPromotionsBloc.emitEvent(TopPromotionsEventLoad());
+    _categoriesBloc.emitEvent(CategoriesEventLoad());
+    _promotionsBloc.emitEvent(
+        PromotionsEventLoad(categoryId: 0, filterId: 0, pageId: 0, search: ''));
     return Scaffold(
       body: BlocEventStateBuilder<ApplicationInitializationState>(
         bloc: _applicationInitializationBloc,

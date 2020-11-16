@@ -14,7 +14,11 @@ import 'package:promotion_platform/utils/helper.dart';
 
 class CustomerAccountsScreen extends StatefulWidget {
   final int membershipCardId;
-  CustomerAccountsScreen({@required this.membershipCardId});
+  final String token;
+  CustomerAccountsScreen({
+    @required this.membershipCardId,
+    @required this.token,
+  });
   @override
   _CustomerAccountsScreenState createState() => _CustomerAccountsScreenState();
 }
@@ -25,8 +29,10 @@ class _CustomerAccountsScreenState extends State<CustomerAccountsScreen> {
   @override
   void initState() {
     _customerAccountsBloc = CustomerAccountsBloc();
-    _customerAccountsBloc.emitEvent(
-        CustomerAccountsEventLoad(membershipId: widget.membershipCardId));
+    _customerAccountsBloc.emitEvent(CustomerAccountsEventLoad(
+      membershipId: widget.membershipCardId,
+      token: widget.token,
+    ));
     super.initState();
   }
 
@@ -140,15 +146,16 @@ class _CustomerAccountsScreenState extends State<CustomerAccountsScreen> {
                   hasBorder: false,
                 ),
               ),
-              NeumorphicButton(
-                style: neumorphicStyleUpWithSmallRadius,
-                onPressed: () {},
-                child: Text(
-                  'Lịch sử',
-                  style: DEFAULT_TEXT_STYLE,
-                  textAlign: TextAlign.center,
-                ),
-              ),
+              SizedBox(),
+              // NeumorphicButton(
+              //   style: neumorphicStyleUpWithSmallRadius,
+              //   onPressed: () {},
+              //   child: Text(
+              //     'Lịch sử',
+              //     style: DEFAULT_TEXT_STYLE,
+              //     textAlign: TextAlign.center,
+              //   ),
+              // ),
             ],
           ),
         ],

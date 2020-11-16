@@ -19,16 +19,22 @@ import 'custom_widget/icon/icon_user_selected.dart';
 
 const String APP_VERSION = '1.0.0';
 // API constant
-const String BASE_URL = 'https://loyaltyapiws.azurewebsites.net';
+const String BASE_URL = 'https://loyaltycicd.azurewebsites.net';
 const String LOGIN_API = 'api/v1/auth/google';
 const String CUSTOMER_API = 'api/v1/customer-info';
+const String BALANCE_API = 'api/v1/customer-info/balance';
 const String CATEGORIES_API = 'api/v1/category';
 const String TOP_BRANDS_API = 'api/v1/brands/top';
+const String BRANDS_API = 'api/v1/brands';
 const String TOP_PROMOTIONS_API = 'api/v1/promotion-detail/top';
-const String PROMOTIONS_API = '';
-const String TRANSACTION_API = 'api/v1/transaction';
+const String PROMOTIONS_API = 'api/v1/promotion-detail';
+const String PROMOTION_DETAIL_API = 'api/v1/promotion-detail/details';
 const String MEMBERSHIPS_API = 'api/v1/memberships';
 const String CUSTOMER_ACCOUNTS_API = 'api/v1/customerAccount/membershipId';
+const String PROMOTION_TRANSACTION_API = 'api/v1/voucher-group/transaction';
+const String POINT_COLLECTION_API = 'api/v1/transaction/point-collection';
+const String VOUCHERS_API = 'api/v1/voucher-detail';
+const String VOUCHER_PREPARATION = 'api/v1/voucher-detail/preparation';
 
 // List Bottom Navigation Bar Items
 List<BottomNavigationBarItem> bottomNavigationBarItems = [
@@ -304,3 +310,17 @@ final NeumorphicStyle neumorphicStyleDownCircleForNum = NeumorphicStyle(
 );
 
 const int TIME_DELAY = 100;
+
+const List<String> CATEGORIES = [
+  'Tất cả',
+  'Đồ ăn',
+  'Thời trang',
+  'Đồ uống',
+  'Dịch vụ',
+  'Giải trí',
+];
+
+const List<String> FILTER = [
+  'Mới nhất',
+  'Cũ nhất',
+];

@@ -26,3 +26,9 @@ class CustomerEventUpdate extends CustomerEvent {
           customerModel: customerModel,
         );
 }
+
+class CustomerEventLoadBalance extends CustomerEvent {
+  CustomerEventLoadBalance({
+    @required String token,
+  }) : super(token: token);
+}

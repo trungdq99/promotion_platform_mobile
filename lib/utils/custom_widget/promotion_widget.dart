@@ -11,6 +11,7 @@ class PromotionWidget extends StatefulWidget {
     @required this.price,
     @required this.id,
     @required this.imgUrl,
+    this.function,
   });
 
   final String brandName;
@@ -18,7 +19,7 @@ class PromotionWidget extends StatefulWidget {
   final int price;
   final int id;
   final String imgUrl;
-
+  final Function function;
   @override
   _PromotionWidgetState createState() => _PromotionWidgetState();
 }
@@ -27,7 +28,7 @@ class _PromotionWidgetState extends State<PromotionWidget> {
   @override
   Widget build(BuildContext context) {
     return NeumorphicButton(
-      onPressed: () {},
+      onPressed: widget.function,
       margin: EdgeInsets.all(16),
       padding: EdgeInsets.all(0),
       style: neumorphicStyleUpWithSmallRadius,

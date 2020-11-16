@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:promotion_platform/repository/repository.dart';
@@ -52,6 +53,7 @@ class AuthenticationBloc
         yield AuthenticationState.notAuthenticated();
       } else {
         print('Access token : $token');
+        _firebaseMessaging.subscribeToTopic('voucher');
         yield AuthenticationState.authenticated(token: token);
       }
     } else if (event is AuthenticationEventSignOut) {
@@ -99,7 +101,7 @@ class AuthenticationBloc
 
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   Future<User> _handleGoogleSignIn() async {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     if (googleUser == null) {
@@ -122,6 +124,7 @@ class AuthenticationBloc
   Future _handleGoogleSignOut() async {
     await _googleSignIn.signOut();
     await _auth.signOut();
+    await _firebaseMessaging.unsubscribeFromTopic('voucher');
     Helper.removeData(ACCESS_TOKEN_KEY);
   }
 

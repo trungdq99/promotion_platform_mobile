@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:promotion_platform/bloc/brand_detail/brand_detail_bloc.dart';
 import 'package:promotion_platform/bloc/brand_detail/brand_detail_event.dart';
 import 'package:promotion_platform/bloc/brand_detail/brand_detail_state.dart';
 import 'package:promotion_platform/models/brand_model.dart';
 import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
 import 'package:promotion_platform/utils/constant.dart';
+import 'package:promotion_platform/utils/custom_colors.dart';
 import 'package:promotion_platform/utils/custom_widget/brand_contact.dart';
+import 'package:promotion_platform/utils/custom_widget/custom_network_image.dart';
 import 'package:promotion_platform/utils/custom_widget/full_screen_progressing.dart';
 import 'package:promotion_platform/utils/custom_widget/show_detail.dart';
 import 'package:promotion_platform/utils/custom_widget/promotion_widget.dart';
+import 'package:promotion_platform/utils/helper.dart';
 
 class BrandDetailScreen extends StatefulWidget {
   final int brandId;
@@ -56,15 +60,15 @@ class _BrandDetailScreenState extends State<BrandDetailScreen> {
           CustomScrollView(
             controller: _scrollController,
             slivers: [
-              _buildAppBar(),
+              _buildAppBar(
+                  brandModel: brandModel, isProgressing: isProgressing),
               SliverList(
                 delegate: SliverChildListDelegate([
                   brandModel != null
                       ? _buildTitle(
                           brandTitle: brandModel.brandName ?? '',
                           phone: brandModel.phoneNumber ?? '',
-                          numOfStore: 7,
-                          type: 'Ẩm thực, ăn uống các thứ')
+                        )
                       : Container(
                           child: Text('Empty brand!'),
                         ),
@@ -82,35 +86,6 @@ class _BrandDetailScreenState extends State<BrandDetailScreen> {
                   //       '- Giao hàng tận nơi với mức giá phải chăng.\n'
                   //       '- Thức ăn luôn nóng hổi sẵn sàng ăn ngay, hoặc bạn có thể hâm lại bằng lò vi sóng ở 7/11\n',
                   // ),
-                  SafeArea(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          PromotionWidget(
-                            promotionName: 'Voucher 500,000 VND',
-                            brandName: 'Uni Delivery',
-                            price: 1000,
-                          ),
-                          PromotionWidget(
-                            promotionName: 'Voucher 500,000 VND',
-                            brandName: 'Uni Delivery',
-                            price: 1000,
-                          ),
-                          PromotionWidget(
-                            promotionName: 'Voucher 500,000 VND',
-                            brandName: 'Uni Delivery',
-                            price: 1000,
-                          ),
-                          PromotionWidget(
-                            promotionName: 'Voucher 500,000 VND',
-                            brandName: 'Uni Delivery',
-                            price: 1000,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
                 ]),
               ),
             ],
@@ -121,46 +96,74 @@ class _BrandDetailScreenState extends State<BrandDetailScreen> {
     );
   }
 
-  Widget _buildAppBar() {
+  Widget _buildAppBar({
+    bool isProgressing,
+    @required BrandModel brandModel,
+  }) {
     return SliverAppBar(
       backgroundColor: Colors.white,
-      flexibleSpace: Container(
-        color: Colors.teal,
-      ),
-      expandedHeight: 150,
-      pinned: true,
-      leading: Padding(
-        padding: EdgeInsets.only(left: 16),
-        child: InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: CircleAvatar(
-            radius: 20,
-            backgroundColor: Colors.black12,
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-      actions: [
-        Padding(
-          padding: EdgeInsets.only(right: 16),
-          child: InkWell(
-            onTap: () {},
-            child: CircleAvatar(
-              radius: 20,
-              backgroundColor: Colors.black12,
-              child: Icon(
-                Icons.share,
-                color: Colors.white,
+      flexibleSpace: Neumorphic(
+        style: neumorphicStyleDownDefault,
+        child: brandModel != null
+            ? CustomNetworkImage(
+                imgUrl: brandModel.imgUrl,
+                width: double.maxFinite,
+                height: 350,
+              )
+            : Container(
+                color: CustomColors.BACKGROUND_COLOR,
               ),
-            ),
-          ),
+      ),
+      // flexibleSpace: Container(
+      //   color: Colors.teal,
+      // ),
+      expandedHeight: 250,
+      pinned: true,
+      leading: NeumorphicButton(
+        style: neumorphicStyleUpCircle,
+        onPressed: () async {
+          await Helper.navigationDelay();
+          Navigator.pop(context);
+        },
+        padding: EdgeInsets.all(16),
+        child: Icon(
+          Icons.close,
+          color: CustomColors.TEXT_COLOR,
+          size: BIG_FONT_SIZE,
         ),
-      ],
+      ),
+      // leading: Padding(
+      //   padding: EdgeInsets.only(left: 16),
+      //   child: InkWell(
+      //     onTap: () {
+      //       Navigator.pop(context);
+      //     },
+      //     child: CircleAvatar(
+      //       radius: 20,
+      //       backgroundColor: Colors.black12,
+      //       child: Icon(
+      //         Icons.arrow_back_ios,
+      //         color: Colors.white,
+      //       ),
+      //     ),
+      //   ),
+      // ),
+      // actions: [
+      //   Padding(
+      //     padding: EdgeInsets.only(right: 16),
+      //     child: InkWell(
+      //       onTap: () {},
+      //       child: CircleAvatar(
+      //         radius: 20,
+      //         backgroundColor: Colors.black12,
+      //         child: Icon(
+      //           Icons.share,
+      //           color: Colors.white,
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // ],
     );
   }
 
@@ -168,8 +171,6 @@ class _BrandDetailScreenState extends State<BrandDetailScreen> {
     String brandTitle: '',
     String email: '',
     String phone: '',
-    int numOfStore: 0,
-    String type: '',
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -187,15 +188,18 @@ class _BrandDetailScreenState extends State<BrandDetailScreen> {
               brandTitle,
               style: BOLD_TITLE_TEXT_STYLE,
             ),
-            leading: Container(
-              width: 50,
-              height: 50,
-              color: Colors.teal,
-            ),
+            // leading: Container(
+            //   width: 50,
+            //   height: 50,
+            //   color: Colors.teal,
+            // ),
             trailing: Icon(Icons.star),
             subtitle: Row(
               children: [
-                Icon(Icons.star),
+                Icon(
+                  Icons.star,
+                  color: CustomColors.YELLOW,
+                ),
                 SizedBox(
                   width: 16,
                 ),
@@ -206,12 +210,12 @@ class _BrandDetailScreenState extends State<BrandDetailScreen> {
               ],
             ),
           ),
-          BrandContact(
-            phone: phone,
-            numOfStore: numOfStore,
-            email: email,
-            type: type,
-          ),
+          // BrandContact(
+          //   phone: phone,
+          //   numOfStore: numOfStore,
+          //   email: email,
+          //   type: type,
+          // ),
         ],
       ),
     );

@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:promotion_platform/models/customer_model.dart';
 import '../utils/helper.dart';
 
@@ -39,6 +39,13 @@ class Repository {
         ),
       );
 
+  Future fetchBalance({@required String token}) => _apiProvider.fetchData(
+        BALANCE_API,
+        RequestMethod.GET,
+        Helper.getAuthorizeHeader(token),
+        '',
+      );
+
   Future fetchCategories() => _apiProvider.fetchData(
         CATEGORIES_API,
         RequestMethod.GET,
@@ -53,6 +60,26 @@ class Repository {
         '',
       );
 
+  Future fetchPromotions({
+    @required int categoryId,
+    @required int filterId,
+    @required int pageId,
+    @required String search,
+  }) =>
+      _apiProvider.fetchData(
+        '$PROMOTIONS_API/category/$categoryId/filter/$filterId/page/$pageId/search/$search',
+        RequestMethod.GET,
+        UN_AUTHORIZE_HEADER,
+        '',
+      );
+
+  Future fetchPromotionDetail({@required int id}) => _apiProvider.fetchData(
+        '$PROMOTION_DETAIL_API/$id',
+        RequestMethod.GET,
+        UN_AUTHORIZE_HEADER,
+        '',
+      );
+
   Future fetchTopBrands() => _apiProvider.fetchData(
         TOP_BRANDS_API,
         RequestMethod.GET,
@@ -61,22 +88,24 @@ class Repository {
       );
 
   Future fetchBrandDetail({@required int brandId}) => _apiProvider.fetchData(
-        '$TOP_BRANDS_API/$brandId',
+        '$BRANDS_API/$brandId',
         RequestMethod.GET,
         UN_AUTHORIZE_HEADER,
         '',
       );
 
-  Future makeTransactions({
+  Future collectPoint({
     @required String token,
-    @required String body,
-  }) =>
-      _apiProvider.fetchData(
-        TRANSACTION_API,
-        RequestMethod.POST,
-        Helper.getAuthorizeHeader(token),
-        body,
-      );
+    @required String qrCode,
+  }) {
+    Map<String, dynamic> body = {'qrCode': qrCode};
+    return _apiProvider.fetchData(
+      POINT_COLLECTION_API,
+      RequestMethod.POST,
+      Helper.getAuthorizeHeader(token),
+      Helper.encodeJson(body),
+    );
+  }
 
   Future fetchMemberships({
     @required String token,
@@ -89,12 +118,44 @@ class Repository {
       );
 
   Future fetchCustomerAccounts({
+    @required String token,
     @required int membershipId,
   }) =>
       _apiProvider.fetchData(
-        '$CUSTOMER_ACCOUNTS_API=$membershipId',
+        '$CUSTOMER_ACCOUNTS_API/$membershipId',
         RequestMethod.GET,
-        UN_AUTHORIZE_HEADER,
+        Helper.getAuthorizeHeader(token),
         '',
       );
+
+  Future promotionTransaction({
+    @required String token,
+    @required int voucherGroupId,
+  }) =>
+      _apiProvider.fetchData(
+        '$PROMOTION_TRANSACTION_API/$voucherGroupId',
+        RequestMethod.PUT,
+        Helper.getAuthorizeHeader(token),
+        '',
+      );
+
+  Future fetchVouchers({
+    @required String token,
+  }) =>
+      _apiProvider.fetchData(
+        VOUCHERS_API,
+        RequestMethod.GET,
+        Helper.getAuthorizeHeader(token),
+        '',
+      );
+
+  Future updateVoucher(
+      {@required int id, @required String token, @required bool isUsed}) {
+    Map<String, dynamic> body = {
+      'id': id,
+      'isUsed': isUsed,
+    };
+    return _apiProvider.fetchData(VOUCHER_PREPARATION, RequestMethod.PUT,
+        Helper.getAuthorizeHeader(token), Helper.encodeJson(body));
+  }
 }

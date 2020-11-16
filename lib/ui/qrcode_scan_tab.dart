@@ -6,11 +6,16 @@ import 'package:promotion_platform/bloc/authentication/authentication_bloc.dart'
 import 'package:promotion_platform/bloc/authentication/authentication_state.dart';
 import 'package:promotion_platform/bloc/customer/customer_bloc.dart';
 import 'package:promotion_platform/bloc/customer/customer_event.dart';
+import 'package:promotion_platform/bloc/point_collection/point_collection_bloc.dart';
+import 'package:promotion_platform/bloc/point_collection/point_collection_event.dart';
+import 'package:promotion_platform/bloc/point_collection/point_collection_state.dart';
 import 'package:promotion_platform/repository/repository.dart';
 import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
 import 'package:promotion_platform/utils/constant.dart';
 import 'package:promotion_platform/utils/custom_colors.dart';
+import 'package:promotion_platform/utils/custom_widget/custom_alert.dart';
+import 'package:promotion_platform/utils/custom_widget/full_screen_progressing.dart';
 
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -22,41 +27,47 @@ class QrCodeScanTab extends StatefulWidget {
 }
 
 class _QrCodeScanTabState extends State<QrCodeScanTab> {
-  // final TextEditingController _amountController = TextEditingController();
-  // final TextEditingController _storeIdController = TextEditingController();
-  // final TextEditingController _amountController = TextEditingController();
   String data = '';
-  QRViewController controller;
-  var qrText = '';
+  QRViewController _qrViewController;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+
   void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
+    this._qrViewController = controller;
     controller.scannedDataStream.listen((scanData) {
-      // setState(() {
-      //   qrText = scanData;
-      // });
+      setState(() {
+        isScanning = false;
+        _qrViewController.pauseCamera();
+      });
       if (_token.isNotEmpty) {
-        // Repository repo = Repository();
-        // await repo.makeTransactions(token: token, body: qrText);
-        _customerBloc.emitEvent(CustomerEventLoad(token: _token));
+        _pointCollectionBloc.emitEvent(PointCollectionEventCollect(
+          token: _token,
+          qrCode: scanData,
+        ));
       }
     });
   }
 
+  bool isScanning;
+
+  PointCollectionBloc _pointCollectionBloc;
   @override
   void initState() {
+    isScanning = true;
+    _pointCollectionBloc = PointCollectionBloc();
     super.initState();
   }
 
   @override
   void dispose() {
-    controller?.dispose();
+    _qrViewController?.dispose();
     super.dispose();
   }
 
   AuthenticationBloc _authenticationBloc;
   CustomerBloc _customerBloc;
+
   String _token = '';
+
   @override
   Widget build(BuildContext context) {
     _authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
@@ -65,130 +76,84 @@ class _QrCodeScanTabState extends State<QrCodeScanTab> {
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                BlocEventStateBuilder<AuthenticationState>(
-                  builder: (context, state) {
-                    if (state.isAuthenticated) {
-                      _token = state.token;
-                    }
-                    return Container(
-                      height: 300,
-                      width: double.maxFinite,
-                      color: Colors.black,
-                      // child: Text('Camera'),
-                      // child: QRView(
-                      //   key: qrKey,
-                      //   onQRViewCreated: _onQRViewCreated,
-                      // ),
-                      // alignment: Alignment.center,
-                      // child: Text('Camera'),
-                    );
-                    // return NeumorphicButton(
-                    //   onPressed: () async {
-                    //     if (token != null) {
-                    //       Repository repo = Repository();
-                    //       await repo.makeTransactions(
-                    //           token: token, body: qrText);
-                    //       _customerBloc
-                    //           .emitEvent(CustomerEventLoad(token: token));
-                    //       print('Success!');
-                    //       showDialog(
-                    //         context: context,
-                    //         builder: (context) {
-                    //           return Column(
-                    //             mainAxisAlignment: MainAxisAlignment.center,
-                    //             children: [
-                    //               Neumorphic(
-                    //                 child: Container(
-                    //                   width:
-                    //                       MediaQuery.of(context).size.width / 2,
-                    //                   height: 100,
-                    //                   alignment: Alignment.center,
-                    //                   child: Text(
-                    //                     'Success!',
-                    //                     style: DEFAULT_TEXT_STYLE,
-                    //                   ),
-                    //                 ),
-                    //                 style: neumorphicStyleDownDefault,
-                    //               ),
-                    //               NeumorphicButton(
-                    //                 style: neumorphicStyleUpDefault,
-                    //                 padding: EdgeInsets.all(0),
-                    //                 onPressed: () {
-                    //                   Navigator.of(context).pop();
-                    //                   widget.tabController.index = 0;
-                    //                 },
-                    //                 child: Container(
-                    //                   width:
-                    //                       MediaQuery.of(context).size.width / 2,
-                    //                   alignment: Alignment.center,
-                    //                   padding: EdgeInsets.all(16),
-                    //                   color: CustomColors.GREEN,
-                    //                   child: Text(
-                    //                     'OK',
-                    //                     style: DEFAULT_TEXT_STYLE,
-                    //                   ),
-                    //                 ),
-                    //               ),
-                    //             ],
-                    //           );
-                    //         },
-                    //       );
-                    //     }
-                    //   },
-                    //   style: neumorphicStyleUpWithHighRadius,
-                    //   margin: EdgeInsets.symmetric(
-                    //     horizontal: 64,
-                    //     vertical: 32,
-                    //   ),
-                    //   padding: EdgeInsets.all(0),
-                    //   child: Container(
-                    //     // height: 100,
-                    //     width: double.maxFinite,
-                    //     padding: EdgeInsets.all(16),
-                    //     color: CustomColors.GREEN,
-                    //     alignment: Alignment.center,
-                    //     child: Text(
-                    //       'Tích điểm',
-                    //       style: DEFAULT_TEXT_STYLE,
-                    //     ),
-                    //   ),
-                    // );
-                  },
-                  bloc: _authenticationBloc,
-                ),
-                // _buildQrCode(
-                //   data: data,
-                // ),
-              ],
-            ),
+          child: BlocEventStateBuilder<PointCollectionState>(
+            bloc: _pointCollectionBloc,
+            builder: (context, pointCollectionState) {
+              if (pointCollectionState.isCollected && _token.isNotEmpty) {
+                _customerBloc
+                    .emitEvent(CustomerEventLoadBalance(token: _token));
+              }
+              return Stack(
+                children: [
+                  SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        BlocEventStateBuilder<AuthenticationState>(
+                          builder: (context, authenticationState) {
+                            if (authenticationState.isAuthenticated) {
+                              _token = authenticationState.token;
+                            }
+                            return Neumorphic(
+                              style: neumorphicStyleDownDefault,
+                              child: Container(
+                                width: double.maxFinite,
+                                height: MediaQuery.of(context).size.height / 2,
+                                color: CustomColors.BACKGROUND_COLOR,
+                                alignment: Alignment.center,
+                                child: isScanning
+                                    ? QRView(
+                                        key: qrKey,
+                                        onQRViewCreated: _onQRViewCreated,
+                                      )
+                                    : Text(
+                                        'Camera is close!',
+                                        style: DEFAULT_TEXT_STYLE,
+                                      ),
+                              ),
+                            );
+                          },
+                          bloc: _authenticationBloc,
+                        ),
+                        // Text(qrText),
+                        NeumorphicButton(
+                          style: neumorphicStyleUpWithHighRadius,
+                          margin: EdgeInsets.symmetric(vertical: 32),
+                          onPressed: () {
+                            if (isScanning) {
+                              _qrViewController.pauseCamera();
+                              setState(() {
+                                isScanning = false;
+                              });
+                            } else {
+                              _qrViewController.resumeCamera();
+                              setState(() {
+                                isScanning = true;
+                              });
+                            }
+                          },
+                          child: Text(
+                            isScanning ? 'Pause' : 'Resume',
+                            style: DEFAULT_TEXT_STYLE,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  pointCollectionState.isCollecting
+                      ? FullScreenProgressing()
+                      : SizedBox(),
+                  pointCollectionState.isCollected
+                      ? CustomAlert(errMsg: pointCollectionState.message)
+                      : SizedBox(),
+                  pointCollectionState.isError
+                      ? CustomAlert(errMsg: pointCollectionState.message)
+                      : SizedBox(),
+                ],
+              );
+            },
           ),
         ),
       ),
     );
   }
-
-  // String _getQrCode({
-  //   @required String amount,
-  //   @required String storeId,
-  // }) =>
-  //     '$amount/$storeId';
-  // Widget _buildQrCode({
-  //   @required String data,
-  //   double size: 240,
-  // }) {
-  //   return Column(
-  //     children: [
-  //       Text(data),
-  //       QrImage(
-  //         data: data,
-  //         version: QrVersions.auto,
-  //         size: size,
-  //         gapless: false,
-  //       ),
-  //     ],
-  //   );
-  // }
 }

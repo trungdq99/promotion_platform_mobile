@@ -24,13 +24,12 @@ class MembershipScreen extends StatefulWidget {
 
 class _MembershipScreenState extends State<MembershipScreen> {
   MembershipsBloc _membershipsBloc = MembershipsBloc();
-
+  String token;
   @override
   Widget build(BuildContext context) {
     final _authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
     return BlocEventStateBuilder<AuthenticationState>(
       builder: (context, authenticationState) {
-        String token;
         if (authenticationState.isAuthenticated) {
           token = authenticationState.token;
         }
@@ -103,12 +102,16 @@ class _MembershipScreenState extends State<MembershipScreen> {
       padding: EdgeInsets.all(24),
       onPressed: () async {
         await Helper.navigationDelay();
-        Navigator.push(
-            context,
-            CupertinoPageRoute(
-              builder: (context) =>
-                  CustomerAccountsScreen(membershipCardId: id),
-            ));
+        if (token != null && token.isNotEmpty) {
+          Navigator.push(
+              context,
+              CupertinoPageRoute(
+                builder: (context) => CustomerAccountsScreen(
+                  membershipCardId: id,
+                  token: token,
+                ),
+              ));
+        }
       },
       child: Table(
         children: [

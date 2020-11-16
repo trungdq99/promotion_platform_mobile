@@ -18,8 +18,10 @@ class CustomerAccountsBloc
     if (event is CustomerAccountsEventLoad) {
       yield CustomerAccountsState.loading();
       List<CustomerAccountModel> listCustomerAccount;
-      listCustomerAccount =
-          await loadCustomerAccounts(membershipId: event.membershipId);
+      listCustomerAccount = await loadCustomerAccounts(
+        membershipId: event.membershipId,
+        token: event.token,
+      );
       if (listCustomerAccount == null) {
         yield CustomerAccountsState.error(
           errMsg: 'Something went wrong!!!',
@@ -32,11 +34,13 @@ class CustomerAccountsBloc
     }
   }
 
-  Future<List<CustomerAccountModel>> loadCustomerAccounts(
-      {@required int membershipId}) async {
+  Future<List<CustomerAccountModel>> loadCustomerAccounts({
+    @required int membershipId,
+    @required String token,
+  }) async {
     Repository _repository = Repository();
-    Response response =
-        await _repository.fetchCustomerAccounts(membershipId: membershipId);
+    Response response = await _repository.fetchCustomerAccounts(
+        membershipId: membershipId, token: token);
     print(response.statusCode);
     print(response.body);
     List<CustomerAccountModel> listCustomerAccount;

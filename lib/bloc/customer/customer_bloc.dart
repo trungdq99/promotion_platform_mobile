@@ -43,6 +43,14 @@ class CustomerBloc extends BlocEventStateBase<CustomerEvent, CustomerState> {
         //   yield CustomerState.error(message: responseModel.message);
         // }
       }
+    } else if (event is CustomerEventLoadBalance) {
+      double balance;
+      balance = await loadBalance(token: event.token);
+      if (balance != null) {
+        CustomerModel customerModel = currentState.customerModel;
+        customerModel.lastBalance = balance.toDouble();
+        yield CustomerState.loaded(customerModel: customerModel);
+      }
     }
   }
 
@@ -82,5 +90,17 @@ class CustomerBloc extends BlocEventStateBase<CustomerEvent, CustomerState> {
       }
     }
     return responseModel;
+  }
+
+  Future<double> loadBalance({@required String token}) async {
+    Repository _repository = Repository();
+    Response response = await _repository.fetchBalance(token: token);
+    print(response.statusCode);
+    print(response.body);
+    double balance;
+    if (response.statusCode == 200) {
+      balance = Helper.decodeJson(response.body);
+    }
+    return balance;
   }
 }

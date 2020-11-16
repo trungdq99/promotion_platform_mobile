@@ -51,15 +51,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void showErrorMessage({@required String errMsg}) async {
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return CustomAlert(errMsg: errMsg);
-      },
-    );
-  }
-
   Widget _buildScreen({
     bool isProgressing,
     bool isError,
@@ -83,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _buildLoginByPhoneButton(),
+                // _buildLoginByPhoneButton(),
                 isLoginByPhone
                     ? _buildConfirmButton()
                     : _buildLoginByGoogleButton(),

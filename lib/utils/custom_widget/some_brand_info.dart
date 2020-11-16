@@ -2,18 +2,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:promotion_platform/ui/brand_detail_screen.dart';
+import 'package:promotion_platform/utils/custom_colors.dart';
+import 'package:promotion_platform/utils/custom_widget/custom_network_image.dart';
 
 import '../constant.dart';
 
-class SomeBrandInfo extends StatelessWidget {
+class SomeBrandInfo extends StatefulWidget {
   final String brandTitle;
   final String info;
-  final Function function;
+  final int brandId;
+  final String imgUrl;
+
   SomeBrandInfo({
-    @required this.brandTitle,
-    @required this.info,
-    this.function,
+    this.brandTitle: '',
+    this.info: '',
+    this.imgUrl: '',
+    this.brandId,
   });
+
+  @override
+  _SomeBrandInfoState createState() => _SomeBrandInfoState();
+}
+
+class _SomeBrandInfoState extends State<SomeBrandInfo> {
   @override
   Widget build(BuildContext context) {
     return NeumorphicButton(
@@ -22,7 +33,9 @@ class SomeBrandInfo extends StatelessWidget {
         Navigator.push(
             context,
             CupertinoPageRoute(
-              builder: (context) => BrandDetailScreen(),
+              builder: (context) => BrandDetailScreen(
+                brandId: widget.brandId,
+              ),
             ));
       },
       margin: EdgeInsets.all(16),
@@ -31,12 +44,19 @@ class SomeBrandInfo extends StatelessWidget {
         children: [
           Expanded(
             flex: 1,
-            child: Container(
-              padding: EdgeInsets.all(8),
-              child: Image.network(
-                'https://brasol.vn/public/uploads/1528692055-29.png',
-                fit: BoxFit.cover,
-              ),
+            child: Neumorphic(
+              style: neumorphicStyleUpCircle,
+              child: widget.imgUrl.isNotEmpty
+                  ? CustomNetworkImage(
+                      imgUrl: widget.imgUrl,
+                      width: 68,
+                      height: 68,
+                    )
+                  : Container(
+                      width: 68,
+                      height: 68,
+                      color: CustomColors.BACKGROUND_COLOR,
+                    ),
             ),
           ),
           Expanded(
@@ -47,27 +67,24 @@ class SomeBrandInfo extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    this.brandTitle,
+                    this.widget.brandTitle,
                     style: BOLD_TITLE_TEXT_STYLE,
                   ),
                   SizedBox(
                     height: 8,
                   ),
                   Text(
-                    this.info,
+                    this.widget.info,
                     overflow: TextOverflow.ellipsis,
                     style: SMALL_TEXT_STYLE,
                   ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  NeumorphicButton(
-                    style: neumorphicStyleDownWithHighRadius,
-                    onPressed: () {},
+                  Neumorphic(
+                    style: neumorphicStyleUpWithHighRadius,
                     padding: EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 8,
                     ),
+                    margin: EdgeInsets.symmetric(vertical: 8),
                     child: Text(
                       'Chi tiết',
                       style: SMALL_TEXT_STYLE,

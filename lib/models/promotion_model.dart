@@ -10,6 +10,8 @@
 // imgUrl	string
 // brandName	string
 
+import 'package:promotion_platform/models/brand_model.dart';
+
 class PromotionModel {
   int id;
   int promotionId;
@@ -19,8 +21,10 @@ class PromotionModel {
   String shortDescription;
   String description;
   String imgUrl;
-  String brandName;
   String categoryName;
+  int voucherGroupId;
+  BrandModel brandModel;
+
   PromotionModel({
     this.id,
     this.promotionId: 0,
@@ -30,7 +34,9 @@ class PromotionModel {
     this.shortDescription: '',
     this.description: '',
     this.imgUrl: '',
-    this.brandName: '',
+    this.voucherGroupId: 0,
+    this.categoryName: '',
+    this.brandModel,
   });
 
   PromotionModel.fromMap(Map<String, dynamic> map) {
@@ -42,6 +48,9 @@ class PromotionModel {
     this.shortDescription = map['shortDescription'] ?? '';
     this.description = map['description'] ?? '';
     this.imgUrl = map['imgUrl'] ?? '';
-    this.brandName = map['brandName'] ?? '';
+    this.voucherGroupId = map['voucherGroupId'] ?? 0;
+    this.categoryName = map['categoryName'] ?? '';
+    Map<String, dynamic> brandDataSet = map['brandDataSet'];
+    this.brandModel = BrandModel.fromMap(brandDataSet);
   }
 }
