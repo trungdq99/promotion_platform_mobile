@@ -83,11 +83,19 @@ class _VoucherDetailScreenState extends State<VoucherDetailScreen> {
                           ? Neumorphic(
                               style: neumorphicStyleUpWithSmallRadius,
                               padding: EdgeInsets.all(32),
-                              child: QrImage(
-                                data: widget.voucherModel.voucherCode,
-                                version: QrVersions.auto,
-                                size: 250,
-                                gapless: false,
+                              child: Column(
+                                children: [
+                                  QrImage(
+                                    data: widget.voucherModel.voucherCode,
+                                    version: QrVersions.auto,
+                                    size: 250,
+                                    gapless: false,
+                                  ),
+                                  Text(
+                                    widget.voucherModel.voucherCode,
+                                    style: DEFAULT_TEXT_STYLE,
+                                  ),
+                                ],
                               ),
                             )
                           : SizedBox(),
@@ -114,12 +122,14 @@ class _VoucherDetailScreenState extends State<VoucherDetailScreen> {
                           id: widget.voucherModel.id,
                           token: token,
                         ));
+                        widget.voucherModel.isUsed = false;
                       } else {
                         _voucherPreparationBloc
                             .emitEvent(VoucherPreparationEventUse(
                           id: widget.voucherModel.id,
                           token: token,
                         ));
+                        widget.voucherModel.isUsed = true;
                       }
                     }
                   },

@@ -158,4 +158,14 @@ class Repository {
     return _apiProvider.fetchData(VOUCHER_PREPARATION, RequestMethod.PUT,
         Helper.getAuthorizeHeader(token), Helper.encodeJson(body));
   }
+
+  Future fetchHistory({
+    @required String token,
+  }) =>
+      _apiProvider.fetchData(
+        HISTORY_API,
+        RequestMethod.GET,
+        Helper.getAuthorizeHeader(token),
+        '',
+      );
 }

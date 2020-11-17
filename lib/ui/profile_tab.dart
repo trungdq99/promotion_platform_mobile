@@ -9,7 +9,9 @@ import 'package:promotion_platform/bloc/customer/customer_event.dart';
 import 'package:promotion_platform/bloc/customer/customer_state.dart';
 import 'package:promotion_platform/models/customer_model.dart';
 import 'package:promotion_platform/ui/edit_profile_screen.dart';
+import 'package:promotion_platform/ui/history_screen.dart';
 import 'package:promotion_platform/ui/membership_screen.dart';
+import 'package:promotion_platform/ui/voucher_screen.dart';
 import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
 import 'package:promotion_platform/utils/constant.dart';
@@ -64,44 +66,61 @@ class _TabProfileScreenState extends State<TabProfileScreen> {
                       _buildButton(
                         title: 'Quà đã đổi',
                         iconData: Icons.card_giftcard,
+                        function: () async {
+                          await Helper.navigationDelay();
+                          Navigator.push(
+                              widget.homeContext,
+                              CupertinoPageRoute(
+                                builder: (context) => VoucherScreen(),
+                              ));
+                        },
                       ),
                       _buildButton(
                         title: 'Lịch sử Bean',
                         iconData: Icons.history,
+                        function: () async {
+                          await Helper.navigationDelay();
+                          Navigator.push(
+                              widget.homeContext,
+                              CupertinoPageRoute(
+                                builder: (context) => HistoryScreen(),
+                              ));
+                        },
                       ),
                       _buildButton(
                         title: 'Thương hiệu',
                         iconData: Icons.shop,
                       ),
-                      _buildButton(
-                        title: 'Game',
-                        iconData: Icons.videogame_asset,
+                      // _buildButton(
+                      //   title: 'Game',
+                      //   iconData: Icons.videogame_asset,
+                      // ),
+                      SizedBox(
+                        height: 24,
                       ),
+                      // _buildButton(
+                      //   title: 'Về Uni Bean',
+                      // ),
+                      // _buildButton(
+                      //   title: 'Hỗ trợ',
+                      //   iconData: Icons.settings_input_svideo,
+                      // ),
+                      // _buildButton(
+                      //   title: 'Cài đặt',
+                      //   iconData: Icons.settings,
+                      // ),
                       SizedBox(
                         height: 24,
                       ),
                       _buildButton(
-                        title: 'Về Uni Bean',
+                        title: 'Đăng xuất',
+                        iconData: Icons.logout,
+                        function: () async {
+                          await Helper.navigationDelay();
+                          _authenticationBloc
+                              .emitEvent(AuthenticationEventSignOut());
+                        },
                       ),
-                      _buildButton(
-                        title: 'Hỗ trợ',
-                        iconData: Icons.settings_input_svideo,
-                      ),
-                      _buildButton(
-                        title: 'Cài đặt',
-                        iconData: Icons.settings,
-                      ),
-                      SizedBox(
-                        height: 24,
-                      ),
-                      _buildButton(
-                          title: 'Đăng xuất',
-                          iconData: Icons.logout,
-                          function: () async {
-                            await Helper.navigationDelay();
-                            _authenticationBloc
-                                .emitEvent(AuthenticationEventSignOut());
-                          }),
                       SizedBox(
                         height: 24,
                       ),

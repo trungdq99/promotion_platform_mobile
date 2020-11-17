@@ -7,6 +7,7 @@ import 'package:promotion_platform/bloc/top_promotions/top_promotions_state.dart
 import 'package:promotion_platform/models/promotion_model.dart';
 import 'package:promotion_platform/ui/brand_detail_screen.dart';
 import 'package:promotion_platform/utils/custom_colors.dart';
+import 'package:promotion_platform/utils/custom_widget/brand_widget.dart';
 import 'package:promotion_platform/utils/custom_widget/custom_network_image.dart';
 import 'package:promotion_platform/utils/custom_widget/icon/game_icon.dart';
 import 'package:promotion_platform/bloc/top_brands/top_brands_bloc.dart';
@@ -75,6 +76,9 @@ class _HomeTabState extends State<HomeTab> {
                       GroupTitle(
                         title: 'Thương hiệu nổi bật',
                         canShowAll: true,
+                        function: () {
+                          widget.tabController.index = 3;
+                        },
                       ),
                       _buildListBrand(),
                       GroupTitle(
@@ -174,14 +178,23 @@ class _HomeTabState extends State<HomeTab> {
           listBrands = state.listBrandModel;
           listBrands.forEach(
             (element) {
-              children.add(
-                _buildBrand(
-                  brandTitle: element.brandName ?? '',
-                  promotions: element.numberOfPromotion,
-                  brandId: element.id ?? 0,
-                  imageUrl: element.imgUrl ?? '',
-                ),
-              );
+              children.add(BrandWidget(
+                brandId: element.id ?? 0,
+                brandTitle: element.brandName ?? '',
+                imageUrl: element.imgUrl ?? '',
+                promotions: element.numberOfPromotion ?? 0,
+                function: () async {
+                  await Helper.navigationDelay();
+                  Navigator.push(
+                    widget.homeContext,
+                    CupertinoPageRoute(
+                      builder: (context) => BrandDetailScreen(
+                        brandId: element.id,
+                      ),
+                    ),
+                  );
+                },
+              ));
             },
           );
         }
@@ -284,62 +297,60 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  // Show brand
-  Widget _buildBrand({
-    @required String brandTitle,
-    int promotions: 0,
-    String imageUrl: '',
-    @required int brandId,
-  }) {
-    return NeumorphicButton(
-      onPressed: () async {
-        await Helper.navigationDelay();
-        Navigator.push(
-          widget.homeContext,
-          CupertinoPageRoute(
-            builder: (context) => BrandDetailScreen(
-              brandId: brandId,
-            ),
-          ),
-        );
-        // _brandDetailScreenBloc
-        //     .emitEvent(BrandDetailScreenEventOpen(brandId: brandId));
-      },
-      margin: EdgeInsets.all(16),
-      padding: EdgeInsets.all(0),
-      child: Container(
-        width: 124,
-        height: 124,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CustomNetworkImage(
-              imgUrl: imageUrl,
-              width: 124,
-              height: 64,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: Text(
-                brandTitle,
-                style: BOLD_SMALL_TEXT_STYLE,
-                overflow: TextOverflow.ellipsis,
-                textWidthBasis: TextWidthBasis.parent,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: Text(
-                '$promotions khuyến mãi',
-                style: SMALL_TEXT_STYLE,
-              ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // // Show brand
+  // Widget _buildBrand({
+  //   @required String brandTitle,
+  //   int promotions: 0,
+  //   String imageUrl: '',
+  //   @required int brandId,
+  // }) {
+  //   return NeumorphicButton(
+  //     onPressed: () async {
+  //       await Helper.navigationDelay();
+  //       Navigator.push(
+  //         widget.homeContext,
+  //         CupertinoPageRoute(
+  //           builder: (context) => BrandDetailScreen(
+  //             brandId: brandId,
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //     margin: EdgeInsets.all(16),
+  //     padding: EdgeInsets.all(0),
+  //     child: Container(
+  //       width: 124,
+  //       height: 124,
+  //       child: Column(
+  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //         children: [
+  //           CustomNetworkImage(
+  //             imgUrl: imageUrl,
+  //             width: 124,
+  //             height: 64,
+  //           ),
+  //           Padding(
+  //             padding: EdgeInsets.symmetric(horizontal: 8),
+  //             child: Text(
+  //               brandTitle,
+  //               style: BOLD_SMALL_TEXT_STYLE,
+  //               overflow: TextOverflow.ellipsis,
+  //               textWidthBasis: TextWidthBasis.parent,
+  //             ),
+  //           ),
+  //           Padding(
+  //             padding: EdgeInsets.symmetric(horizontal: 8),
+  //             child: Text(
+  //               '$promotions khuyến mãi',
+  //               style: SMALL_TEXT_STYLE,
+  //             ),
+  //           ),
+  //           SizedBox(
+  //             height: 8,
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 }

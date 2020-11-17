@@ -35,7 +35,7 @@ const String PROMOTION_TRANSACTION_API = 'api/v1/voucher-group/transaction';
 const String POINT_COLLECTION_API = 'api/v1/transaction/point-collection';
 const String VOUCHERS_API = 'api/v1/voucher-detail';
 const String VOUCHER_PREPARATION = 'api/v1/voucher-detail/preparation';
-
+const String HISTORY_API = 'api/v1/transaction/history';
 // List Bottom Navigation Bar Items
 List<BottomNavigationBarItem> bottomNavigationBarItems = [
   BottomNavigationBarItem(

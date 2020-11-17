@@ -7,6 +7,8 @@ import 'package:promotion_platform/bloc/authentication/authentication_event.dart
 import 'package:promotion_platform/bloc/authentication/authentication_state.dart';
 import 'package:promotion_platform/bloc/categories/categories_bloc.dart';
 import 'package:promotion_platform/bloc/categories/categories_event.dart';
+import 'package:promotion_platform/bloc/notification/notification_bloc.dart';
+import 'package:promotion_platform/bloc/notification/notification_state.dart';
 import 'package:promotion_platform/bloc/top_brands/top_brands_bloc.dart';
 import 'package:promotion_platform/bloc/top_brands/top_brands_event.dart';
 import 'package:promotion_platform/bloc/customer/customer_bloc.dart';

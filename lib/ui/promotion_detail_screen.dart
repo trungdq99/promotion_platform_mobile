@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:promotion_platform/bloc/authentication/authentication_bloc.dart';
 import 'package:promotion_platform/bloc/customer/customer_bloc.dart';
 import 'package:promotion_platform/bloc/customer/customer_event.dart';
+import 'package:promotion_platform/bloc/notification/notification_bloc.dart';
+import 'package:promotion_platform/bloc/notification/notification_event.dart';
 import 'package:promotion_platform/bloc/promotion_detail/promotion_detail_bloc.dart';
 import 'package:promotion_platform/bloc/promotion_detail/promotion_detail_event.dart';
 import 'package:promotion_platform/bloc/promotion_detail/promotion_detail_state.dart';
@@ -12,9 +15,11 @@ import 'package:promotion_platform/bloc/promotion_transaction/promotion_transact
 import 'package:promotion_platform/bloc/vouchers/vouchers_bloc.dart';
 import 'package:promotion_platform/bloc/vouchers/vouchers_event.dart';
 import 'package:promotion_platform/models/promotion_model.dart';
+import 'package:promotion_platform/ui/brand_detail_screen.dart';
 import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
 import 'package:promotion_platform/utils/custom_colors.dart';
+import 'package:promotion_platform/utils/custom_widget/confirm_widget.dart';
 import 'package:promotion_platform/utils/custom_widget/custom_alert.dart';
 import 'package:promotion_platform/utils/custom_widget/custom_network_image.dart';
 import 'package:promotion_platform/utils/custom_widget/full_screen_progressing.dart';
@@ -100,14 +105,23 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
                       style: neumorphicStyleUpWithHighRadius,
                       onPressed: () async {
                         await Helper.navigationDelay();
-                        if (token != null &&
-                            token.isNotEmpty &&
-                            _promotionModel != null) {
-                          _promotionTransactionBloc
-                              .emitEvent(PromotionTransactionEventTransact(
-                            token: token,
-                            voucherGroupId: _promotionModel.voucherGroupId,
-                          ));
+
+                        bool result = await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return ConfirmWidget();
+                          },
+                        );
+                        if (result) {
+                          if (token != null &&
+                              token.isNotEmpty &&
+                              _promotionModel != null) {
+                            _promotionTransactionBloc
+                                .emitEvent(PromotionTransactionEventTransact(
+                              token: token,
+                              voucherGroupId: _promotionModel.voucherGroupId,
+                            ));
+                          }
                         }
                       },
                       margin: EdgeInsets.all(32),
@@ -145,6 +159,7 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
           point: _promotionModel != null ? _promotionModel.price : 0,
           brandPicUrl:
               _promotionModel != null ? _promotionModel.brandModel.imgUrl : '',
+          brandId: _promotionModel != null ? _promotionModel.brandModel.id : 0,
         ),
         ShowDetail(
           detail: _promotionModel != null ? _promotionModel.description : '',
@@ -154,14 +169,14 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
         //   numOfStore: 7,
         //   phone: '19001000',
         // ),
-        _promotionModel != null
-            ? SomeBrandInfo(
-                brandTitle: _promotionModel.brandModel.brandName,
-                info: _promotionModel.brandModel.description,
-                brandId: _promotionModel.brandModel.id,
-                imgUrl: _promotionModel.brandModel.imgUrl,
-              )
-            : SizedBox(),
+        // _promotionModel != null
+        //     ? SomeBrandInfo(
+        //         brandTitle: _promotionModel.brandModel.brandName,
+        //         info: _promotionModel.brandModel.description,
+        //         brandId: _promotionModel.brandModel.id,
+        //         imgUrl: _promotionModel.brandModel.imgUrl,
+        //       )
+        //     : SizedBox(),
         SizedBox(
           height: 100,
         ),
@@ -174,6 +189,7 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
     String brand: '',
     int point: 0,
     String brandPicUrl: '',
+    int brandId: 0,
   }) {
     return Neumorphic(
       style: neumorphicStyleUpDefault,
@@ -182,7 +198,16 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
         children: [
           Expanded(
             flex: 1,
-            child: Neumorphic(
+            child: NeumorphicButton(
+              onPressed: () async {
+                await Helper.navigationDelay();
+                Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                      builder: (context) => BrandDetailScreen(brandId: brandId),
+                    ));
+              },
+              padding: EdgeInsets.all(0),
               style: neumorphicStyleUpCircle,
               child: brandPicUrl.isNotEmpty
                   ? CustomNetworkImage(
@@ -253,7 +278,7 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
         },
         padding: EdgeInsets.all(16),
         child: Icon(
-          Icons.close,
+          Icons.arrow_back_ios,
           color: CustomColors.TEXT_COLOR,
           size: BIG_FONT_SIZE,
         ),

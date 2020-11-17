@@ -67,7 +67,7 @@ class _BrandDetailScreenState extends State<BrandDetailScreen> {
                   brandModel != null
                       ? _buildTitle(
                           brandTitle: brandModel.brandName ?? '',
-                          phone: brandModel.phoneNumber ?? '',
+                          brandPicUrl: brandModel.imgUrl ?? '',
                         )
                       : Container(
                           child: Text('Empty brand!'),
@@ -125,9 +125,8 @@ class _BrandDetailScreenState extends State<BrandDetailScreen> {
           await Helper.navigationDelay();
           Navigator.pop(context);
         },
-        padding: EdgeInsets.all(16),
         child: Icon(
-          Icons.close,
+          Icons.arrow_back_ios,
           color: CustomColors.TEXT_COLOR,
           size: BIG_FONT_SIZE,
         ),
@@ -169,53 +168,61 @@ class _BrandDetailScreenState extends State<BrandDetailScreen> {
 
   Widget _buildTitle({
     String brandTitle: '',
-    String email: '',
-    String phone: '',
+    String brandPicUrl: '',
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(),
-      ),
-      margin: EdgeInsets.symmetric(
-        horizontal: 16,
-      ),
-      child: Column(
+    return Neumorphic(
+      style: neumorphicStyleUpDefault,
+      padding: EdgeInsets.all(16),
+      child: Row(
         children: [
-          ListTile(
-            title: Text(
-              brandTitle,
-              style: BOLD_TITLE_TEXT_STYLE,
-            ),
-            // leading: Container(
-            //   width: 50,
-            //   height: 50,
-            //   color: Colors.teal,
-            // ),
-            trailing: Icon(Icons.star),
-            subtitle: Row(
-              children: [
-                Icon(
-                  Icons.star,
-                  color: CustomColors.YELLOW,
-                ),
-                SizedBox(
-                  width: 16,
-                ),
-                Text(
-                  '5.0',
-                  style: DEFAULT_TEXT_STYLE,
-                ),
-              ],
+          Expanded(
+            flex: 1,
+            child: Neumorphic(
+              style: neumorphicStyleUpCircle,
+              child: brandPicUrl.isNotEmpty
+                  ? CustomNetworkImage(
+                      imgUrl: brandPicUrl,
+                      width: 80,
+                      height: 80,
+                    )
+                  : Container(
+                      color: CustomColors.BACKGROUND_COLOR,
+                      width: 80,
+                      height: 80,
+                    ),
             ),
           ),
-          // BrandContact(
-          //   phone: phone,
-          //   numOfStore: numOfStore,
-          //   email: email,
-          //   type: type,
-          // ),
+          Expanded(
+            flex: 3,
+            child: Padding(
+              padding: EdgeInsets.only(left: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    brandTitle,
+                    style: BOLD_TITLE_TEXT_STYLE,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.star,
+                        color: CustomColors.YELLOW,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        '5.0',
+                        style: DEFAULT_TEXT_STYLE,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

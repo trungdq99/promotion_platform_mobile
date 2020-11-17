@@ -4,6 +4,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:promotion_platform/bloc/authentication/authentication_bloc.dart';
 import 'package:promotion_platform/bloc/customer/customer_bloc.dart';
 import 'package:promotion_platform/bloc/customer/customer_state.dart';
+import 'package:promotion_platform/bloc/notification/notification_bloc.dart';
 import 'package:promotion_platform/bloc/promotions/promotions_bloc.dart';
 import 'package:promotion_platform/bloc/promotions/promotions_event.dart';
 import 'package:promotion_platform/bloc/promotions/promotions_state.dart';
@@ -37,11 +38,6 @@ class PromotionTabScreen extends StatefulWidget {
 
 class _PromotionTabScreenState extends State<PromotionTabScreen> {
   double _deviceWidth;
-
-  bool _isShowTypeSelection = false;
-  bool _isShowSortSelection = false;
-  int _sortIndex = 0;
-
   TextEditingController _searchController;
   PromotionsBloc _promotionsBloc;
   CustomerBloc _customerBloc;
@@ -69,14 +65,6 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
           GestureDetector(
             onTap: () {
               FocusScope.of(context).unfocus();
-              setState(() {
-                if (_isShowTypeSelection) {
-                  _isShowTypeSelection = false;
-                }
-                if (_isShowSortSelection) {
-                  _isShowSortSelection = false;
-                }
-              });
             },
             child: SafeArea(
               child: SingleChildScrollView(
@@ -93,102 +81,88 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
             ),
           ),
           Positioned(
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                NeumorphicButton(
-                  style: neumorphicStyleUpWithSmallRadius,
-                  margin: EdgeInsets.all(16),
-                  onPressed: () async {
-                    await Helper.navigationDelay();
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: NeumorphicButton(
+                      style: neumorphicStyleUpWithSmallRadius,
+                      margin: EdgeInsets.all(16),
+                      onPressed: () async {
+                        await Helper.navigationDelay();
 
-                    List result = await showModalBottomSheet(
-                      context: context,
-                      builder: (context) =>
-                          SelectCategoryWidget(selectedIndex: _categoryId),
-                      backgroundColor: CustomColors.BACKGROUND_COLOR,
-                    );
-                    if (result != null) {
-                      bool isChange = result[1];
-                      if (isChange) {
-                        setState(() {
-                          _categoryId = result[0];
-                        });
-                        _promotionsBloc.emitEvent(PromotionsEventLoad(
-                          categoryId: _categoryId,
-                          filterId: _filterId,
-                          pageId: 0,
-                          search: _searchController.text,
-                        ));
-                      }
-                    }
-                  },
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 32,
-                    vertical: 16,
+                        List result = await showModalBottomSheet(
+                          context: context,
+                          builder: (context) =>
+                              SelectCategoryWidget(selectedIndex: _categoryId),
+                          backgroundColor: CustomColors.BACKGROUND_COLOR,
+                        );
+                        if (result != null) {
+                          bool isChange = result[1];
+                          if (isChange) {
+                            setState(() {
+                              _categoryId = result[0];
+                            });
+                            _promotionsBloc.emitEvent(PromotionsEventLoad(
+                              categoryId: _categoryId,
+                              filterId: _filterId,
+                              pageId: 0,
+                              search: _searchController.text,
+                            ));
+                          }
+                        }
+                      },
+                      child: Text(
+                        CATEGORIES[_categoryId],
+                        style: DEFAULT_TEXT_STYLE,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                   ),
-                  child: Text(
-                    CATEGORIES[_categoryId],
-                    style: DEFAULT_TEXT_STYLE,
-                  ),
-                ),
-                NeumorphicButton(
-                  style: neumorphicStyleUpWithSmallRadius,
-                  margin: EdgeInsets.all(16),
-                  onPressed: () async {
-                    await Helper.navigationDelay();
+                  Expanded(
+                    flex: 1,
+                    child: NeumorphicButton(
+                      style: neumorphicStyleUpWithSmallRadius,
+                      margin: EdgeInsets.all(16),
+                      onPressed: () async {
+                        await Helper.navigationDelay();
 
-                    List result = await showModalBottomSheet(
-                      context: context,
-                      builder: (context) =>
-                          SelectFilterWidget(selectedIndex: _filterId),
-                      backgroundColor: CustomColors.BACKGROUND_COLOR,
-                    );
-                    if (result != null) {
-                      bool isChange = result[1];
-                      if (isChange) {
-                        setState(() {
-                          _filterId = result[0];
-                        });
-                        _promotionsBloc.emitEvent(PromotionsEventLoad(
-                          categoryId: _categoryId,
-                          filterId: _filterId,
-                          pageId: 0,
-                          search: _searchController.text,
-                        ));
-                      }
-                    }
-                  },
-                  child: Text(
-                    FILTER[_filterId],
-                    style: DEFAULT_TEXT_STYLE,
+                        List result = await showModalBottomSheet(
+                          context: context,
+                          builder: (context) =>
+                              SelectFilterWidget(selectedIndex: _filterId),
+                          backgroundColor: CustomColors.BACKGROUND_COLOR,
+                        );
+                        if (result != null) {
+                          bool isChange = result[1];
+                          if (isChange) {
+                            setState(() {
+                              _filterId = result[0];
+                            });
+                            _promotionsBloc.emitEvent(PromotionsEventLoad(
+                              categoryId: _categoryId,
+                              filterId: _filterId,
+                              pageId: 0,
+                              search: _searchController.text,
+                            ));
+                          }
+                        }
+                      },
+                      child: Text(
+                        FILTER[_filterId],
+                        style: DEFAULT_TEXT_STYLE,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                   ),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 32,
-                    vertical: 16,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
             bottom: 0,
           ),
-          // Positioned(
-          //   bottom: 100,
-          //   right: -10,
-          //   child: Column(
-          //     crossAxisAlignment: CrossAxisAlignment.end,
-          //     children: [
-          //       _buildSelectType(),
-          //       _buildSelectSort(),
-          //     ],
-          //   ),
-          // ),
-          // Positioned(
-          //   bottom: 100,
-          //   right: 0,
-          //   child: _buildSelectSort(),
-          // ),
         ],
       ),
     );
@@ -228,293 +202,58 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
             child: Progressing(),
           );
         }
-        return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          padding: EdgeInsets.all(8),
-          child: listPromotions != null
-              ? Row(
-                  children: children,
-                )
-              : Container(
-                  child: Text(
-                    'Empty list promotion',
-                    style: DEFAULT_TEXT_STYLE,
-                  ),
+        return listPromotions != null && listPromotions.length > 0
+            ? GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 0,
+                  mainAxisSpacing: 0,
                 ),
-        );
+                itemCount: listPromotions.length,
+                shrinkWrap: true,
+                physics: ScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return PromotionWidget(
+                    id: listPromotions[index].id,
+                    imgUrl: listPromotions[index].imgUrl,
+                    price: listPromotions[index].price,
+                    brandName: listPromotions[index].brandModel.brandName,
+                    promotionName: listPromotions[index].promotionName,
+                    function: () async {
+                      await Helper.navigationDelay();
+                      Navigator.push(
+                        widget.homeContext,
+                        CupertinoPageRoute(
+                          builder: (context) => PromotionDetailScreen(
+                              id: listPromotions[index].id),
+                        ),
+                      );
+                    },
+                  );
+                },
+              )
+            : Container(
+                child: Text(
+                  'Empty list promotion',
+                  style: DEFAULT_TEXT_STYLE,
+                ),
+              );
+        // return SingleChildScrollView(
+        //   scrollDirection: Axis.horizontal,
+        //   child: listPromotions != null
+        //       ? Row(
+        //           children: children,
+        //         )
+        //       : Container(
+        //           child: Text(
+        //             'Empty list promotion',
+        //             style: DEFAULT_TEXT_STYLE,
+        //           ),
+        //         ),
+        // );
       },
       bloc: _promotionsBloc,
     );
-  }
-
-  Widget _buildSelectSort() {
-    return _isShowSortSelection
-        ? Row(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _isShowSortSelection = false;
-                  });
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(50),
-                    ),
-                  ),
-                  width: 50,
-                  height: 50,
-                  child: Icon(
-                    Icons.close,
-                    color: Colors.teal,
-                  ),
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                    color: Colors.black,
-                  ),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(8),
-                  ),
-                ),
-                width: 200,
-                //height: 200,
-                child: Column(
-                  children: [
-                    _buildSortOption(title: 'Mới nhất', value: 0),
-                    _buildSortOption(title: 'Cũ nhất', value: 1),
-                    _buildSortOption(title: 'Bean từ cao đến thấp', value: 2),
-                    _buildSortOption(title: 'Bean từ thấp đến cao', value: 3),
-                  ],
-                ),
-              ),
-            ],
-          )
-        : GestureDetector(
-            onTap: () {
-              setState(() {
-                _isShowSortSelection = true;
-              });
-            },
-            child: Container(
-              width: 50,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.black,
-                ),
-                color: Colors.white,
-              ),
-              alignment: Alignment.center,
-              padding: EdgeInsets.all(8),
-              child: RotatedBox(
-                quarterTurns: -1,
-                child: Text(
-                  'Mới nhất',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-            ),
-          );
-  }
-
-  Card _buildSortOption({
-    @required String title,
-    @required int value,
-  }) {
-    return Card(
-      child: ListTile(
-        title: Text(title),
-        trailing: Radio(
-          value: value,
-          groupValue: _sortIndex,
-          onChanged: (value) {
-            setState(() {
-              // _sortIndex = value;
-            });
-          },
-        ),
-        onTap: () {
-          setState(() {
-            _sortIndex = value;
-          });
-        },
-      ),
-    );
-  }
-
-  Widget _buildSelectType() {
-    return _isShowTypeSelection
-        // If true, show selection
-        ? Row(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _isShowTypeSelection = false;
-                  });
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(50),
-                    ),
-                  ),
-                  width: 50,
-                  height: 50,
-                  child: Icon(
-                    Icons.close,
-                    color: Colors.teal,
-                  ),
-                ),
-              ),
-              Container(
-                width: 300,
-                height: 88,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(16)),
-                  color: Colors.white,
-                  border: Border.all(
-                    color: Colors.black,
-                  ),
-                ),
-                padding: EdgeInsets.all(8),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 72,
-                        height: 72,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(50),
-                          ),
-                          border: Border.all(
-                            color: Colors.black,
-                          ),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          'All',
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Container(
-                        width: 72,
-                        height: 72,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(50),
-                          ),
-                          border: Border.all(
-                            color: Colors.black,
-                          ),
-                        ),
-                        alignment: Alignment.center,
-                        child: Icon(
-                          Icons.fastfood,
-                          color: Colors.teal,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Container(
-                        width: 72,
-                        height: 72,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(50),
-                          ),
-                          border: Border.all(
-                            color: Colors.black,
-                          ),
-                        ),
-                        alignment: Alignment.center,
-                        child: Icon(
-                          Icons.shop,
-                          color: Colors.teal,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Container(
-                        width: 72,
-                        height: 72,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(50),
-                          ),
-                          border: Border.all(
-                            color: Colors.black,
-                          ),
-                        ),
-                        alignment: Alignment.center,
-                        child: Icon(
-                          Icons.videogame_asset,
-                          color: Colors.teal,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          )
-        // If false, hide selection
-        : GestureDetector(
-            onTap: () {
-              setState(() {
-                _isShowTypeSelection = true;
-              });
-            },
-            child: Container(
-              width: 72,
-              height: 72,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(50),
-                ),
-                border: Border.all(
-                  color: Colors.black,
-                ),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                'All',
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              ),
-            ),
-          );
   }
 
   Widget _buildSearchTextField() {
@@ -526,7 +265,7 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
         controller: _searchController,
         decoration: InputDecoration(
           border: InputBorder.none,
-          hintText: 'Tìm kiếm',
+          hintText: 'Tìm kiếm quà',
           suffixIcon: NeumorphicButton(
             onPressed: () {
               FocusScope.of(context).unfocus();
@@ -600,14 +339,9 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
                 Navigator.push(
                   widget.homeContext,
                   CupertinoPageRoute(
-                    builder: (context) => MyGiftScreen(),
+                    builder: (context) => VoucherScreen(),
                   ),
                 );
-                // Navigator.of(homeContext).push(
-                //   CupertinoPageRoute(
-                //     builder: (context) => MyGiftScreen(),
-                //   ),
-                // );
               },
               padding: EdgeInsets.all(16),
               margin: EdgeInsets.only(

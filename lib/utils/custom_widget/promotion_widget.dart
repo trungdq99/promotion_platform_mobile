@@ -27,19 +27,20 @@ class PromotionWidget extends StatefulWidget {
 class _PromotionWidgetState extends State<PromotionWidget> {
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
     return NeumorphicButton(
       onPressed: widget.function,
       margin: EdgeInsets.all(16),
       padding: EdgeInsets.all(0),
       style: neumorphicStyleUpWithSmallRadius,
       child: Container(
-        width: 208,
+        width: width / 2 - 32,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomNetworkImage(
               imgUrl: widget.imgUrl,
-              width: 208,
+              width: width / 2 - 32,
               height: 100,
             ),
             Padding(

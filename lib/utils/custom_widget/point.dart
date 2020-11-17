@@ -23,7 +23,10 @@ class Point extends StatelessWidget {
             padding: EdgeInsets.all(16),
           )
         : Padding(
-            padding: EdgeInsets.all(16),
+            padding: EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 8,
+            ),
             child: _showPoint(),
           );
   }

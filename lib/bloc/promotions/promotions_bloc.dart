@@ -21,12 +21,33 @@ class PromotionsBloc
     if (event is PromotionsEventLoad) {
       yield PromotionsState.loading();
       List<PromotionModel> listPromotion;
-      listPromotion = await loadPromotions(
-        search: event.search,
-        pageId: event.pageId,
-        filterId: event.filterId,
-        categoryId: event.categoryId,
-      );
+      if (event.categoryId == 0) {
+        for (int i = 1; i < 6; i++) {
+          List<PromotionModel> list;
+          list = await loadPromotions(
+            search: event.search,
+            pageId: event.pageId,
+            filterId: event.filterId,
+            categoryId: i,
+          );
+          if (list == null) {
+            yield PromotionsState.error(message: 'Something went wrong!');
+          } else {
+            if (listPromotion == null) {
+              listPromotion = [];
+            }
+            listPromotion.addAll(list);
+          }
+        }
+      } else {
+        listPromotion = await loadPromotions(
+          search: event.search,
+          pageId: event.pageId,
+          filterId: event.filterId,
+          categoryId: event.categoryId,
+        );
+      }
+
       if (listPromotion == null) {
         yield PromotionsState.error(message: 'Something went wrong!');
       } else {

@@ -10,12 +10,12 @@ import 'package:promotion_platform/utils/custom_colors.dart';
 import 'package:promotion_platform/utils/custom_widget/ticket.dart';
 import 'package:promotion_platform/utils/helper.dart';
 
-class MyGiftScreen extends StatefulWidget {
+class VoucherScreen extends StatefulWidget {
   @override
-  _MyGiftScreenState createState() => _MyGiftScreenState();
+  _VoucherScreenState createState() => _VoucherScreenState();
 }
 
-class _MyGiftScreenState extends State<MyGiftScreen> {
+class _VoucherScreenState extends State<VoucherScreen> {
   VouchersBloc _vouchersBloc;
 
   @override
@@ -46,11 +46,13 @@ class _MyGiftScreenState extends State<MyGiftScreen> {
             ));
           });
         }
-        return SingleChildScrollView(
-          child: Column(
-            children: children,
-          ),
-        );
+        return list != null && list.length > 0
+            ? SingleChildScrollView(
+                child: Column(
+                  children: children,
+                ),
+              )
+            : Text('Bạn chưa có quà');
       },
       bloc: _vouchersBloc,
     );

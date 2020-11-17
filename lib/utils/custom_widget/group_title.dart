@@ -35,9 +35,12 @@ class GroupTitle extends StatelessWidget {
           canShowAll
               ? InkWell(
                   onTap: function,
-                  child: Text(
-                    'Tất cả',
-                    style: DEFAULT_TEXT_STYLE,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'Tất cả',
+                      style: DEFAULT_TEXT_STYLE,
+                    ),
                   ),
                 )
               : Container(),

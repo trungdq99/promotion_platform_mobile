@@ -7,14 +7,18 @@ import 'package:promotion_platform/bloc/categories/categories_state.dart';
 import 'package:promotion_platform/bloc/customer/customer_bloc.dart';
 import 'package:promotion_platform/bloc/customer/customer_event.dart';
 import 'package:promotion_platform/bloc/customer/customer_state.dart';
+import 'package:promotion_platform/bloc/notification/notification_bloc.dart';
+import 'package:promotion_platform/bloc/notification/notification_state.dart';
 import 'package:promotion_platform/bloc/top_brands/top_brands_bloc.dart';
 import 'package:promotion_platform/bloc/top_brands/top_brands_state.dart';
 import 'package:promotion_platform/bloc/top_promotions/top_promotions_bloc.dart';
 import 'package:promotion_platform/bloc/top_promotions/top_promotions_state.dart';
+import 'package:promotion_platform/ui/brand_tab.dart';
 import 'package:promotion_platform/ui/qrcode_scan_tab.dart';
 import 'package:promotion_platform/utils/custom_colors.dart';
 import 'package:promotion_platform/utils/bloc_helpers/bloc_provider.dart';
 import 'package:promotion_platform/utils/bloc_widgets/bloc_state_builder.dart';
+import 'package:promotion_platform/utils/custom_widget/custom_alert.dart';
 import 'package:promotion_platform/utils/custom_widget/full_screen_progressing.dart';
 import './promotion_tab.dart';
 import './notification_tab.dart';
@@ -106,9 +110,10 @@ class _HomeScreenState extends State<HomeScreen> {
               break;
             case 3:
               returnValue = _buildTabView(
-                tabView: TabNotificationScreen(
-                  homeContext: context,
-                ),
+                tabView: BrandTab(homeContext: context),
+                // tabView: TabNotificationScreen(
+                //   homeContext: context,
+                // ),
                 navKey: fourthTabNavKey,
               );
               break;
