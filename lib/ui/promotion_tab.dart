@@ -90,7 +90,12 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
                     flex: 1,
                     child: NeumorphicButton(
                       style: neumorphicStyleUpWithSmallRadius,
-                      margin: EdgeInsets.all(16),
+                      margin: EdgeInsets.only(
+                        left: 16,
+                        bottom: 16,
+                        right: 8,
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 8),
                       onPressed: () async {
                         await Helper.navigationDelay();
 
@@ -112,6 +117,12 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
                               pageId: 0,
                               search: _searchController.text,
                             ));
+                            // _promotionsBloc.emitEvent(PromotionsEventLoad(
+                            //   categoryId: _categoryId,
+                            //   filterId: _filterId,
+                            //   pageId: 0,
+                            //   search: _searchController.text,
+                            // ));
                           }
                         }
                       },
@@ -126,7 +137,12 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
                     flex: 1,
                     child: NeumorphicButton(
                       style: neumorphicStyleUpWithSmallRadius,
-                      margin: EdgeInsets.all(16),
+                      margin: EdgeInsets.only(
+                        left: 8,
+                        bottom: 16,
+                        right: 16,
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 8),
                       onPressed: () async {
                         await Helper.navigationDelay();
 
@@ -142,12 +158,13 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
                             setState(() {
                               _filterId = result[0];
                             });
-                            _promotionsBloc.emitEvent(PromotionsEventLoad(
-                              categoryId: _categoryId,
-                              filterId: _filterId,
-                              pageId: 0,
-                              search: _searchController.text,
-                            ));
+                            loadPromotion();
+                            // _promotionsBloc.emitEvent(PromotionsEventLoad(
+                            //   categoryId: _categoryId,
+                            //   filterId: _filterId,
+                            //   pageId: 0,
+                            //   search: _searchController.text,
+                            // ));
                           }
                         }
                       },
@@ -168,15 +185,33 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
     );
   }
 
+  void loadPromotion() {
+    _promotionsBloc.emitEvent(PromotionsEventLoad(
+      categoryId: _categoryId,
+      filterId: _filterId,
+      pageId: 0,
+      search: _searchController.text,
+    ));
+  }
+
   Widget _buildListPromotion() {
     return BlocEventStateBuilder<PromotionsState>(
       builder: (context, state) {
         List<PromotionModel> listPromotions;
+        List<List<Widget>> listWidget = [
+          <Widget>[],
+          <Widget>[],
+          <Widget>[],
+          <Widget>[],
+          <Widget>[],
+        ];
         List<Widget> children = [];
         if (state.isLoaded) {
           listPromotions = state.listPromotionModel;
+        }
+        if (listPromotions != null && _categoryId == 0) {
           listPromotions.forEach((element) {
-            children.add(PromotionWidget(
+            Widget child = PromotionWidget(
               id: element.id,
               promotionName: element.promotionName,
               brandName: element.brandModel.brandName,
@@ -193,8 +228,31 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
                   ),
                 );
               },
-            ));
+            );
+            int index = Helper.convertCategoryNameToIndex(element.categoryName);
+            listWidget[index - 1].add(child);
           });
+
+          for (int i = 0; i < 5; i++) {
+            if (listWidget[i].length > 1) {
+              children.add(GroupTitle(
+                title: CATEGORIES[i + 1],
+                canShowAll: true,
+                function: () {
+                  setState(() {
+                    _categoryId = i + 1;
+                  });
+                  loadPromotion();
+                },
+              ));
+              children.add(SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: listWidget[i],
+                ),
+              ));
+            }
+          }
         }
         if (state.isLoading) {
           return Padding(
@@ -203,35 +261,44 @@ class _PromotionTabScreenState extends State<PromotionTabScreen> {
           );
         }
         return listPromotions != null && listPromotions.length > 0
-            ? GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 0,
-                  mainAxisSpacing: 0,
-                ),
-                itemCount: listPromotions.length,
-                shrinkWrap: true,
-                physics: ScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return PromotionWidget(
-                    id: listPromotions[index].id,
-                    imgUrl: listPromotions[index].imgUrl,
-                    price: listPromotions[index].price,
-                    brandName: listPromotions[index].brandModel.brandName,
-                    promotionName: listPromotions[index].promotionName,
-                    function: () async {
-                      await Helper.navigationDelay();
-                      Navigator.push(
-                        widget.homeContext,
-                        CupertinoPageRoute(
-                          builder: (context) => PromotionDetailScreen(
-                              id: listPromotions[index].id),
-                        ),
+            ? _categoryId > 0
+                ? GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 0,
+                      mainAxisSpacing: 0,
+                      childAspectRatio:
+                          (MediaQuery.of(context).size.width / 2 - 32) / 180,
+                    ),
+                    padding: EdgeInsets.all(0),
+                    itemCount: listPromotions.length,
+                    shrinkWrap: true,
+                    physics: ScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return PromotionWidget(
+                        id: listPromotions[index].id,
+                        imgUrl: listPromotions[index].imgUrl,
+                        price: listPromotions[index].price,
+                        brandName: listPromotions[index].brandModel.brandName,
+                        promotionName: listPromotions[index].promotionName,
+                        function: () async {
+                          await Helper.navigationDelay();
+                          Navigator.push(
+                            widget.homeContext,
+                            CupertinoPageRoute(
+                              builder: (context) => PromotionDetailScreen(
+                                  id: listPromotions[index].id),
+                            ),
+                          );
+                        },
                       );
                     },
-                  );
-                },
-              )
+                  )
+                : SingleChildScrollView(
+                    child: Column(
+                      children: children,
+                    ),
+                  )
             : Container(
                 child: Text(
                   'Empty list promotion',

@@ -50,11 +50,11 @@ class _SelectCategoryWidgetState extends State<SelectCategoryWidget> {
                     index: 1,
                   ),
                   _buildSelectItem(
-                    title: 'Thời trang',
+                    title: 'Đồ uống',
                     index: 2,
                   ),
                   _buildSelectItem(
-                    title: 'Đồ uống',
+                    title: 'Thời trang',
                     index: 3,
                   ),
                   _buildSelectItem(

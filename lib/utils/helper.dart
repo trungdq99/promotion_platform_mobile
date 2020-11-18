@@ -158,4 +158,15 @@ class Helper {
     ];
     return result;
   }
+
+  static int convertCategoryNameToIndex(String name) {
+    int result = 0;
+    for (int i = 1; i < 6; i++) {
+      if (name == CATEGORIES[i]) {
+        result = i;
+        break;
+      }
+    }
+    return result;
+  }
 }

@@ -21,6 +21,7 @@ class PromotionModel {
   String shortDescription;
   String description;
   String imgUrl;
+  int categoryId;
   String categoryName;
   int voucherGroupId;
   BrandModel brandModel;
@@ -35,6 +36,7 @@ class PromotionModel {
     this.description: '',
     this.imgUrl: '',
     this.voucherGroupId: 0,
+    this.categoryId: 0,
     this.categoryName: '',
     this.brandModel,
   });
@@ -49,6 +51,7 @@ class PromotionModel {
     this.description = map['description'] ?? '';
     this.imgUrl = map['imgUrl'] ?? '';
     this.voucherGroupId = map['voucherGroupId'] ?? 0;
+    this.categoryId = map['categoryId'] ?? 0;
     this.categoryName = map['categoryName'] ?? '';
     Map<String, dynamic> brandDataSet = map['brandDataSet'];
     this.brandModel = BrandModel.fromMap(brandDataSet);

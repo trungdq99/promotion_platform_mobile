@@ -35,6 +35,7 @@ class _PromotionWidgetState extends State<PromotionWidget> {
       style: neumorphicStyleUpWithSmallRadius,
       child: Container(
         width: width / 2 - 32,
+        height: 180,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

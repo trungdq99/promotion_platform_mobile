@@ -314,8 +314,8 @@ const int TIME_DELAY = 100;
 const List<String> CATEGORIES = [
   'Tất cả',
   'Đồ ăn',
-  'Thời trang',
   'Đồ uống',
+  'Thời trang',
   'Dịch vụ',
   'Giải trí',
 ];
